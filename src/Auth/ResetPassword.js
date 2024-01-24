@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Loader from '../Components/Loader';
-import { View, TextInput, Text, StyleSheet, TouchableOpacity,ToastAndroid } from 'react-native';
+import { View, TextInput, Text, StyleSheet,ImageBackground,TouchableWithoutFeedback,Keyboard,TouchableOpacity,ToastAndroid } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import backimage from '../../assets/images/back2.png';
 
 const ResetPassword = () => {
 
@@ -13,6 +14,7 @@ const ResetPassword = () => {
   const navigation = useNavigation();
 
   const handleSubmitPress = () => {
+    setErrorValidate(true);
     if (!cnic) {
       ToastAndroid.show('Please enter your CNIC', ToastAndroid.LONG);
       return;
@@ -20,10 +22,9 @@ const ResetPassword = () => {
       ToastAndroid.show('Please enter your Contact', ToastAndroid.LONG);
       return;
     } else {
-      // setloading(true);
+      setloading(true);
       const requestData = { cnic, contact };
 
-      setloading(true)
       fetch('https://bm.punjab.gov.pk/api/sendotpforresetpass', {
         method: 'POST',
         headers: {
@@ -53,56 +54,85 @@ const ResetPassword = () => {
   
 
   return (
-    <View style={styles.container}>
-         <Loader loading={loading} />
-      <View style={styles.headingContainer}>
-        <Text style={styles.heading}>Enter Details</Text>
-      </View>
+<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+<View style={{ flex: 1 }}>
+ <ImageBackground source={backimage} style={styles.backgroundimage} resizeMode="stretch">
+ <Loader loading={loading} />
+  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={{ width: '95%', backgroundColor: '#fff', padding: 0, height: 450, borderRadius: 10,opacity:0.9}}>
+
+       <View style={[styles.greenview]}>
+                    <Text style={[styles.loginText]}>Reset Password</Text>
+                    </View>
       <View style={styles.fieldContainer}>
         <Text style={styles.fieldHeading}>شناختی کارڈ:</Text>
+        <View style={[styles.textinputview]}>
         <TextInput
+          maxLength={13}
+          keyboardType="numeric"
+          placeholder="شناختی کارڈ/ب فارم نمبر درج کریں"
+          placeholderTextColor="#808080" // Add this line to set the placeholder color
+          value={cnic}
+          placeholderStyle={{ paddingHorizontal: 20 }}
+          onChangeText={setcnic}
           style={[
             styles.inputField,
             {
-              borderColor: !cnic && errorValidate ? 'red' : '#002D62', // Adjusted borderColor
+              borderColor: !cnic && errorValidate ? 'red' : 'white', // Adjusted borderColor
             },
           ]}
-          maxLength={13}
-          keyboardType="numeric"
-          placeholder="Enter CNIC"
-          value={cnic}
-          onChangeText={setcnic}
         />
+        </View>
       </View>
       <View style={styles.fieldContainer}>
         <Text style={styles.fieldHeading}> رابطہ نمبر:</Text>
+        <View style={[styles.textinputview]}>
         <TextInput
-          style={[
-            styles.inputField,
-            {
-              borderColor: !contact && errorValidate ? 'red' : '#002D62', // Adjusted borderColor
-            },
-          ]}
-          keyboardType="numeric"
-          maxLength={11}
-          placeholder="Enter Contact Number"
-          value={contact}
-          onChangeText={setcontact}
-        />
+            keyboardType="numeric"
+            maxLength={11}
+            placeholder="اپنا موبائل نمبر درج کریں"
+            placeholderTextColor="#808080" // Add this line to set the placeholder color
+            value={contact}
+            onChangeText={setcontact}
+            style={[
+              styles.inputField,
+              {
+                borderColor: !contact && errorValidate ? 'red' : 'white',
+              },
+            ]}
+          />
+        </View>
       </View>
-      <TouchableOpacity style={styles.loginButton} onPress={handleSubmitPress}>
+      <View style={{ padding: 20,paddingBottom:10, alignItems: 'center' }}>
+      <TouchableOpacity style={styles.ButtonStyle} onPress={handleSubmitPress}>
         <Text style={styles.loginButtonText}>Submit</Text>
-      </TouchableOpacity>
-    </View>
+      </TouchableOpacity> 
+      </View>
+    </View> 
+  </View>
+</ImageBackground>
+</View>
+</TouchableWithoutFeedback>   
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff',
+  backgroundimage:{
+    width: null,
+    height: null,
+    flex: 1
+  },
+  greenview:{
+    backgroundColor: '#3a4e35',
+     borderTopRightRadius: 10, 
+     borderTopLeftRadius:10
+  },
+  loginText:{
+    textAlign: 'center',
+    color: '#fff', 
+    fontWeight: 'bold', 
+    fontSize: 30, 
+    padding:15
   },
   headingContainer: {
     alignItems: 'center',
@@ -114,31 +144,41 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#002D62',
   },
+  textinputview:{
+    marginTop: 10, 
+    backgroundColor: '#c0c0c0', 
+    borderRadius: 5, 
+    height: 40,
+    flexDirection: 'row', // Align items horizontally
+    alignItems: 'center', // Center items vertically
+  },
   fieldContainer: {
-    width: '80%',
-    marginBottom: 20,
+    paddingTop:20,
+    paddingLeft:20,
+    paddingRight:20
   },
   fieldHeading: {
-    // fontSize: 16,
-    color: 'black',
-    marginBottom: 5,
-    fontWeight: "bold"
+    marginTop: 30, 
+    fontWeight: "bold", 
+    color: "#000000"
   },
   inputField: {
-    borderWidth: 2,
-    borderRadius: 8,
-    borderColor: '#002D62', // Adjusted borderColor
-    fontSize: 16,
-    color: '#3f51b5',
-    width: '100%',
-    height: 45,
-    paddingLeft: 10,
-  },
-  loginButton: {
-    backgroundColor: '#002D62',
+    flex: 1,
+    color: 'black',
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 40,
     padding: 10,
-    borderRadius: 10,
-    width: '50%',
+  },
+  ButtonStyle: {
+    justifyContent: 'center',
+    width: '70%',
+    padding: 8,
+    marginTop:'5%',
+    // paddingVertical: 10,
+    borderRadius: 5,
+    // paddingHorizontal: 15,
+    backgroundColor: '#3a4e35',
   },
   loginButtonText: {
     color: '#fff',

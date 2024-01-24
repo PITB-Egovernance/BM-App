@@ -7,7 +7,7 @@ import { Text,
   Dimensions,
   TouchableOpacity,
   ToastAndroid } from 'react-native';
-import pwdIMage from '../../assets/images/background.png'
+  import pwdIMage from '../../assets/images/back2.png'
 import Loader from '../Components/Loader';
 import Footer from '../Components/Footer'; 
 import baseUrl from '../Components/Url';
@@ -55,6 +55,23 @@ const Register = ({navigation}) => {
    const [tehsil_id, setTehsilId]       = useState('');
    const [password, setPassword]      = useState('');
    const [errorValidate, setErrorValidate] =  useState(false);
+   const [warning, setWarning] = React.useState('');
+  const handleInputChange = (input) => {
+    // Check if the input contains non-English characters
+    const containsNonEnglish = /[^a-zA-Z ]/.test(input);
+
+    // Set the warning based on the presence of non-English characters
+    if (containsNonEnglish) {
+      setWarning('Please enter text in English only.');
+    } else {
+      setWarning('');
+    }
+
+    // Filter out non-English characters
+    const filteredInput = input.replace(/[^a-zA-Z ]/g, '');
+
+    setName(filteredInput);
+  };
   /* */
   
   const onRegisterPress = () =>{
@@ -275,21 +292,19 @@ return (
               </View>
               
               <Text style={{marginTop:10,fontWeight:"bold",color:"#000000"}}>نام:</Text>
-              <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:40}}>
-                <TextInput 
-                  ref={firstTextInput}
-                  onSubmitEditing={handleSubmitFirstTextInput}
-                  placeholderColor="#c4c3cb" 
-                  placeholderTextColor='grey'
-                  placeholder="اپنا نام درج کریں"
-                  value={name}
-                  onChangeText={(name)=> setName(name)}
-                  style={[styles.registerFormTextInput
-                    ,{borderColor: !name && errorValidate ? 'red':'#fff'}
-                  ]}
-                />
-              </View>
-
+              <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 40 }}>
+              <TextInput
+                ref={firstTextInput}
+                onSubmitEditing={handleSubmitFirstTextInput}
+                placeholderColor="#c4c3cb"
+                placeholderTextColor='grey'
+                placeholder="اپنا نام درج کریں"
+                value={name}
+                onChangeText={(input) => handleInputChange(input)}
+                style={[styles.registerFormTextInput, { borderColor: !name && errorValidate ? 'red' : '#fff' }]}
+              />
+            </View>
+            {warning !== '' && <Text style={{ color: 'red', fontSize: 12 }}>{warning}</Text>}
               
               <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>شناختی کارڈ نمبر:</Text>
               <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:40}}>
@@ -558,7 +573,7 @@ ButtonStyle:{
   width:'40%',
   padding:10,
   borderRadius: 12,
-  backgroundColor: '#588739',
+  backgroundColor: '#3a4e35',
   marginTop:10,
   marginLeft:80
 },

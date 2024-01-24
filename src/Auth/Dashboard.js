@@ -249,7 +249,7 @@ const pwd = ({ route, navigation}) => {
 
     <View>
 
-      <ImageBackground source={back} style={{ width: '100%', height: '100%' }}>
+      <ImageBackground source={back} resizeMode="stretch" style={{ width: '100%', height: '100%' }}>
       <Loader loading={loading} />
       <View style={styles.headerContainer}>
            <TouchableOpacity 
