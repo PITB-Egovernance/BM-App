@@ -51,6 +51,7 @@ const pwd = ({ route, navigation}) => {
   const [loading, setLoading] = useState(false);
 
   const[bmUserId,setBmUserId] = useState('');
+  const[RegformID,setRegFormID] = useState('');
   const[zakat,setZakatStatus] = useState('');
   const[ddverify, setDdVerify] = useState('');
   const[deoverify, setDeoVerify] = useState('');
@@ -63,22 +64,14 @@ const pwd = ({ route, navigation}) => {
 
   useEffect(() => {
 
+    
     checkZakatApi();
-    const regformID = route.params.regformID == undefined && syncStorage.get('regform_id') == undefined ? syncStorage.get('regform_id') :
-    route.params.regformID == undefined && syncStorage.get('regform_id') != undefined ? syncStorage.get('regform_id') :
-    syncStorage.get('regform_id');
+    // const regformID = route.params.regformID == undefined && syncStorage.get('regform_id') == undefined ? syncStorage.get('regform_id') :
+    // route.params.regformID == undefined && syncStorage.get('regform_id') != undefined ? syncStorage.get('regform_id') :
+    // syncStorage.get('regform_id');
+   
     checkpwdDetail();
-    // console.log('route.params.regformID', regformID);
-    // SplashScreen.hide();
-    // Tts.setDefaultLanguage('en-US');
-    // Tts.setDefaultRate(0.5);
-    // Tts.setDefaultPitch(1);
-    // handleSpeech = () => {
-    //   Tts.speak('آپ کی درخواست جمع ہو چکی ہے جس کو آپ اس لِنک پر ٹریک کر سکتے ہیںyour Application has been submitted');
-    // }
-    // handleStopSpeech = () => {
-    //   Tts.stop();
-    // }
+    
   }, []);
   const handleLogout = async (navigation) => {
     
@@ -313,7 +306,7 @@ const pwd = ({ route, navigation}) => {
             <ScrollView
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}>
-              {bmUserId!= '' ? 
+              {bmUserId!= '' || syncStorage.get('regform_id')!='' && syncStorage.get('regform_id') !=undefined ? 
                 <View style={{...styles.tiles, backgroundColor: 'green'}}>
                   <TouchableOpacity onPress={() => navigation.navigate('BMshow')} style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
                     <Text style={[styles.buttonText, {marginLeft:20, color: '#fff', fontSize: 16, fontFamily: 'sans-serif', }]}>
