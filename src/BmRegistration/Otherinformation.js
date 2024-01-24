@@ -70,6 +70,7 @@ const [affidavitCheck, setAffidaviteCheck] = useState('');
   { label: 'Ehsaas Program', value: 'Ehsaas Program' },
   { label: 'BISP', value: 'BISP' },
   { label: 'Bait-ul-Maal', value: 'Bait-ul-Maal' },
+  { label: 'Other', value: 'Other' },
 ];
 useEffect(() =>{
   const bmuser_id = syncStorage.get('bmuser_id');
