@@ -43,6 +43,7 @@ import regIMage5 from '../../assets/images/DRTC-04.png';
 
 import Footer from '../Components/Footer';
 import syncStorage from 'react-native-sync-storage';
+import baseUrl from "../Components/Url";
 
 
 const pwd = ({ route, navigation}) => {
@@ -50,6 +51,7 @@ const pwd = ({ route, navigation}) => {
   const [loading, setLoading] = useState(false);
 
   const[bmUserId,setBmUserId] = useState('');
+  const[zakat,setZakatStatus] = useState('');
   const[ddverify, setDdVerify] = useState('');
   const[deoverify, setDeoVerify] = useState('');
   const[comverify, setComVerify] = useState('');
@@ -61,9 +63,10 @@ const pwd = ({ route, navigation}) => {
 
   useEffect(() => {
 
+    checkZakatApi();
     const regformID = route.params.regformID == undefined && syncStorage.get('regform_id') == undefined ? syncStorage.get('regform_id') :
     route.params.regformID == undefined && syncStorage.get('regform_id') != undefined ? syncStorage.get('regform_id') :
-      syncStorage.get('regform_id');
+    syncStorage.get('regform_id');
     checkpwdDetail();
     // console.log('route.params.regformID', regformID);
     // SplashScreen.hide();
@@ -81,8 +84,8 @@ const pwd = ({ route, navigation}) => {
     
     try {
       setLoading(true);
-      await EncryptedStorage.removeItem("user_session");
-      await AsyncStorage.removeItem('authToken');
+      // await EncryptedStorage.removeItem("user_session");
+      // await AsyncStorage.removeItem('authToken');
       syncStorage.set('affidavitImage','');
       syncStorage.set('domicileDistrict','');
       syncStorage.set('tehsilID','');
@@ -160,10 +163,8 @@ const pwd = ({ route, navigation}) => {
       syncStorage.set('nohostelcertiImage', '');
       syncStorage.set('resultcardImage', '');
 
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Login' }],
-      });
+      
+      navigation.navigate('Login')
       setLoading(false);
     } catch (e) {
       console.log('Error clearing auth token:', e);
@@ -175,8 +176,8 @@ const pwd = ({ route, navigation}) => {
   // const UserBmId = syncStorage.get('bmUser');
   
   const checkpwdDetail = () => {
-  console.log('BM User ID==u=', UserBmId)
-    fetch(`https://bm.punjab.gov.pk/api/apiformbmshow/${UserBmId}`, {
+    console.log('BM User ID==u=', UserBmId,'Base url BM', baseUrl[0])
+    fetch(`${baseUrl[0]}/apiformbmshow/${UserBmId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -213,6 +214,44 @@ const pwd = ({ route, navigation}) => {
       })
   }
 
+  const checkZakatApi = () =>{
+
+    
+    const cnic = route.params.Cnic;
+    console.log('CNIC', cnic)
+    setLoading(true)
+    fetch(`${baseUrl[0]}/checkZakatCnic`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'secret': 'secret key',
+      },
+      body: JSON.stringify({ cnic: `${cnic}` }),
+      // body: JSON.stringify({ cnic: `3730310859758` }),
+    })
+      .then(respBM => respBM.json())
+      .then(respZakat => {
+
+        console.log('CHeck Zakat',respZakat)
+        setZakatStatus(respZakat)
+        // if(respZakat.status === 1){
+
+        //   setMessage(respZakat.message)
+          
+        // }else if(respZakat.status === 0){
+
+        //   setMessage(respZakat.message)
+        // }else if(respZakat.status === 'pending'){
+
+        //   setMessage(respZakat.message)
+        // }
+      }).catch((error) => console.error(error))
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
   return (
 
     <View>
@@ -229,135 +268,21 @@ const pwd = ({ route, navigation}) => {
       <Text style={[styles.buttonText, { fontWeight: "bold", fontSize: 28, paddingTop: 30, color: '#fff', textAlign: 'center' }]}>بیت المال پنجاب</Text>
       </View>
 
+        {zakat.status === 0 ?
+        
         <View style={{ padding: 1, flex: 1, justifyContent: 'center', paddingTop: '30%' }}>
 
           <View style={{ width: '100%', backgroundColor: '#fff', height: '80%', padding: 30, borderTopLeftRadius: 15, borderTopRightRadius: 15,opacity:1,marginTop: '15%' }}>
 
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}>
-{bmUserId!= '' ? 
-              <View style={{...styles.tiles, backgroundColor: 'green'}}>
-                <TouchableOpacity onPress={() => navigation.navigate('BMshow')} style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-                  <Text style={[styles.buttonText, {marginLeft:20, color: '#fff', fontSize: 16, fontFamily: 'sans-serif', }]}>
-                    بیت المال کے لیے درخواست 
-                  </Text>
-                  <Image source={regIMage} style={{marginLeft:10, width: '15%', height: 40 }} />
-                </TouchableOpacity>
-              </View>
-              :
-              <View style={[styles.tiles]}>
-                <TouchableOpacity onPress={() => navigation.navigate('BmRegistration')} style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-                  <Text style={[styles.buttonText, {marginLeft:20, color: '#fff', fontSize: 16, fontFamily: 'sans-serif', }]}>
-                    بیت المال کے لیے درخواست 
-                  </Text>
-                  <Image source={regIMage} style={{marginLeft:10, width: '15%', height: 40 }} />
-                </TouchableOpacity>
-              </View>
-}
-{/* {bmUserId!= '' ?  */}
-                {/* <View style={{...styles.tiles, backgroundColor: 'green',alignItems: 'center', justifyContent: 'center' }}>
-                  <TouchableOpacity style={{ flexDirection: 'row-reverse', alignItems: 'center', flex: 1 }}>
-                    <Image source={regIMage1} style={{ width: '30%', height: 50, marginRight: -1 }} />
-                    <View style={{ flex: 1,marginLeft:'20%' }}>
-                      <Text style={[styles.buttonText, { color: '#fff', marginLeft: -15, fontSize: 16, fontFamily: 'sans-serif', textAlign: 'center' }]}>
-                       چیئرمین سیکرٹری بیت المال کی تصدیق
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View> */}
-                {/* : */}
-                <View style={{...styles.tiles, alignItems: 'center', justifyContent: 'center' }}>
-                  <TouchableOpacity style={{ flexDirection: 'row-reverse', alignItems: 'center', flex: 1 }}>
-                    <Image source={regIMage1} style={{ width: '30%', height: 50, marginRight: -1 }} />
-                    <View style={{ flex: 1,marginLeft:'20%' }}>
-                      <Text style={[styles.buttonText, { color: '#fff', marginLeft: -10, fontSize: 16, fontFamily: 'sans-serif', textAlign: 'center' }]}>
-                        چیئرمین/سیکرٹری بیت المال کی تصدیق 
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-{/* }                 */}
-
-                {/* Field Verification */}
-                <View style={[styles.tiles]}>
-                    <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                    <View style={{ flex: 1 }}>
-                      <Text style={[styles.buttonText,{ color: '#fff', fontSize: 16, fontFamily: 'sans-serif', textAlign: 'center' }]}>
-                      علاقائی تصدیق  
-                      </Text>
-                    </View>
-                      <Image source={regIMage2} style={{ width: '30%', height: 40, marginLeft: -20 }} />
-                    </TouchableOpacity>
-                </View>
-
-
-
-
-                {/* <View style={{ backgroundColor: '#003060', height: 60, width: '80%', borderRadius: 10, marginTop: 20, marginLeft: 25 }}>
-                  <TouchableOpacity onPress={onPress}>
-                    <Image source={regIMage2} style={{ width: '40%', height: 40, marginTop: 10, marginLeft: -10 }} />
-                    <View style={{ marginLeft: '30%', marginTop: '-18%' }}>
-                      <Text style={{ color: '#fff', fontSize: 16, fontFamily: 'sans-serif' }}>
-                        {'     '}DD Verify{'\n'}{'     '}Application
-                      </Text>
-                    </View>
-
-                  </TouchableOpacity>
-                </View> */}
-                  {/* <View style={[styles.tiles]}>
-                  <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
-                    <View style={{ flex: 1 }}>
-                      <Text style={[styles.buttonText,{ color: '#fff', fontSize: 16, fontFamily: 'sans-serif', marginLeft: 10, textAlign: 'center' }]}>
-                        ڈپٹی ڈائریکٹر کی تصدیق
-                      </Text>
-                    </View>
-                    <Image source={regIMage2} style={{ width: '30%', height: 40, marginLeft: -10 }} />
-                  </TouchableOpacity>
-                  </View> */}
-
-
-                <View style={[styles.tiles]}>
-                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-                  <View style={{ flex: 1 }}>
-                    <Text style={[styles.buttonText,{ color: '#fff', fontSize: 16, fontFamily: 'sans-serif', textAlign: 'center' }]}>
-                      کمیٹی کی پراسیسنگ
-                    </Text>
-                  </View>
-                  <Image source={regIMage3} style={{ width: 55, height: 40 }} />
-                </TouchableOpacity>
-                </View>
-
-
-                <View style={[styles.tiles]}>
-                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-                  <Text style={[styles.buttonText,{ color: '#fff', fontSize: 16, fontFamily: 'sans-serif', marginLeft: 5, flex: 1, textAlign: 'center' }]}>
-                    فنڈ برائے تقسیم
-                  </Text>
-                  <Image source={regIMage4} style={{ width: '30%', height: 40, marginLeft: -4 }} />
-                </TouchableOpacity>
-                </View>
-
-                <View style={[styles.tiles]}>
-                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-                  <Text style={[styles.buttonText,{ color: '#fff', fontSize: 16, fontFamily: 'sans-serif', marginLeft: 5, flex: 1, textAlign: 'center' }]}>
-                    ادائیگی 
-                  </Text>
-                  <Image source={regIMage5} style={{ width: '30%', height: 40, marginLeft: -4 }} />
-                </TouchableOpacity>
-                </View>
-
-
-              {/* <View style={[styles.tiles]}>
-              <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-                <Text style={[styles.buttonText, { color: '#fff', fontSize: 16, fontFamily: 'sans-serif', marginLeft: 5, flex: 1, textAlign: 'center' }]}>
-                  جاری کردہ چیک
-                </Text>
-                <Image source={regIMage5} style={{ width: '25%', height: 40, marginLeft: -1 }} />
-              </TouchableOpacity>
-              </View> */}
-
-              </ScrollView>
+          <View style={[styles.tiles,{width:'100%',marginLeft:0,backgroundColor: 'red',}]}>
+            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+              <Text style={[styles.buttonText, {marginLeft:20, color: '#fff', fontSize: 16, fontFamily: 'sans-serif', }]}>
+                  {zakat.message}  
+              </Text>
+              {/* <Image source={regIMage} style={{marginLeft:10, width: '15%', height: 40 }} /> */}
+            </TouchableOpacity>
+          </View>
+        
           
           </View>
           <Footer />
@@ -370,6 +295,160 @@ const pwd = ({ route, navigation}) => {
           </View> */}
           
         </View>
+              
+        :zakat.status ===  1 ? 
+      
+        <View style={{ padding: 1, flex: 1, justifyContent: 'center', paddingTop: '30%' }}>
+
+          <View style={{ width: '100%', backgroundColor: '#fff', height: '80%', padding: 30, borderTopLeftRadius: 15, borderTopRightRadius: 15,opacity:1,marginTop: '15%' }}>
+
+          <View style={[styles.tiles,{width:'100%',marginLeft:0,backgroundColor: 'green',}]}>
+            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+              <Text style={[styles.buttonText, {marginLeft:20, color: '#fff', fontSize: 16, fontFamily: 'sans-serif', }]}>
+                  {zakat.message}  
+              </Text>
+              {/* <Image source={regIMage} style={{marginLeft:10, width: '15%', height: 40 }} /> */}
+            </TouchableOpacity>
+          </View>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}>
+              {bmUserId!= '' ? 
+                <View style={{...styles.tiles, backgroundColor: 'green'}}>
+                  <TouchableOpacity onPress={() => navigation.navigate('BMshow')} style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+                    <Text style={[styles.buttonText, {marginLeft:20, color: '#fff', fontSize: 16, fontFamily: 'sans-serif', }]}>
+                      بیت المال کے لیے درخواست 
+                    </Text>
+                    <Image source={regIMage} style={{marginLeft:10, width: '15%', height: 40 }} />
+                  </TouchableOpacity>
+                </View>
+                :
+                <View style={[styles.tiles]}>
+                  <TouchableOpacity onPress={() => navigation.navigate('BmRegistration')} style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+                    <Text style={[styles.buttonText, {marginLeft:20, color: '#fff', fontSize: 16, fontFamily: 'sans-serif', }]}>
+                      بیت المال کے لیے درخواست 
+                    </Text>
+                    <Image source={regIMage} style={{marginLeft:10, width: '15%', height: 40 }} />
+                  </TouchableOpacity>
+                </View>
+                }
+                {/* {bmUserId!= '' ?  */}
+                {/* <View style={{...styles.tiles, backgroundColor: 'green',alignItems: 'center', justifyContent: 'center' }}>
+                  <TouchableOpacity style={{ flexDirection: 'row-reverse', alignItems: 'center', flex: 1 }}>
+                    <Image source={regIMage1} style={{ width: '30%', height: 50, marginRight: -1 }} />
+                    <View style={{ flex: 1,marginLeft:'20%' }}>
+                      <Text style={[styles.buttonText, { color: '#fff', marginLeft: -15, fontSize: 16, fontFamily: 'sans-serif', textAlign: 'center' }]}>
+                      چیئرمین سیکرٹری بیت المال کی تصدیق
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View> */}
+                {/* : */}
+              <View style={{...styles.tiles, alignItems: 'center', justifyContent: 'center' }}>
+                <TouchableOpacity style={{ flexDirection: 'row-reverse', alignItems: 'center', flex: 1 }}>
+                  <Image source={regIMage1} style={{ width: '30%', height: 50, marginRight: -1 }} />
+                  <View style={{ flex: 1,marginLeft:'20%' }}>
+                    <Text style={[styles.buttonText, { color: '#fff', marginLeft: -10, fontSize: 16, fontFamily: 'sans-serif', textAlign: 'center' }]}>
+                      چیئرمین/سیکرٹری بیت المال کی تصدیق 
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+              {/* }                 */}
+
+              {/* Field Verification */}
+              <View style={[styles.tiles]}>
+                  <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={[styles.buttonText,{ color: '#fff', fontSize: 16, fontFamily: 'sans-serif', textAlign: 'center' }]}>
+                    علاقائی تصدیق  
+                    </Text>
+                  </View>
+                    <Image source={regIMage2} style={{ width: '30%', height: 40, marginLeft: -20 }} />
+                  </TouchableOpacity>
+              </View>
+
+
+
+
+              {/* <View style={{ backgroundColor: '#003060', height: 60, width: '80%', borderRadius: 10, marginTop: 20, marginLeft: 25 }}>
+                <TouchableOpacity onPress={onPress}>
+                  <Image source={regIMage2} style={{ width: '40%', height: 40, marginTop: 10, marginLeft: -10 }} />
+                  <View style={{ marginLeft: '30%', marginTop: '-18%' }}>
+                    <Text style={{ color: '#fff', fontSize: 16, fontFamily: 'sans-serif' }}>
+                      {'     '}DD Verify{'\n'}{'     '}Application
+                    </Text>
+                  </View>
+
+                </TouchableOpacity>
+                </View> 
+              */}
+                {/* <View style={[styles.tiles]}>
+                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={[styles.buttonText,{ color: '#fff', fontSize: 16, fontFamily: 'sans-serif', marginLeft: 10, textAlign: 'center' }]}>
+                      ڈپٹی ڈائریکٹر کی تصدیق
+                    </Text>
+                  </View>
+                  <Image source={regIMage2} style={{ width: '30%', height: 40, marginLeft: -10 }} />
+                </TouchableOpacity>
+                </View> */}
+
+
+              <View style={[styles.tiles]}>
+                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={[styles.buttonText,{ color: '#fff', fontSize: 16, fontFamily: 'sans-serif', textAlign: 'center' }]}>
+                      کمیٹی کی پراسیسنگ
+                    </Text>
+                  </View>
+                  <Image source={regIMage3} style={{ width: 55, height: 40 }} />
+                </TouchableOpacity>
+              </View>
+
+
+              <View style={[styles.tiles]}>
+                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+                  <Text style={[styles.buttonText,{ color: '#fff', fontSize: 16, fontFamily: 'sans-serif', marginLeft: 5, flex: 1, textAlign: 'center' }]}>
+                    فنڈ برائے تقسیم
+                  </Text>
+                  <Image source={regIMage4} style={{ width: '30%', height: 40, marginLeft: -4 }} />
+                </TouchableOpacity>
+              </View>
+
+              <View style={[styles.tiles]}>
+                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+                  <Text style={[styles.buttonText,{ color: '#fff', fontSize: 16, fontFamily: 'sans-serif', marginLeft: 5, flex: 1, textAlign: 'center' }]}>
+                    ادائیگی 
+                  </Text>
+                  <Image source={regIMage5} style={{ width: '30%', height: 40, marginLeft: -4 }} />
+                </TouchableOpacity>
+              </View>
+
+
+              {/* <View style={[styles.tiles]}>
+              <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+                <Text style={[styles.buttonText, { color: '#fff', fontSize: 16, fontFamily: 'sans-serif', marginLeft: 5, flex: 1, textAlign: 'center' }]}>
+                  جاری کردہ چیک
+                </Text>
+                <Image source={regIMage5} style={{ width: '25%', height: 40, marginLeft: -1 }} />
+              </TouchableOpacity>
+              </View> */}
+
+            </ScrollView>
+          
+          </View>
+          <Footer />
+
+          {/* <View style={{ backgroundColor: '#0C2D48', height: 110, width: '130%', paddingTop: 5, marginLeft: -40 }}>
+            <View style={{ flexDirection: 'row', flex: 1 }}>
+              <Image source={regIMage9} style={{ height: '45%', width: '35%' }} />
+              <Image source={regIMage10} style={{ height: '45%', width: '10%', marginLeft: '35%' }} />
+            </View>
+          </View> */}
+          
+        </View>
+        :''}
 
 
       </ImageBackground>

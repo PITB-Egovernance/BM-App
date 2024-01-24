@@ -56,6 +56,7 @@ const [reg_date, setReg_date] = useState('');
 
 const [yourincome, setYourincome] = useState('');
 const [parentincome, setParentincome] = useState('');
+const [affidavitCheck, setAffidaviteCheck] = useState('');
  // step2 Affidavite BM       
  const [affidavitImage, setAffidavitImage] = useState('');
  const [uriaffidavit, setURIAffidavit] = useState('');
@@ -63,12 +64,12 @@ const [parentincome, setParentincome] = useState('');
  const [affidavitType, setAffidavitType] = useState('');
 
  const GovernmentData = [
-  { label: 'Sehat Card', value: 'Sehat Card' },
+  { label: 'Health Card', value: 'Health Card' },
   { label: 'Khidmat Card', value: 'Khidmat Card' },
   { label: 'Government Job', value: 'Government Job' },
-  { label: 'Ehsas Program', value: 'Ehsas Program' },
-  { label: 'Benazir Income Support Program', value: 'Benazir Incmome Support Program' },
-  { label: 'Bait ul Mal', value: 'Bait ul Mal' },
+  { label: 'Ehsaas Program', value: 'Ehsaas Program' },
+  { label: 'BISP', value: 'BISP' },
+  { label: 'Bait-ul-Maal', value: 'Bait-ul-Maal' },
 ];
 useEffect(() =>{
   const bmuser_id = syncStorage.get('bmuser_id');
@@ -76,23 +77,33 @@ useEffect(() =>{
 }, []);
 
 const NextStep = () => {
+
   setErrorValidate(true);
   if (!service) {
     ToastAndroid.show('Availing any service', ToastAndroid.LONG);
     return;
-  } 
+
+  }else if(!affidavitCheck){
+
+    ToastAndroid.show('حلف نامہ کو منتخب کرین', ToastAndroid.LONG);
+    return;
+  }else if(affidavitCheck === 'No'){
+
+    ToastAndroid.show('حلف نامہ کو ہان پر منتخب کرین', ToastAndroid.LONG);
+    return;
+  }
   //  else if (!affidavitName) {
   //   ToastAndroid.show('Fill The Required Information', ToastAndroid.LONG);
   //   return;
   // } 
   else {
-    console.log('Service ', service, 'GovernmentData', otherservice, affidavitImage, uriaffidavit, 'Yourincome', yourincome, 'Parentincome', parentincome);
+    console.log('Service ', service, 'GovernmentData', otherservice, affidavitImage, 'Yourincome', yourincome, 'Parentincome', parentincome);
     syncStorage.set('Service', service);
     syncStorage.set('GovernmentData', otherservice);
     syncStorage.set('affidavitImage', affidavitImage);
-    syncStorage.set('uriaffidavit', uriaffidavit);
-    syncStorage.set('affidavitName', affidavitName);
-    syncStorage.set('affidavitType', affidavitType);
+    // syncStorage.set('uriaffidavit', uriaffidavit);
+    // syncStorage.set('affidavitName', affidavitName);
+    // syncStorage.set('affidavitType', affidavitType);
     syncStorage.set('Yourincome', yourincome);
     syncStorage.set('Parentincome', parentincome);
     syncStorage.set('Reg_date', reg_date);
@@ -113,19 +124,26 @@ const NextStep = () => {
 
 // step3
   const affidavit = async () => {
-    DocumentPicker.pick({
-      allowMultiSelection: false,
-      type: [DocumentPicker.types.images,DocumentPicker.types.pdf],
-    })
-      .then((response) =>
-   {   
-      // console.log('response',JSON.stringify(response[0], null, 2))
-      setAffidavitImage(response[0].uri)
-      setURIAffidavit(response[0].uri)
-      setAffidavitName(response[0].name)
-      setAffidavitType(response[0].type)
-   })
+     const options = {
+      mediaType: 'photo',
+      includeBase64: true,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
 
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error: ', response.error);
+      } else {
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        affidavitImage(imageUri);
+    
+        console.log('Image affidavit profile',imageUri)
+        const fileBase64        = response.assets[0].base64
+      }
+    });
    
   }
   
@@ -218,13 +236,22 @@ const NextStep = () => {
 
     }
 
-          <Text style={{marginTop:70,fontWeight:"bold",color:"#000000"}}>حلف نامہ اپ لوڈ کریں(Optional):</Text>
-              <View style={{marginTop:5,backgroundColor:'#D3D3D3',borderRadius:5, height:100 }}>
-                <TouchableOpacity onPress={affidavit} style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:60 }}>
-                  {affidavitImage != '' ? <Image source={{uri:affidavitImage}} style={{width: '100%', height: 60,resizeMode : 'contain' }} /> :null}
-                </TouchableOpacity>
+         <Text style={{marginTop:70,fontWeight:"bold",color:"#000000"}}>حلف نامہ:</Text>
+              <View style={{marginTop:5,backgroundColor:'#D3D3D3',borderRadius:5, height:200 }}>
+               <Text style={{padding:20}}>بیان حلفی ھے کہ درج بالا کوائف میرے علم کے مطابق بلکل صحیی ھیں اور کوئی بات پوشیدھ نھیں رکھی گئی۔اگر یہ کوائف غلط پائے جائیں تو میں وصول شدھ رقم واپس کرنے کا پابند ھوں گا/گی۔میں اقرار کرتا کرتی ھوں کاغزات کی مصدقہ نقل ایک ماہ کے اندر سیکٹری ضلعی بیت المال کمیٹی کو فراہم کردوں گا/گ</Text>
               </View>
-
+              <RadioButton.Group  onValueChange={affidavitCheck => setAffidaviteCheck(affidavitCheck)} value={affidavitCheck} style={{}}>
+                <View style={{ flexDirection: 'row',marginTop:15, justifyContent:'center'}}>
+                    <View style={{flexDirection: "row"}}>
+                      <RadioButton value="Yes"/>
+                      <Text style={{fontWeight: 'bold',marginTop:'10%',color:'black'}}>ہاں</Text>
+                    </View>
+                    <View  style={{flexDirection: "row"}}>
+                      <RadioButton value="No" />
+                      <Text style={{fontWeight: 'bold',marginTop:'10%',color:'black'}}>نہیں</Text>
+                    </View>
+                </View>
+              </RadioButton.Group>
 
         <View>
         {/* <TouchableOpacity  

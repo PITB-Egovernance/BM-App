@@ -1,28 +1,45 @@
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef} from 'react';
 import Loader from '../Components/Loader';
-import { View, TextInput, Text, StyleSheet, TouchableOpacity, ToastAndroid } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  View,
+  TextInput,
+  Image,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ToastAndroid,
+  Dimensions,
+} from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import backimage from '../../assets/images/bait-ul-mall.png';
 
 const OTPForResetPass = () => {
+  const screenWidth = Dimensions.get('window').width;
+  //height and width of logo adjusting from here//
+  const imageWidth = screenWidth * 0.5;
+  const imageHeight = imageWidth; 
   const [loading, setLoading] = useState(false);
   const [otp, setOTP] = useState('');
-  const inputsRef = [
-    useRef(),
-    useRef(),
-    useRef(),
-    useRef(),
-    useRef(),
-  ];
+  const inputsRef = [useRef(), useRef(), useRef(), useRef(), useRef()];
 
   const navigation = useNavigation();
   const route = useRoute();
 
   const handleOTPVerification = () => {
+    // Check if otp is empty
+    if (!otp) {
+      ToastAndroid.show('Kindly fill in the OTP field', ToastAndroid.LONG);
+      return;
+    }else{
+
+
+  
     const requestData = {
       id: route.params.userId,
       code: otp,
     };
-    // setLoading(true);
+  
+    setLoading(true);
     fetch('https://bm.punjab.gov.pk/api/passverifyOtp', {
       method: 'POST',
       headers: {
@@ -31,29 +48,35 @@ const OTPForResetPass = () => {
       },
       body: JSON.stringify(requestData),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('API Response:', data); 
+      .then(response => response.json())
+      .then(data => {
+        console.log('API Response:', data);
         if (data.check) {
-          
           ToastAndroid.show('OTP verified successfully', ToastAndroid.LONG);
-        
+  
           navigation.navigate('ChangePassword', { userId: route.params.userId });
         } else {
           // Show error message if OTP verification fails
           ToastAndroid.show('Kindly provide correct OTP', ToastAndroid.LONG);
         }
       })
-      .catch((error) => {
+      .catch(error => {
         // setLoading(false);
         console.error('Error verifying OTP:', error);
-        ToastAndroid.show('Error verifying OTP. Please try again later.', ToastAndroid.LONG);
-        
-      });
+        ToastAndroid.show(
+          'Error verifying OTP. Please try again later.',
+          ToastAndroid.LONG,
+        );
+      }).finally(() => {
+  
+        setLoading(false);
+      }
+      );
+    }
   };
   
   const handleInputChange = (index, value) => {
-    setOTP((prevOTP) => {
+    setOTP(prevOTP => {
       const newOTP = prevOTP.split('');
       newOTP[index] = value;
       return newOTP.join('');
@@ -64,29 +87,22 @@ const OTPForResetPass = () => {
     } else if (!value && index > 0) {
       inputsRef[index - 1].current.focus();
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
-        <Loader loading={loading} />
+      <Loader loading={loading} />
       <View style={styles.section1}>
-          <View style={styles.subView}>
-            <View style={styles.subViewText}>
-              <Text adjustsFontSizeToFit style={styles.eCatalogText}>
-                OTP
-              </Text>
-            </View>
-            <View style={styles.subViewIcon}>
-              {/* <Image/> */}
-            {/* <Icon
-              style={styles.searchIcon}
-              name={'lock'} 
-              size={60}
-              color="#002D62"
-            /> */}
-            </View>
-          </View>
-        </View>
+        <Image
+          source={backimage}
+          style={{
+            width: imageWidth,
+            height: imageHeight,
+            resizeMode: 'cover',
+            
+          }}
+        />
+      </View>
       <View style={styles.headingContainer}>
         <Text style={styles.heading}>Code Verification</Text>
       </View>
@@ -97,15 +113,20 @@ const OTPForResetPass = () => {
             <TextInput
               key={index}
               ref={inputsRef[index]}
-              style={[styles.otpInputField, otp.length === index ? styles.otpInputActive : null]}
+              style={[
+                styles.otpInputField,
+                otp.length === index ? styles.otpInputActive : null,
+              ]}
               value={otp[index] || ''}
               maxLength={1}
-              onChangeText={(text) => handleInputChange(index, text)}
+              onChangeText={text => handleInputChange(index, text)}
               keyboardType="numeric"
             />
           ))}
       </View>
-      <TouchableOpacity style={styles.verifyButton} onPress={handleOTPVerification}>
+      <TouchableOpacity
+        style={styles.verifyButton}
+        onPress={handleOTPVerification}>
         <Text style={styles.verifyButtonText}>Verify OTP</Text>
       </TouchableOpacity>
       <View style={styles.bottomTextContainer}>
@@ -141,7 +162,7 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 20,
     fontWeight: 'bold',
-    fontStyle:'CenturyGothic',
+    fontStyle: 'CenturyGothic',
     color: '#002D62',
   },
   otpInputContainer: {
@@ -186,7 +207,7 @@ const styles = StyleSheet.create({
   },
   section1: {
     flexDirection: 'row',
-    // backgroundColor: '#f2f2f2',
+    marginTop: '10%',
     color: '#fff',
     shadowColor: '#000',
     shadowOffset: {

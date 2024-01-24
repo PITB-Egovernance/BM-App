@@ -39,14 +39,24 @@ import back from '../../assets/images/back.png';
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { MultiSelect } from 'react-native-element-dropdown';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import syncStorage from 'react-native-sync-storage';
 // import syncStorage from 'react-native-sync-storage';
+
+
 
 const nashemanPress = () =>{
   Alert.alert('Coming Soon !');
 }
 
+
 const SelectCategory = ({navigation}) => {
 
+  const [genderCheck,setGender] = useState('');
+  useEffect(() => {
+
+    const gender = syncStorage.get('gender');
+    setGender(gender);
+  },[])
 // Get Api Call infos end
   return (
     <View>
@@ -73,16 +83,30 @@ const SelectCategory = ({navigation}) => {
               <Text style={[styles.text,{textAlign:'center'}]}>معذور/ضرورت مند افراد </Text>
               {/* <Text style={[styles.text,{textAlign:'center'}]}>Persons</Text> */}
           </TouchableOpacity>
-        </View>        
+        </View> 
+
+        
+        
+              
         <View style={{justifyContent: "space-between",alignItems: "center"}}>
+        {genderCheck == 'Female'? 
           <TouchableOpacity  
                 style={styles.button}
                 activeOpacity={0.5}
-                onPress={() => navigation.navigate('Marriage')}
+                onPress={() =>navigation.navigate('Marriage')}
                 >          
               <Text style={[styles.text,{textAlign:'center'}]}>شادی کے لیے عطیہ</Text>
               {/* <Text style={[styles.text,{textAlign:'center'}]}>Persons</Text> */}
           </TouchableOpacity>
+
+          : <TouchableOpacity  
+          style={styles.button}
+          activeOpacity={0.5}
+          onPress={() =>  Alert.alert('Only females can apply for marriage grant')}
+          >          
+        <Text style={[styles.text,{textAlign:'center'}]}>شادی کے لیے عطیہ</Text>
+        {/* <Text style={[styles.text,{textAlign:'center'}]}>Persons</Text> */}
+    </TouchableOpacity>} 
         </View>
         <View style={{justifyContent: "space-between",alignItems: "center"}}>
           <TouchableOpacity  

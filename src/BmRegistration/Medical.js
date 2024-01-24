@@ -33,6 +33,8 @@ import DocumentPicker, {
   isInProgress,
   types,
 } from 'react-native-document-picker';
+import baseUrl from '../Components/Url';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 const Medical = ({navigation}) => {
     const [errorValidate, setErrorValidate] = useState(false);
@@ -52,6 +54,10 @@ const Medical = ({navigation}) => {
 
 
     const Relationdata = [
+        { label: 'Mother', value: 'Mother' },
+        { label: 'Father', value: 'Father' },
+        { label: 'Friend', value: 'Friend' },
+        { label: 'Gaurdian', value: 'Gaurdian' },
         { label: 'Husband/wife', value: 'Husband/wife' },
         { label: 'Son', value: 'Son' },
         { label: 'Daughter', value: 'Daughter' },
@@ -62,15 +68,11 @@ const Medical = ({navigation}) => {
 
  // step2 own/father cnic front     
  const [fcnicImage, setFcnicImage]   = useState('');
- const [urifcnic, setURIFcnic]  = useState('');
- const [fcnicName, setFcnicName] = useState('');
- const [fcnicType, setFcnicType] = useState('');
+ const [capfCnic, setCapFCnic]   = useState('');
 
  // step2 own/father cnic back       
  const [fcnicbackImage, setFcnicbackImage]   = useState('');
- const [urifcnicback, setURIFcnicback]  = useState('');
- const [fcnicbackName, setFcnicbackName] = useState('');
- const [fcnicbackType, setFcnicbackType] = useState('');
+ const [capCnicBack, setCapCnicBack]   = useState('');
 
 
  const [NameArray, setNameArray] = useState([]);
@@ -97,35 +99,55 @@ useEffect(() =>{
 
  // step2 own/father cnic front 
 const fcnic = async () => {
-  DocumentPicker.pick({
-    allowMultiSelection: false,
-    type: [DocumentPicker.types.images,DocumentPicker.types.pdf],
-  })
-    .then((response) =>
- {   
-    // console.log('response',JSON.stringify(response[0], null, 2))
-    setFcnicImage(response[0].uri)
-    setURIFcnic(response[0].uri)
-    setFcnicName(response[0].name)
-    setFcnicType(response[0].type)
- })
+
+  const options = {
+    mediaType: 'photo',
+    includeBase64: true,
+    maxHeight: 2000,
+    maxWidth: 2000,
+  };
+
+  launchImageLibrary(options, (response) => {
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.error) {
+      console.log('Image picker error: ', response.error);
+    } else {
+      let imageUri = response.uri || response.assets?.[0]?.uri;
+      setFcnicImage(imageUri);
+  
+      console.log('Image cnic back',imageUri)
+      const fileBase64        = response.assets[0].base64
+      setCapFCnic(fileBase64)
+    }
+  });
 } 
 
  
 // step2 own/father cnic back  
 const fcnicback = async () => {
-  DocumentPicker.pick({
-    allowMultiSelection: false,
-    type: [DocumentPicker.types.images,DocumentPicker.types.pdf],
-  })
-    .then((response) =>
- {   
-    // console.log('response',JSON.stringify(response[0], null, 2))
-    setFcnicbackImage(response[0].uri)
-    setURIFcnicback(response[0].uri)
-    setFcnicbackName(response[0].name)
-    setFcnicbackType(response[0].type)
- })
+  
+  const options = {
+    mediaType: 'photo',
+    includeBase64: true,
+    maxHeight: 2000,
+    maxWidth: 2000,
+  };
+
+  launchImageLibrary(options, (response) => {
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.error) {
+      console.log('Image picker error: ', response.error);
+    } else {
+      let imageUri = response.uri || response.assets?.[0]?.uri;
+      setFcnicbackImage(imageUri);
+  
+      console.log('Image cnic back',imageUri)
+      const fileBase64        = response.assets[0].base64
+      setCapCnicBack(fileBase64)
+    }
+  });
 } 
 
 const renderItem = (item) => {
@@ -202,6 +224,7 @@ const district = syncStorage.get('district')
 const Tehsil = syncStorage.get('tehsil')
 console.log('Tehsil', Tehsil)
 const imageProfile = syncStorage.get('image')
+const imageProfilee = syncStorage.get('imageCap')
 const fullname = syncStorage.get('applicantname')
 const fathername = syncStorage.get('fathername')
 // const pcrdp = syncStorage.get('Pcrdp')
@@ -222,13 +245,13 @@ const yourincome = syncStorage.get('yourincome')
 const parentincome = syncStorage.get('parentincome')
 const service = syncStorage.get('Service')
 const otherservice = syncStorage.get('GovernmentData')
-const uriaffidavit = syncStorage.get('uriaffidavit');
+// const uriaffidavit = syncStorage.get('uriaffidavit');
 const affidavitImage = syncStorage.get('affidavitImage');
-const affidavitType = syncStorage.get('affidavitType');
+// const affidavitType = syncStorage.get('affidavitType');
 /* Step 4 Fields Get Relative Detail*/
 console.log('asda', yourincome,parentincome,service,otherservice)
 console.log('Family Data', familyData)
-if (familyData != '') {
+if (familyData != '' && familyData!=undefined) {
  const regID = [];
  const rnameData = [];
  const rageData = [];
@@ -279,23 +302,24 @@ if (familyData != '') {
 console.log(JSON.stringify(NameArray),AgeArray,EducationArray) /* Step 4 Fields Get Select Category*/
 
  
-    console.log('formData', NameArray);
+    console.log('bas eurl', baseUrl[0]);
     setLoading(true)
     fetch(
-      `https://bm.punjab.gov.pk/api/regformmedallpost`,
+      `${baseUrl[0]}/regformmedallpost`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'multipart/application/json',
           'Accept': 'application/json',
+          'enctype':"multipart/form-data"
         },
-        body: JSON.stringify({ user_id: `${bmuser_id}`, district: `${district}`,tehsil: `${Tehsil}`,image: `${imageProfile}`,applicantname: `${fullname}`,
+        body: JSON.stringify({ user_id: `${bmuser_id}`, district: `${district}`,tehsil: `${Tehsil}`,image: `${imageProfilee}`,applicantname: `${fullname}`,
           cnic: `${cnic}`,contact: `${phone}`,fathername:`${fathername}`,dob: `${dob}`,agegroup: `${agegroup}`,gender: `${gender}`,address: `${paddress}`,paddress: `${ppaddress}`,
           reg_date: `${reg_date}`,yourincome: `${yourincome}`,parentincome:`${parentincome}`,service:`${service}`,GovernmentData:`${otherservice}`,
-          uriaffidavit: `${uriaffidavit}`,affidavitImage: `${affidavitImage}`,affidavitType: `${affidavitType}`,rname:`${NameArray}`,rage:`${AgeArray}`,
+          affidavitImage: `${affidavitImage}`,rname:`${NameArray}`,rage:`${AgeArray}`,
           roccupation:`${OccupyArray}`,rincome:`${IncomeArray}`,reducation:`${EducationArray}`,rrelation:`${RelationArray}`,
           expensedetail:`${expensedetail}`,residence:`${residence}`,disease:`${disease}`,treatmentfrom:`${treatmentfrom}`,treatmentexpense:`${treatmentexpense}`,name:`${name}`,fname:`${fname}`,
-          cnic:`${cnic}`,address:`${address}`,paddress:`${paddress}`,relation:`${relation}`,fcnicImage:`${fcnicImage}`,fcnicback:`${fcnicbackImage}`
+          cocnic:`${cnic}`,address:`${address}`,paddress:`${paddress}`,relation:`${relation}`,fcnicImage:`${capfCnic}`,fcnicback:`${capCnicBack}`
           
         })
       }

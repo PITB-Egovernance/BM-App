@@ -628,7 +628,7 @@ setObmarks(obmarks);
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:40}}>
                 <TextInput
                   placeholderColor="#c4c3cb"
-                  placeholder={service}
+                  placeholder='service'
                   editable={false}
                   style={[styles.BMshowFormTextInput
                     // ,{borderColor: !firstName && errorValidate ? 'red':'#fff'}

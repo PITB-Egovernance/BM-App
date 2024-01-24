@@ -34,6 +34,8 @@ import { Alert, Keyboard, KeyboardAvoidingView,  TextInput, TouchableWithoutFeed
 import pwdIMage from  '../../assets/images/background.png';
 import syncStorage from 'react-native-sync-storage';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import baseUrl from '../Components/Url';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 
 const Education = ({navigation}) => {
@@ -66,278 +68,385 @@ const Education = ({navigation}) => {
     { label: 'Fourth year', value: 'Fourth year'},
     { label: 'Masters', value: 'Masters'},
   ];
+  const rdata = [
+    { label: 'Mother', value: 'Mother' },
+    { label: 'Father', value: 'Father' },
+    { label: 'Sister', value: 'Sister'},
+    { label: 'Friend', value: 'Friend' },
+    { label: 'Gaurdian', value: 'Gaurdian' },
+    { label: 'Brother', value: 'Brother'},
+    { label: 'Close Relative', value: 'Close Relative'},
+
+  ];
 
 
 // step2 1 father cnic front     
 const [scnicImage, setScnicImage]   = useState('');
-const [uriscnic, setURIScnic]  = useState('');
-const [scnicName, setScnicName] = useState('');
-const [scnicType, setScnicType] = useState('');
+const [capscnic, setCapScnic]  = useState('');
 
 // step2 1 father cnic back       
 const [scnicbackImage, setScnicbackImage]   = useState('');
-const [uriscnicback, setURIScnicback]  = useState('');
-const [scnicbackName, setScnicbackName] = useState('');
-const [scnicbackType, setScnicbackType] = useState('');
+const [capScnicback, setCapScnicBack]  = useState('');
 
 
 //  step2 2 
 const [fcnicImage, setFcnicImage]   = useState('');
-const [urifcnic, setURIFcnic]  = useState('');
-const [fcnicName, setFcnicName] = useState('');
-const [fcnicType, setFcnicType] = useState('');
+const [capturedfcnic, setCapturedFCnic]   = useState('');
+
 
 // step2 2    
 const [fcnicbackImage, setFcnicbackImage]   = useState('');
-const [urifcnicback, setURIFcnicback]  = useState('');
-const [fcnicbackName, setFcnicbackName] = useState('');
-const [fcnicbackType, setFcnicbackType] = useState('');
+const [capturedfcnicback, setCapturedFCnicBack]  = useState('');
 
 
 // slip   
 const [slipImage, setSlipImage]   = useState('');
-const [urislip, setURISlip]  = useState('');
-const [slipName, setSlipName] = useState('');
-const [slipType, setSlipType] = useState('');
+const [capSlip, setCapSlip]  = useState('');
 
 // death certi  
 const [deathcertiImage, setDeathcertiImage]   = useState('');
-const [urideathcerti, setURIDeathcerti]  = useState('');
-const [deathcertiName, setDeathcertiName] = useState('');
-const [deathcertiType, setDeathcertiType] = useState('');
-
+const [capDeath, setCapDeath]  = useState('');
 // disable certi  
 const [disablecertiImage, setDisablecertiImage]   = useState('');
-const [uridisablecerti, setURIDisablecerti]  = useState('');
-const [disablecertiName, setDisablecertiName] = useState('');
-const [disablecertiType, setDisablecertiType] = useState('');
+const [capDisbale, setCapDisable]  = useState('');
 
 // hostelcerti certi  
 const [hostelcertiImage, setHostelcertiImage]   = useState('');
-const [urihostelcerti, setURIHostelcerti]  = useState('');
-const [hostelcertiName, setHostelcertiName] = useState('');
-const [hostelcertiType, setHostelcertiType] = useState('');
+const [capHostel, setCapHostel]  = useState('');
 
 // nohostelcerti certi  
 const [nohostelcertiImage, setNohostelcertiImage]   = useState('');
-const [urinohostelcerti, setURINohostelcerti]  = useState('');
-const [nohostelcertiName, setNohostelcertiName] = useState('');
-const [nohostelcertiType, setNohostelcertiType] = useState('');
+const [capNoHostel, setCapNoHostel]  = useState('');
 
 
 //adm certi  
 const [admcertiImage, setAdmcertiImage]   = useState('');
-const [uriadmcerti, setURIAdmcerti]  = useState('');
-const [admcertiName, setAdmcertiName] = useState('');
-const [admcertiType, setAdmcertiType] = useState('');
+const [capAdm, setCapAdm]  = useState('');
 
 
 //resultcard 
 const [resultcardImage, setResultcardImage]   = useState('');
-const [uriresultcard, setURIResultcard]  = useState('');
-const [resultcardName, setResultcardName] = useState('');
-const [resultcardType, setResultcardType] = useState('');
+const [capResult, setCapResult]  = useState('');
 
 
 //scholcerti
 const [scholcertiImage, setScholcertiImage]   = useState('');
-const [urischolcerti, setURIScholcerti]  = useState('');
-const [scholcertiName, setScholcertiName] = useState('');
-const [scholcertiType, setScholcertiType] = useState('');
+const [capSchoolCert, setCapSchoolCert]  = useState('');
 
 
 
   // step2 1 father cnic front 
 const fcnic = async () => {
-  DocumentPicker.pick({
-    allowMultiSelection: false,
-    type: [DocumentPicker.types.images,DocumentPicker.types.pdf],
-  })
-    .then((response) =>
- {   
-    // console.log('response',JSON.stringify(response[0], null, 2))
-    setFcnicImage(response[0].uri)
-    setURIFcnic(response[0].uri)
-    setFcnicName(response[0].name)
-    setFcnicType(response[0].type)
- })
+ 
+
+  const options = {
+    mediaType: 'photo',
+    includeBase64: true,
+    maxHeight: 2000,
+    maxWidth: 2000,
+  };
+
+  launchImageLibrary(options, (response) => {
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.error) {
+      console.log('Image picker error: ', response.error);
+    } else {
+      let imageUri = response.uri || response.assets?.[0]?.uri;
+      setFcnicImage(imageUri);
+      
+      const fileBase64        = response.assets[0].base64
+      console.log('Image Cnic Captured',fileBase64)
+      setCapturedFCnic(fileBase64)
+    }
+  });
 } 
 
  
 // step2 1 father cnic back  
 const fcnicback = async () => {
-  DocumentPicker.pick({
-    allowMultiSelection: false,
-    type: [DocumentPicker.types.images,DocumentPicker.types.pdf],
-  })
-    .then((response) =>
- {   
-    // console.log('response',JSON.stringify(response[0], null, 2))
-    setFcnicbackImage(response[0].uri)
-    setURIFcnicback(response[0].uri)
-    setFcnicbackName(response[0].name)
-    setFcnicbackType(response[0].type)
- })
+  
+  const options = {
+    mediaType: 'photo',
+    includeBase64: true,
+    maxHeight: 2000,
+    maxWidth: 2000,
+  };
+
+  launchImageLibrary(options, (response) => {
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.error) {
+      console.log('Image picker error: ', response.error);
+    } else {
+      let imageUri = response.uri || response.assets?.[0]?.uri;
+      setFcnicbackImage(imageUri);
+  
+      console.log('Image cnic back',imageUri)
+      const fileBase64        = response.assets[0].base64
+      setCapturedFCnicBack(fileBase64);
+    }
+  });
 } 
 
  // step2 1 father cnic front 
  const scnic = async () => {
-  DocumentPicker.pick({
-    allowMultiSelection: false,
-    type: [DocumentPicker.types.images,DocumentPicker.types.pdf],
-  })
-    .then((response) =>
- {   
-    // console.log('response',JSON.stringify(response[0], null, 2))
-    setScnicImage(response[0].uri)
-    setURIScnic(response[0].uri)
-    setScnicName(response[0].name)
-    setScnicType(response[0].type)
- })
+ 
+  const options = {
+    mediaType: 'photo',
+    includeBase64: true,
+    maxHeight: 2000,
+    maxWidth: 2000,
+  };
+
+  launchImageLibrary(options, (response) => {
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.error) {
+      console.log('Image picker error: ', response.error);
+    } else {
+      let imageUri = response.uri || response.assets?.[0]?.uri;
+      setScnicImage(imageUri);
+  
+      console.log('father Image front back',imageUri)
+      const fileBase64        = response.assets[0].base64
+      setCapScnic(fileBase64)
+    }
+  });
 } 
 
  
 // step2 1 father cnic back  
 const scnicback = async () => {
-  DocumentPicker.pick({
-    allowMultiSelection: false,
-    type: [DocumentPicker.types.images,DocumentPicker.types.pdf],
-  })
-    .then((response) =>
- {   
-    // console.log('response',JSON.stringify(response[0], null, 2))
-    setScnicbackImage(response[0].uri)
-    setURIScnicback(response[0].uri)
-    setScnicbackName(response[0].name)
-    setScnicbackType(response[0].type)
- })
+  
+  const options = {
+    mediaType: 'photo',
+    includeBase64: true,
+    maxHeight: 2000,
+    maxWidth: 2000,
+  };
+
+  launchImageLibrary(options, (response) => {
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.error) {
+      console.log('Image picker error: ', response.error);
+    } else {
+      let imageUri = response.uri || response.assets?.[0]?.uri;
+      setScnicbackImage(imageUri);
+  
+      console.log('Image cnic back',imageUri)
+      const fileBase64        = response.assets[0].base64
+      setCapScnicBack(fileBase64)
+    }
+  });
 } 
 
  // 3 slip
 const slip = async () => {
-  DocumentPicker.pick({
-    allowMultiSelection: false,
-    type: [DocumentPicker.types.images,DocumentPicker.types.pdf],
-  })
-    .then((response) =>
- {   
-    // console.log('response',JSON.stringify(response[0], null, 2))
-    setSlipImage(response[0].uri)
-    setURISlip(response[0].uri)
-    setSlipName(response[0].name)
-    setSlipType(response[0].type)
- })
+  
+  const options = {
+    mediaType: 'photo',
+    includeBase64: true,
+    maxHeight: 2000,
+    maxWidth: 2000,
+  };
+
+  launchImageLibrary(options, (response) => {
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.error) {
+      console.log('Image picker error: ', response.error);
+    } else {
+      let imageUri = response.uri || response.assets?.[0]?.uri;
+      setSlipImage(imageUri);
+  
+      console.log('Image Slip',imageUri)
+      const fileBase64        = response.assets[0].base64
+      setCapSlip(fileBase64);
+    }
+  });
 } 
 
  // 3 death certi
  const deathcerti = async () => {
-  DocumentPicker.pick({
-    allowMultiSelection: false,
-    type: [DocumentPicker.types.images,DocumentPicker.types.pdf],
-  })
-    .then((response) =>
- {   
-    // console.log('response',JSON.stringify(response[0], null, 2))
-    setDeathcertiImage(response[0].uri)
-    setURIDeathcerti(response[0].uri)
-    setDeathcertiName(response[0].name)
-    setDeathcertiType(response[0].type)
- })
+  
+  const options = {
+    mediaType: 'photo',
+    includeBase64: true,
+    maxHeight: 2000,
+    maxWidth: 2000,
+  };
+
+  launchImageLibrary(options, (response) => {
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.error) {
+      console.log('Image picker error: ', response.error);
+    } else {
+      let imageUri = response.uri || response.assets?.[0]?.uri;
+      setDeathcertiImage(imageUri);
+  
+      console.log('Image cnic back',imageUri)
+      const fileBase64        = response.assets[0].base64
+      setCapDeath(fileBase64);
+    }
+  });
 } 
 // 3 disable certi
 const disablecerti = async () => {
-  DocumentPicker.pick({
-    allowMultiSelection: false,
-    type: [DocumentPicker.types.images,DocumentPicker.types.pdf],
-  })
-    .then((response) =>
- {   
-    // console.log('response',JSON.stringify(response[0], null, 2))
-    setDisablecertiImage(response[0].uri)
-    setURIDisablecerti(response[0].uri)
-    setDisablecertiName(response[0].name)
-    setDisablecertiType(response[0].type)
- })
+ 
+  const options = {
+    mediaType: 'photo',
+    includeBase64: true,
+    maxHeight: 2000,
+    maxWidth: 2000,
+  };
+
+  launchImageLibrary(options, (response) => {
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.error) {
+      console.log('Image picker error: ', response.error);
+    } else {
+      let imageUri = response.uri || response.assets?.[0]?.uri;
+      setDisablecertiImage(imageUri);
+  
+      console.log('Image cnic back',imageUri)
+      const fileBase64        = response.assets[0].base64
+      setCapDisable(fileBase64)
+    }
+  });
 } 
 // 3 adm certi
 const admcerti = async () => {
-  DocumentPicker.pick({
-    allowMultiSelection: false,
-    type: [DocumentPicker.types.images,DocumentPicker.types.pdf],
-  })
-    .then((response) =>
- {   
-    // console.log('response',JSON.stringify(response[0], null, 2))
-    setAdmcertiImage(response[0].uri)
-    setURIAdmcerti(response[0].uri)
-    setAdmcertiName(response[0].name)
-    setAdmcertiType(response[0].type)
- })
+ 
+  const options = {
+    mediaType: 'photo',
+    includeBase64: true,
+    maxHeight: 2000,
+    maxWidth: 2000,
+  };
+
+  launchImageLibrary(options, (response) => {
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.error) {
+      console.log('Image picker error: ', response.error);
+    } else {
+      let imageUri = response.uri || response.assets?.[0]?.uri;
+      setAdmcertiImage(imageUri);
+  
+      console.log('Image cnic back',imageUri)
+      const fileBase64        = response.assets[0].base64
+      setCapAdm(fileBase64)
+    }
+  });
 } 
 
 // 3 scholcerti
 const scholcerti = async () => {
-  DocumentPicker.pick({
-    allowMultiSelection: false,
-    type: [DocumentPicker.types.images,DocumentPicker.types.pdf],
-  })
-    .then((response) =>
- {   
-    // console.log('response',JSON.stringify(response[0], null, 2))
-    setScholcertiImage(response[0].uri)
-    setURIScholcerti(response[0].uri)
-    setScholcertiName(response[0].name)
-    setScholcertiType(response[0].type)
- })
+ 
+  const options = {
+    mediaType: 'photo',
+    includeBase64: true,
+    maxHeight: 2000,
+    maxWidth: 2000,
+  };
+
+  launchImageLibrary(options, (response) => {
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.error) {
+      console.log('Image picker error: ', response.error);
+    } else {
+      let imageUri = response.uri || response.assets?.[0]?.uri;
+      setScholcertiImage(imageUri);
+  
+      console.log('Image cnic back',imageUri)
+      const fileBase64        = response.assets[0].base64
+      setCapSchoolCert(fileBase64)
+    }
+  });
 } 
 
 
 // 3 hostel
 const hostelcerti = async () => {
-  DocumentPicker.pick({
-    allowMultiSelection: false,
-    type: [DocumentPicker.types.images,DocumentPicker.types.pdf],
-  })
-    .then((response) =>
- {   
-    // console.log('response',JSON.stringify(response[0], null, 2))
-    setHostelcertiImage(response[0].uri)
-    setURIHostelcerti(response[0].uri)
-    setHostelcertiName(response[0].name)
-    setHostelcertiType(response[0].type)
- })
+   
+    const options = {
+      mediaType: 'photo',
+      includeBase64: true,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+  
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error: ', response.error);
+      } else {
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        setHostelcertiImage(imageUri);
+    
+        console.log('Image cnic back',imageUri)
+        const fileBase64        = response.assets[0].base64
+        setCapHostel(fileBase64)
+      }
+    });
 } 
 
 // 3 nohostel
 const nohostelcerti = async () => {
-  DocumentPicker.pick({
-    allowMultiSelection: false,
-    type: [DocumentPicker.types.images,DocumentPicker.types.pdf],
-  })
-    .then((response) =>
- {   
-    // console.log('response',JSON.stringify(response[0], null, 2))
-    setNohostelcertiImage(response[0].uri)
-    setURINohostelcerti(response[0].uri)
-    setNohostelcertiName(response[0].name)
-    setNohostelcertiType(response[0].type)
- })
+ 
+  const options = {
+    mediaType: 'photo',
+    includeBase64: true,
+    maxHeight: 2000,
+    maxWidth: 2000,
+  };
+
+  launchImageLibrary(options, (response) => {
+    if (response.didCancel) {
+      console.log('User cancelled image picker');
+    } else if (response.error) {
+      console.log('Image picker error: ', response.error);
+    } else {
+      let imageUri = response.uri || response.assets?.[0]?.uri;
+      setNohostelcertiImage(imageUri);
+  
+      console.log('Image cnic back',imageUri)
+      const fileBase64        = response.assets[0].base64
+      setCapNoHostel(fileBase64)
+    }
+  });
 } 
 
 // 3 resultcard
 const resultcard = async () => {
-  DocumentPicker.pick({
-    allowMultiSelection: false,
-    type: [DocumentPicker.types.images,DocumentPicker.types.pdf],
-  })
-    .then((response) =>
- {   
-    // console.log('response',JSON.stringify(response[0], null, 2))
-    setResultcardImage(response[0].uri)
-    setURIResultcard(response[0].uri)
-    setResultcardName(response[0].name)
-    setResultcardType(response[0].type)
- })
+   
+    const options = {
+      mediaType: 'photo',
+      includeBase64: true,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+  
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error: ', response.error);
+      } else {
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        setResultcardImage(imageUri);
+    
+        console.log('Image cnic back',imageUri)
+        const fileBase64        = response.assets[0].base64
+        setCapResult(fileBase64)
+      }
+    });
 } 
 //Relative Props
 const [NameArray, setNameArray] = useState([]);
@@ -447,6 +556,7 @@ const district = syncStorage.get('district')
 const Tehsil = syncStorage.get('tehsil')
 console.log('Tehsil', Tehsil)
 const imageProfile = syncStorage.get('image')
+const imageProfilee = syncStorage.get('imageCap')
 const fullname = syncStorage.get('applicantname')
 const fathername = syncStorage.get('fathername')
 // const pcrdp = syncStorage.get('Pcrdp')
@@ -467,49 +577,49 @@ const yourincome = syncStorage.get('yourincome')
 const parentincome = syncStorage.get('parentincome')
 const service = syncStorage.get('Service')
 const otherservice = syncStorage.get('GovernmentData')
-const uriaffidavit = syncStorage.get('uriaffidavit');
+// const uriaffidavit = syncStorage.get('uriaffidavit');
 const affidavitImage = syncStorage.get('affidavitImage');
-const affidavitType = syncStorage.get('affidavitType');
+// const affidavitType = syncStorage.get('affidavitType');
 /* Step 4 Fields Get Relative Detail*/
 console.log('asda', yourincome,parentincome,service,otherservice)
 console.log('Family Data', familyData)
-if (familyData != '') {
-const regID = [];
-const rnameData = [];
-const rageData = [];
-const rincomeData = [];
-const roccupationData = [];
-const rrelationData = [];
-const reducationData = [];
-var count = Object.keys(familyData).length;
-console.log('Keys family dr', count);
-for (var i = 0; i < count; i++) {
-  // regformIDData.push(familyData[i].regform_id);
-  rnameData.push(familyData[i].rname);
-  rageData.push(familyData[i].rage);
-  rincomeData.push(familyData[i].rincome);
-  roccupationData.push(familyData[i].roccupation);
-  rrelationData.push(familyData[i].rrelation);
-  reducationData.push(familyData[i].reducation);
-  regID.push(familyData[i].regform_id)
+if (familyData != '' && familyData!=undefined) {
+  const regID = [];
+  const rnameData = [];
+  const rageData = [];
+  const rincomeData = [];
+  const roccupationData = [];
+  const rrelationData = [];
+  const reducationData = [];
+  var count = Object.keys(familyData).length;
+  console.log('Keys family dr', count);
+  for (var i = 0; i < count; i++) {
+    // regformIDData.push(familyData[i].regform_id);
+    rnameData.push(familyData[i].rname);
+    rageData.push(familyData[i].rage);
+    rincomeData.push(familyData[i].rincome);
+    roccupationData.push(familyData[i].roccupation);
+    rrelationData.push(familyData[i].rrelation);
+    reducationData.push(familyData[i].reducation);
+    regID.push(familyData[i].regform_id)
 
- //  console.log('Family_dir_inner Name', rnameData)
- //  console.log('Family_dir_inner relation', rageData)
- //  console.log('Family_dir_inner Age', rincomeData)
- //  console.log('Family_dir_inner education', reducationData)
- //  console.log('Family_dir_inner icome', rrelationData)
- //  console.log('Family_dir_inner Occ', roccupationData)
- 
+  //  console.log('Family_dir_inner Name', rnameData)
+  //  console.log('Family_dir_inner relation', rageData)
+  //  console.log('Family_dir_inner Age', rincomeData)
+  //  console.log('Family_dir_inner education', reducationData)
+  //  console.log('Family_dir_inner icome', rrelationData)
+  //  console.log('Family_dir_inner Occ', roccupationData)
+  
 
-}
+  }
 
-setNameArray(rnameData)
-setAgeArray(rageData)
-setOccupArray(roccupationData)
-setIncomeArray(rincomeData)
-setEducationArray(reducationData)
-setRelationArray(rrelationData)
-setRegID(regID)
+  setNameArray(rnameData)
+  setAgeArray(rageData)
+  setOccupArray(roccupationData)
+  setIncomeArray(rincomeData)
+  setEducationArray(reducationData)
+  setRelationArray(rrelationData)
+  setRegID(regID)
 
 }
 /* Step 4 Fields Get Select Category*/
@@ -522,121 +632,34 @@ setRegID(regID)
 
 
 console.log(JSON.stringify(NameArray),AgeArray,EducationArray)
-//  if (uriaffidavit == '') {
-//  }
-//  else {
-//    formData.append('affidavite', {
-//      uri: Platform.OS === 'android' ? uriaffidavit : uriaffidavit.replace('file://', ''),
-//      type: affidavitType,
-//      name: affidavitImage
-//    });
-//  }
 
-//relativedetail info 
-//  formData.append('rname[]', JSON.stringify(NameArray))
-//  formData.append('rrelation[]', JSON.stringify(RelationArray))
-//  formData.append('roccupation[]', JSON.stringify(OccupyArray))
-//  formData.append('rage[]', JSON.stringify(AgeArray))
-//  formData.append('reducation[]', JSON.stringify(EducationArray))
-//  formData.append('rincome[]', JSON.stringify(IncomeArray))
-
-
- //Marriage fields starts from here
-
- //    console.log('Sourceofincome', sourceofincome)
- //    console.log('Bridename', bridename)
- //    console.log('Bridecnic', bridecnic)
- //    console.log('Brideage', brideage)
- //    console.log('Groomname', groomname)
- //    console.log('Groomfathername', groomfathername)
- //    console.log('Groomcnic', groomcnic)
- //    console.log('Groomaddress', groomaddress)
- //    console.log('Income',income)
- //    console.log('Margdate', margdate)
- //    console.log('Adate', adate)
- //    console.log('Married', married)
- //    console.log('Regname',regname)
- //    console.log('Regaddress',regaddress)
-
- // formData.append('sourceofincome', sourceofincome)
- // formData.append('bridename', bridename)
- // formData.append('bridecnic', bridecnic)
- // formData.append('brideage', brideage)
- // formData.append('groomname', groomname)
- // formData.append('groomfathername', groomfathername)
- // formData.append('groomcnic', groomcnic)
- // formData.append('groomaddress', groomaddress)
- // formData.append('income', income)
- // formData.append('margdate', JSON.stringify(margdate));
- // // formData.append('margdate',margdate)
- // formData.append('married', married)
- // // formData.append('adate',adate)
- // formData.append('adate', JSON.stringify(adate));
- // formData.append('regname', regname)
- // formData.append('regaddress', regaddress)
-
-
- // if (uribcnicf == '') {
- // } else {
- //   formData.append('bridecnicfront', {
- //     uri: Platform.OS === 'android' ? uribcnicf : uribcnicf.replace('file://', ''),
- //     type: bcnicfType,
- //     name: bcnicfName
- //   });
- // }
-
- // if (uribcnicb == '') {
- // } else {
- //   formData.append('bridecnicback', {
- //     uri: Platform.OS === 'android' ? uribcnicb : uribcnicb.replace('file://', ''),
- //     type: bcnicbType,
- //     name: bcnicbName
- //   });
- // }
-
- // if (urigcnicf == '') {
- // } else {
- //   formData.append('groomcnicfront', {
- //     uri: Platform.OS === 'android' ? urigcnicf : urigcnicf.replace('file://', ''),
- //     type: gcnicfType,
- //     name: gcnicfName
- //   });
- // }
-
- // if (urigcnicb == '') {
- // } else {
- //   formData.append('groomcnicback', {
- //     uri: Platform.OS === 'android' ? urigcnicb : urigcnicb.replace('file://', ''),
- //     type: gcnicbType,
- //     name: gcnicbName
- //   });
- // }
- console.log('formData Arrays', NameArray);
+console.log('formData Arrays', NameArray);
     
   setLoading(true)
   fetch(
-    `https://bm.punjab.gov.pk/api/regformeduallpost`,
+    `${baseUrl[0]}/regformeduallpost`,
     {
       method: 'POST',
       headers: {
         'Content-Type': 'multipart/application/json',
         'Accept': 'application/json',
+        'enctype':"multipart/form-data"
       },
-      body: JSON.stringify({ user_id: `${bmuser_id}`, district: `${district}`,tehsil: `${Tehsil}`,image: `${imageProfile}`,applicantname: `${fullname}`,
+      body: JSON.stringify({ user_id: `${bmuser_id}`, district: `${district}`,tehsil: `${Tehsil}`,image: `${imageProfilee}`,applicantname: `${fullname}`,
         cnic: `${cnic}`,contact: `${phone}`,fathername:`${fathername}`,dob: `${dob}`,agegroup: `${agegroup}`,gender: `${gender}`,address: `${paddress}`,paddress: `${ppaddress}`,
         reg_date: `${reg_date}`,yourincome: `${yourincome}`,parentincome:`${parentincome}`,service:`${service}`,GovernmentData:`${otherservice}`,
-        uriaffidavit: `${uriaffidavit}`,affidavitImage: `${affidavitImage}`,affidavitType: `${affidavitType}`,rname:`${NameArray}`,rage:`${AgeArray}`,
+        affidavitImage: `${affidavitImage}`,rname:`${NameArray}`,rage:`${AgeArray}`,
         roccupation:`${OccupyArray}`,rincome:`${IncomeArray}`,reducation:`${EducationArray}`,rrelation:`${RelationArray}`,
         studentname:`${studentname}`,studentcnic:`${studentcnic}`,relation:`${relation}`,rollnumber:`${rollnumber}`,schoolname:`${schoolname}`,grade:`${grade}`,
-        tmarks:`${tmarks}`,obmarks:`${obmarks}`,fcnic:`${fcnicImage}`,fcnicback:`${fcnicbackImage}`,scnicback:`${scnicImage}`,scnic:`${scnicbackImage}`,slip:`${slipImage}`,
-        deathcerti:`${deathcertiImage}`,disablecerti:`${disablecertiImage}`,admcerti:`${admcertiImage}`,resultcard:`${resultcardImage}`,scholcerti:`${scholcertiImage}`,
-        hostelcerti:`${hostelcertiImage}`,nohostelcerti:`${nohostelcertiImage}`
+        tmarks:`${tmarks}`,obmarks:`${obmarks}`,fcnic:`${capturedfcnic}`,fcnicback:`${capturedfcnicback}`,scnicback:`${capscnic}`,scnic:`${capScnicback}`,slip:`${capSlip}`,
+        deathcerti:`${capDeath}`,disablecerti:`${capDisbale}`,admcerti:`${capAdm}`,resultcard:`${capResult}`,scholcerti:`${capSchoolCert}`,
+        hostelcerti:`${capHostel}`,nohostelcerti:`${capNoHostel}`
         
       })
     }
   ).then(resp => resp.json()).then(response => {
     //  console.log('educationtest', JSON.stringify(response));
-    console.log('response BM', JSON.stringify(response['BM Register']['id']));
+    console.log('response BM', response);
 
     if(response.success!=''){
             const regformID = response['BM Register']['id'];
@@ -726,7 +749,7 @@ return (
                     </Text>
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>فارم بھرنے والے کے کوائف:</Text>
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
-                  <TextInput  placeholderColor="#c4c3cb" 
+                  {/* <TextInput  placeholderColor="#c4c3cb" 
                   placeholderTextColor='grey'
                   onChangeText={(relation) => setRelation(relation)}
                   value={relation}
@@ -734,7 +757,28 @@ return (
                   style={[styles.Step1FormTextInput
                     , { borderColor: !relation && errorValidate ? 'red' : '#fff' }
                   ]}
-                  />
+                  /> */}
+                  <View style={styles.container}>
+
+                      <Dropdown
+                      style={[styles.dropdown, { borderColor: !grade && errorValidate ? 'red' : '#fff'}]}
+                      placeholderStyle={styles.placeholderStyle}
+                      selectedTextStyle={styles.selectedTextStyle}
+                      itemTextStyle={styles.itemTextStyle}
+                      inputSearchStyle={styles.inputSearchStyle}
+                        data={rdata}
+                        // search
+                        labelField="label"
+                        valueField="value"
+                        placeholder={'طالب علم کے ساتھ تعلق'}
+                        searchPlaceholder="Search..."
+                        value={relation}
+
+                        onChange={item => {
+                          setRelation(item.value);
+                        }}
+                      />
+                      </View>
                 </View>  
             
 

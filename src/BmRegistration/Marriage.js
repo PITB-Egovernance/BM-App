@@ -32,6 +32,9 @@ import DocumentPicker, {
   isInProgress,
   types,
 } from 'react-native-document-picker';
+import baseUrl from '../Components/Url';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+
 
 const Marriage = ({ navigation }) => {
   const [errorValidate, setErrorValidate] = useState(false);
@@ -52,95 +55,131 @@ const Marriage = ({ navigation }) => {
   const [regaddress, setRegaddress] = useState('');
 
   const Incomedata = [
-    { label: '0-20k', value: 'Yes' },
-    { label: '20k-40k', value: '20k-40k' },
-    { label: '40k-60k', value: '40k-60k' },
-    { label: '60k and above', value: '60k and above' },
+    { label: '1-20k', value: 'Yes' },
+    { label: '21k-40k', value: '21k-40k' },
+    { label: '41k-60k', value: '41k-60k' },
+    { label: '61k and above', value: '61k and above' },
   ];
 
 
   // step2  bride cnic front     
   const [bcnicfImage, setBcnicfImage] = useState('');
-  const [uribcnicf, setURIBcnicf] = useState('');
-  const [bcnicfName, setBcnicfName] = useState('');
-  const [bcnicfType, setBcnicfType] = useState('');
+  const [capBfCnic, setCapBfCnic] = useState('');
 
   // step2 bride cnic back       
   const [bcnicbImage, setBcnicbImage] = useState('');
-  const [uribcnicb, setURIBcnicb] = useState('');
-  const [bcnicbName, setBcnicbName] = useState('');
-  const [bcnicbType, setBcnicbType] = useState('');
+  const [capBcnicback, setCapBcnicback] = useState('');
 
   // step2  groom CNIC front       
   const [gcnicfImage, setGcnicfImage] = useState('');
-  const [urigcnicf, setURIGcnicf] = useState('');
-  const [gcnicfName, setGcnicfName] = useState('');
-  const [gcnicfType, setGcnicfType] = useState('');
+  const [capGCnicF, setCapgfcnic] = useState('');
   // step2  groom CNIC Back       
   const [gcnicbImage, setGcnicbImage] = useState('');
-  const [urigcnicb, setURIGcnicb] = useState('');
-  const [gcnicbName, setGcnicbName] = useState('');
-  const [gcnicbType, setGcnicbType] = useState('');
+  const [capGcnicBack, setCapGcnicBack] = useState('');
 
 
   // step3 bride cnic front
   const bridecnicfront = async () => {
-    DocumentPicker.pick({
-      allowMultiSelection: false,
-      type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
-    })
-      .then((response) => {
-        // console.log('response',JSON.stringify(response[0], null, 2))
-        setBcnicfImage(response[0].uri)
-        setURIBcnicf(response[0].uri)
-        setBcnicfName(response[0].name)
-        setBcnicfType(response[0].type)
-      })
+   
+    const options = {
+      mediaType: 'photo',
+      includeBase64: true,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+  
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error: ', response.error);
+      } else {
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        setBcnicfImage(imageUri);
+    
+        console.log('Image cnic back',imageUri)
+        const fileBase64        = response.assets[0].base64
+        setCapBfCnic(fileBase64)
+      }
+    });
   }
   // step3 bride cnic back
   const bridecnicback = async () => {
-    DocumentPicker.pick({
-      allowMultiSelection: false,
-      type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
-    })
-      .then((response) => {
-        // console.log('response',JSON.stringify(response[0], null, 2))
-        setBcnicbImage(response[0].uri)
-        setURIBcnicb(response[0].uri)
-        setBcnicbName(response[0].name)
-        setBcnicbType(response[0].type)
-      })
+    
+    const options = {
+      mediaType: 'photo',
+      includeBase64: true,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+  
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error: ', response.error);
+      } else {
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        setBcnicbImage(imageUri);
+    
+        console.log('Image cnic back',imageUri)
+        const fileBase64        = response.assets[0].base64
+        setCapBcnicback(fileBase64)
+      }
+    });
   }
 
 
   // step3groom cnic front
   const groomcnicfront = async () => {
-    DocumentPicker.pick({
-      allowMultiSelection: false,
-      type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
-    })
-      .then((response) => {
-        // console.log('response',JSON.stringify(response[0], null, 2))
-        setGcnicfImage(response[0].uri)
-        setURIGcnicf(response[0].uri)
-        setGcnicfName(response[0].name)
-        setGcnicfType(response[0].type)
-      })
+    
+    const options = {
+      mediaType: 'photo',
+      includeBase64: true,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+  
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error: ', response.error);
+      } else {
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        setGcnicfImage(imageUri);
+    
+        // console.log('Image cnic back',imageUri)
+        const fileBase64        = response.assets[0].base64
+        setCapgfcnic(fileBase64)
+      }
+    });
   }
 
   // step3 groom cnic back
   const groomcnicback = async () => {
-    DocumentPicker.pick({
-      allowMultiSelection: false,
-      type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
-    })
-      .then((response) => {
-        // console.log('response',JSON.stringify(response[0], null, 2))
-        setGcnicbImage(response[0].uri)
-        setURIGcnicb(response[0].uri)
-        setGcnicbName(response[0].name)
-        setGcnicbType(response[0].type)
-      })
+    
+    const options = {
+      mediaType: 'photo',
+      includeBase64: true,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+  
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error: ', response.error);
+      } else {
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        setGcnicbImage(imageUri);
+    
+        console.log('Image cnic back',imageUri)
+        const fileBase64        = response.assets[0].base64
+        setCapGcnicBack(fileBase64)
+      }
+    });
   }
   const [NameArray, setNameArray] = useState([]);
   const [AgeArray, setAgeArray] = useState([]);
@@ -173,281 +212,587 @@ const Marriage = ({ navigation }) => {
   };
 
   const MarriageStep = () => {
+
+    const reg_date = syncStorage.get('reg_date')
+    console.log('MArried', married)
     setErrorValidate(true)
-    if(!sourceofincome){
-    ToastAndroid.show('Enter your Source of income', ToastAndroid.LONG);
-    return;
-  } else if(!bridename){
-    ToastAndroid.show('Please enter Bride Name', ToastAndroid.LONG);
-    return;
-  }else if(!bridecnic){
-    ToastAndroid.show('Enter Bride CNIC', ToastAndroid.LONG);
-    return;
-  }else if(!brideage){
-    ToastAndroid.show('Enter Bride Age', ToastAndroid.LONG);
-    return;
-  }else if(!groomname){
-    ToastAndroid.show('Enter Groom Name ', ToastAndroid.LONG);
-    return;
-  }else if(!groomfathername){
-    ToastAndroid.show('Enter Groom Father Name', ToastAndroid.LONG);
-    return;
-  }else if(!groomcnic){
-    ToastAndroid.show('Enter Groom CNIC', ToastAndroid.LONG);
-    return;
-  }else if(!groomaddress){
-    ToastAndroid.show('Enter Groom Address', ToastAndroid.LONG);
-    return;
-  }else if(!income){
-    ToastAndroid.show('Enter your Income', ToastAndroid.LONG);
-    return;
-  }else if(!married){
-    ToastAndroid.show('Select an Option', ToastAndroid.LONG);
-    return;
-  }
-  // else if(!adate){
-  //   ToastAndroid.show('Select Date ', ToastAndroid.LONG);
-  //   return;
-  // }
-  // else if(!regname){
-  //   ToastAndroid.show('Select an option', ToastAndroid.LONG);
-  //   return;
-  // }
-  // else if(!regaddress){
-  //   ToastAndroid.show('Select an option', ToastAndroid.LONG);
-  //   return;
-  // }
-  else if(!uribcnicf){
-    ToastAndroid.show('Upload Bride CNIC Front Image', ToastAndroid.LONG);
-    return;
-  }else if(!uribcnicb){
-    ToastAndroid.show('Upload Bride CNIC Back Image', ToastAndroid.LONG);
-    return;
-  }else if(!urigcnicf){
-    ToastAndroid.show('Upload Groom CNIC Front Image', ToastAndroid.LONG);
-    return;
-  }else if(!urigcnicb){
-    ToastAndroid.show('Upload Bride CNIC Back Image', ToastAndroid.LONG);
-    return;
-  }
-  else{
- /* Step 1 fields Get Bmregt*/
- const bmuser_id = syncStorage.get('bmuser_id')
- const district = syncStorage.get('district')
- // console.log('district',district);
- const Tehsil = syncStorage.get('tehsil')
- console.log('Tehsil', Tehsil)
- const imageProfile = syncStorage.get('image')
- const fullname = syncStorage.get('applicantname')
- const fathername = syncStorage.get('fathername')
- // const pcrdp = syncStorage.get('Pcrdp')
- const cnic = syncStorage.get('cnic')
- const phone = syncStorage.get('contact')
- const dob = syncStorage.get('dob')
- const agegroup = syncStorage.get('age')
- const gender = syncStorage.get('gender')
- const paddress = syncStorage.get('postaladress')
- const ppaddress = syncStorage.get('permanentAddress')
 
 
- /* Step 2 Fields Get otherinfo*/
- const reg_date = syncStorage.get('reg_date')
- // const reg_date = dd.slice(0, 9);
- console.log('reg===', reg_date);
- const yourincome = syncStorage.get('yourincome')
- const parentincome = syncStorage.get('parentincome')
- const service = syncStorage.get('Service')
- const otherservice = syncStorage.get('GovernmentData')
- const uriaffidavit = syncStorage.get('uriaffidavit');
- const affidavitImage = syncStorage.get('affidavitImage');
- const affidavitType = syncStorage.get('affidavitType');
- /* Step 4 Fields Get Relative Detail*/
-console.log('asda', yourincome,parentincome,service,otherservice)
-console.log('Family Data', familyData)
- if (familyData != '') {
-   const regID = [];
-   const rnameData = [];
-   const rageData = [];
-   const rincomeData = [];
-   const roccupationData = [];
-   const rrelationData = [];
-   const reducationData = [];
-   var count = Object.keys(familyData).length;
-   console.log('Keys family dr', count);
-   for (var i = 0; i < count; i++) {
-     // regformIDData.push(familyData[i].regform_id);
-     rnameData.push(familyData[i].rname);
-     rageData.push(familyData[i].rage);
-     rincomeData.push(familyData[i].rincome);
-     roccupationData.push(familyData[i].roccupation);
-     rrelationData.push(familyData[i].rrelation);
-     reducationData.push(familyData[i].reducation);
-     regID.push(familyData[i].regform_id)
+    if(married=='Yes'){
+      const todayDate = new Date();
 
-    //  console.log('Family_dir_inner Name', rnameData)
-    //  console.log('Family_dir_inner relation', rageData)
-    //  console.log('Family_dir_inner Age', rincomeData)
-    //  console.log('Family_dir_inner education', reducationData)
-    //  console.log('Family_dir_inner icome', rrelationData)
-    //  console.log('Family_dir_inner Occ', roccupationData)
+      // console.log('tofay date', reg_date.getDate())
+      // Calculate the date 90 days ago from today
+      const ninetyDaysAgo = new Date();
+      ninetyDaysAgo.setDate(reg_date.getDate() - 90);
+  
+      // Get the user-input target date from the HTML input field
+      const targetDateInput = adate;
+      const targetDate = new Date(targetDateInput);
+      
+      // Check if the target date is within the previous 90 days
+      if (ninetyDaysAgo <= targetDate && targetDate <= todayDate) {
+        
+        if(!sourceofincome){
+          ToastAndroid.show('Enter your Source of income', ToastAndroid.LONG);
+          return;
+        } else if(!bridename){
+          ToastAndroid.show('Please enter Bride Name', ToastAndroid.LONG);
+          return;
+        }else if(!bridecnic){
+          ToastAndroid.show('Enter Bride CNIC', ToastAndroid.LONG);
+          return;
+        }else if(!brideage){
+          ToastAndroid.show('Enter Bride Age', ToastAndroid.LONG);
+          return;
+        }else if(!groomname){
+          ToastAndroid.show('Enter Groom Name ', ToastAndroid.LONG);
+          return;
+        }else if(!groomfathername){
+          ToastAndroid.show('Enter Groom Father Name', ToastAndroid.LONG);
+          return;
+        }else if(!groomcnic){
+          ToastAndroid.show('Enter Groom CNIC', ToastAndroid.LONG);
+          return;
+        }else if(!groomaddress){
+          ToastAndroid.show('Enter Groom Address', ToastAndroid.LONG);
+          return;
+        }else if(!income){
+          ToastAndroid.show('Enter your Income', ToastAndroid.LONG);
+          return;
+        }else if(!married){
+          ToastAndroid.show('Select an Option', ToastAndroid.LONG);
+          return;
+        }
+        else if(!bcnicfImage){
+          ToastAndroid.show('Upload Bride CNIC Front Image', ToastAndroid.LONG);
+          return;
+        }else if(!bcnicbImage){
+          ToastAndroid.show('Upload Bride CNIC Back Image', ToastAndroid.LONG);
+          return;
+        }else if(!gcnicfImage){
+          ToastAndroid.show('Upload Groom CNIC Front Image', ToastAndroid.LONG);
+          return;
+        }else if(!gcnicbImage){
+          ToastAndroid.show('Upload Bride CNIC Back Image', ToastAndroid.LONG);
+          return;
+        }else{
+            /* Step 1 fields Get Bmregt*/
+            const bmuser_id = syncStorage.get('bmuser_id')
+            const district = syncStorage.get('district')
+            // console.log('district',district);
+            const Tehsil = syncStorage.get('tehsil')
+            console.log('Tehsil', Tehsil)
+            const imageProfile = syncStorage.get('image')
+            const imageProfilee = syncStorage.get('imageCap')
+            const fullname = syncStorage.get('applicantname')
+            const fathername = syncStorage.get('fathername')
+            // const pcrdp = syncStorage.get('Pcrdp')
+            const cnic = syncStorage.get('cnic')
+            const phone = syncStorage.get('contact')
+            const dob = syncStorage.get('dob')
+            const agegroup = syncStorage.get('age')
+            const gender = syncStorage.get('gender')
+            const paddress = syncStorage.get('postaladress')
+              const ppaddress = syncStorage.get('permanentAddress')
     
-  
-   }
-
-   setNameArray(rnameData)
-   setAgeArray(rageData)
-   setOccupArray(roccupationData)
-   setIncomeArray(rincomeData)
-   setEducationArray(reducationData)
-   setRelationArray(rrelationData)
-   setRegID(regID)
-   
- }
- /* Step 4 Fields Get Select Category*/
-
- /* User ID */
-
- //  const pwdpinfos_id = syncStorage.get('pwdinfo_id');
-
-//  const formData = new FormData();
-
-
- console.log(JSON.stringify(NameArray),AgeArray,EducationArray)
-//  if (uriaffidavit == '') {
-//  }
-//  else {
-//    formData.append('affidavite', {
-//      uri: Platform.OS === 'android' ? uriaffidavit : uriaffidavit.replace('file://', ''),
-//      type: affidavitType,
-//      name: affidavitImage
-//    });
-//  }
-
- //relativedetail info 
-//  formData.append('rname[]', JSON.stringify(NameArray))
-//  formData.append('rrelation[]', JSON.stringify(RelationArray))
-//  formData.append('roccupation[]', JSON.stringify(OccupyArray))
-//  formData.append('rage[]', JSON.stringify(AgeArray))
-//  formData.append('reducation[]', JSON.stringify(EducationArray))
-//  formData.append('rincome[]', JSON.stringify(IncomeArray))
-
-
-    //Marriage fields starts from here
-
-    //    console.log('Sourceofincome', sourceofincome)
-    //    console.log('Bridename', bridename)
-    //    console.log('Bridecnic', bridecnic)
-    //    console.log('Brideage', brideage)
-    //    console.log('Groomname', groomname)
-    //    console.log('Groomfathername', groomfathername)
-    //    console.log('Groomcnic', groomcnic)
-    //    console.log('Groomaddress', groomaddress)
-    //    console.log('Income',income)
-    //    console.log('Margdate', margdate)
-    //    console.log('Adate', adate)
-    //    console.log('Married', married)
-    //    console.log('Regname',regname)
-    //    console.log('Regaddress',regaddress)
-
-    // formData.append('sourceofincome', sourceofincome)
-    // formData.append('bridename', bridename)
-    // formData.append('bridecnic', bridecnic)
-    // formData.append('brideage', brideage)
-    // formData.append('groomname', groomname)
-    // formData.append('groomfathername', groomfathername)
-    // formData.append('groomcnic', groomcnic)
-    // formData.append('groomaddress', groomaddress)
-    // formData.append('income', income)
-    // formData.append('margdate', JSON.stringify(margdate));
-    // // formData.append('margdate',margdate)
-    // formData.append('married', married)
-    // // formData.append('adate',adate)
-    // formData.append('adate', JSON.stringify(adate));
-    // formData.append('regname', regname)
-    // formData.append('regaddress', regaddress)
-
-
-    // if (uribcnicf == '') {
-    // } else {
-    //   formData.append('bridecnicfront', {
-    //     uri: Platform.OS === 'android' ? uribcnicf : uribcnicf.replace('file://', ''),
-    //     type: bcnicfType,
-    //     name: bcnicfName
-    //   });
-    // }
-
-    // if (uribcnicb == '') {
-    // } else {
-    //   formData.append('bridecnicback', {
-    //     uri: Platform.OS === 'android' ? uribcnicb : uribcnicb.replace('file://', ''),
-    //     type: bcnicbType,
-    //     name: bcnicbName
-    //   });
-    // }
-
-    // if (urigcnicf == '') {
-    // } else {
-    //   formData.append('groomcnicfront', {
-    //     uri: Platform.OS === 'android' ? urigcnicf : urigcnicf.replace('file://', ''),
-    //     type: gcnicfType,
-    //     name: gcnicfName
-    //   });
-    // }
-
-    // if (urigcnicb == '') {
-    // } else {
-    //   formData.append('groomcnicback', {
-    //     uri: Platform.OS === 'android' ? urigcnicb : urigcnicb.replace('file://', ''),
-    //     type: gcnicbType,
-    //     name: gcnicbName
-    //   });
-    // }
-    console.log('formData Arrays', NameArray);
-  
-    setLoading(true)
-    fetch(
-      `https://bm.punjab.gov.pk/api/regformmarriallpost`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'multipart/application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify({ user_id: `${bmuser_id}`, district: `${district}`,tehsil: `${Tehsil}`,image: `${imageProfile}`,applicantname: `${fullname}`,
-          cnic: `${cnic}`,contact: `${phone}`,fathername:`${fathername}`,dob: `${dob}`,agegroup: `${agegroup}`,gender: `${gender}`,address: `${paddress}`,paddress: `${ppaddress}`,
-          reg_date: `${reg_date}`,yourincome: `${yourincome}`,parentincome:`${parentincome}`,service:`${service}`,GovernmentData:`${otherservice}`,
-          uriaffidavit: `${uriaffidavit}`,affidavitImage: `${affidavitImage}`,affidavitType: `${affidavitType}`,rname:`${NameArray}`,rage:`${AgeArray}`,
-          roccupation:`${OccupyArray}`,rincome:`${IncomeArray}`,reducation:`${EducationArray}`,rrelation:`${RelationArray}`,
-          sourceofincome:`${sourceofincome}`,bridename:`${bridename}`,bridecnic:`${bridecnic}`,brideage:`${brideage}`,groomname:`${groomname}`,groomfathername:`${groomfathername}`,groomcnic:`${groomcnic}`,
-          groomaddress:`${groomaddress}`,income:`${income}`,margdate:`${margdate}`,married:`${married}`,adate:`${adate}`,regname:`${regname}`,regaddress:`${regaddress}`,
-          groomcnicfront:`${gcnicfImage}`,groomcnicback:`${gcnicbImage}`,bridecnicfront:`${bcnicfImage}`,bridecnicback:`${bcnicbImage}`
+    
+            /* Step 2 Fields Get otherinfo*/
+           
+            // const reg_date = dd.slice(0, 9);
+            console.log('reg===', reg_date);
+            console.log('reg=== adate', adate);
+            const yourincome = syncStorage.get('yourincome')
+            const parentincome = syncStorage.get('parentincome')
+            const service = syncStorage.get('Service')
+            const otherservice = syncStorage.get('GovernmentData')
+            //  const uriaffidavit = syncStorage.get('uriaffidavit');
+            const affidavitImage = syncStorage.get('affidavitImage');
+            //  const affidavitType = syncStorage.get('affidavitType');
+            /* Step 4 Fields Get Relative Detail*/
+            console.log('asda', yourincome,parentincome,service,otherservice)
+            console.log('Family Data', familyData)
+            if (familyData != '' && familyData!=undefined) {
+              const regID = [];
+              const rnameData = [];
+              const rageData = [];
+              const rincomeData = [];
+              const roccupationData = [];
+              const rrelationData = [];
+              const reducationData = [];
+              var count = Object.keys(familyData).length;
+              console.log('Keys family dr', count);
+              for (var i = 0; i < count; i++) {
+                // regformIDData.push(familyData[i].regform_id);
+                rnameData.push(familyData[i].rname);
+                rageData.push(familyData[i].rage);
+                rincomeData.push(familyData[i].rincome);
+                roccupationData.push(familyData[i].roccupation);
+                rrelationData.push(familyData[i].rrelation);
+                reducationData.push(familyData[i].reducation);
+                regID.push(familyData[i].regform_id)
+    
+                //  console.log('Family_dir_inner Name', rnameData)
+                //  console.log('Family_dir_inner relation', rageData)
+                //  console.log('Family_dir_inner Age', rincomeData)
+                //  console.log('Family_dir_inner education', reducationData)
+                //  console.log('Family_dir_inner icome', rrelationData)
+                //  console.log('Family_dir_inner Occ', roccupationData)
+                
+              
+              }
+    
+              setNameArray(rnameData)
+              setAgeArray(rageData)
+              setOccupArray(roccupationData)
+              setIncomeArray(rincomeData)
+              setEducationArray(reducationData)
+              setRelationArray(rrelationData)
+              setRegID(regID)
+              
+            }
+            /* Step 4 Fields Get Select Category*/
+    
+            /* User ID */
+    
+            //  const pwdpinfos_id = syncStorage.get('pwdinfo_id');
+    
+            //  const formData = new FormData();
+    
+    
+            console.log(JSON.stringify(NameArray),AgeArray,EducationArray)
+            //  if (uriaffidavit == '') {
+            //  }
+            //  else {
+            //    formData.append('affidavite', {
+            //      uri: Platform.OS === 'android' ? uriaffidavit : uriaffidavit.replace('file://', ''),
+            //      type: affidavitType,
+            //      name: affidavitImage
+            //    });
+            //  }
+    
+            //relativedetail info 
+            //  formData.append('rname[]', JSON.stringify(NameArray))
+            //  formData.append('rrelation[]', JSON.stringify(RelationArray))
+            //  formData.append('roccupation[]', JSON.stringify(OccupyArray))
+            //  formData.append('rage[]', JSON.stringify(AgeArray))
+            //  formData.append('reducation[]', JSON.stringify(EducationArray))
+            //  formData.append('rincome[]', JSON.stringify(IncomeArray))
+    
+    
+            //Marriage fields starts from here
+    
+            //    console.log('Sourceofincome', sourceofincome)
+            //    console.log('Bridename', bridename)
+            //    console.log('Bridecnic', bridecnic)
+            //    console.log('Brideage', brideage)
+            //    console.log('Groomname', groomname)
+            //    console.log('Groomfathername', groomfathername)
+            //    console.log('Groomcnic', groomcnic)
+            //    console.log('Groomaddress', groomaddress)
+            //    console.log('Income',income)
+            //    console.log('Margdate', margdate)
+            //    console.log('Adate', adate)
+            //    console.log('Married', married)
+            //    console.log('Regname',regname)
+            //    console.log('Regaddress',regaddress)
+    
+            // formData.append('sourceofincome', sourceofincome)
+            // formData.append('bridename', bridename)
+            // formData.append('bridecnic', bridecnic)
+            // formData.append('brideage', brideage)
+            // formData.append('groomname', groomname)
+            // formData.append('groomfathername', groomfathername)
+            // formData.append('groomcnic', groomcnic)
+            // formData.append('groomaddress', groomaddress)
+            // formData.append('income', income)
+            // formData.append('margdate', JSON.stringify(margdate));
+            // // formData.append('margdate',margdate)
+            // formData.append('married', married)
+            // // formData.append('adate',adate)
+            // formData.append('adate', JSON.stringify(adate));
+            // formData.append('regname', regname)
+            // formData.append('regaddress', regaddress)
+    
+    
+            // if (uribcnicf == '') {
+            // } else {
+            //   formData.append('bridecnicfront', {
+            //     uri: Platform.OS === 'android' ? uribcnicf : uribcnicf.replace('file://', ''),
+            //     type: bcnicfType,
+            //     name: bcnicfName
+            //   });
+            // }
+    
+            // if (uribcnicb == '') {
+            // } else {
+            //   formData.append('bridecnicback', {
+            //     uri: Platform.OS === 'android' ? uribcnicb : uribcnicb.replace('file://', ''),
+            //     type: bcnicbType,
+            //     name: bcnicbName
+            //   });
+            // }
+    
+            // if (urigcnicf == '') {
+            // } else {
+            //   formData.append('groomcnicfront', {
+            //     uri: Platform.OS === 'android' ? urigcnicf : urigcnicf.replace('file://', ''),
+            //     type: gcnicfType,
+            //     name: gcnicfName
+            //   });
+            // }
+    
+            // if (urigcnicb == '') {
+            // } else {
+            //   formData.append('groomcnicback', {
+            //     uri: Platform.OS === 'android' ? urigcnicb : urigcnicb.replace('file://', ''),
+            //     type: gcnicbType,
+            //     name: gcnicbName
+            //   });
+            // }
+            console.log('formData Arrays', NameArray);
           
-        })
+            setLoading(true)
+            fetch(
+              `${baseUrl[0]}/regformmarriallpost`,
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'multipart/application/json',
+                  'Accept': 'application/json',
+                  'enctype':"multipart/form-data"
+                },
+                body: JSON.stringify({ user_id: `${bmuser_id}`, district: `${district}`,tehsil: `${Tehsil}`,image: `${imageProfilee}`,applicantname: `${fullname}`,
+                  cnic: `${cnic}`,contact: `${phone}`,fathername:`${fathername}`,dob: `${dob}`,agegroup: `${agegroup}`,gender: `${gender}`,address: `${paddress}`,paddress: `${ppaddress}`,
+                  reg_date: `${reg_date}`,yourincome: `${yourincome}`,parentincome:`${parentincome}`,service:`${service}`,GovernmentData:`${otherservice}`,
+                affidavitImage: `${affidavitImage}`,rname:`${NameArray}`,rage:`${AgeArray}`,
+                  roccupation:`${OccupyArray}`,rincome:`${IncomeArray}`,reducation:`${EducationArray}`,rrelation:`${RelationArray}`,
+                  sourceofincome:`${sourceofincome}`,bridename:`${bridename}`,bridecnic:`${bridecnic}`,brideage:`${brideage}`,groomname:`${groomname}`,groomfathername:`${groomfathername}`,groomcnic:`${groomcnic}`,
+                  groomaddress:`${groomaddress}`,income:`${income}`,margdate:`${margdate}`,married:`${married}`,adate:`${adate}`,regname:`${regname}`,regaddress:`${regaddress}`,
+                  groomcnicfront:`${capGCnicF}`,groomcnicback:`${capGcnicBack}`,bridecnicfront:`${capBfCnic}`,bridecnicback:`${capBcnicback}`
+                  
+                })
+              }
+            ).then(resp => resp.json()).then(response => {
+              // console.log('asdfghjk', JSON.stringify(response));
+              console.log('response BM', response);
+    
+              if (response.success != '') {
+                const regformID = response['BM Register']['id'];
+                const regform = response['BM Register'];
+                regformID != ''
+                  ?
+                  syncStorage.set('regform_id', regformID)
+                  : null
+    
+                navigation.navigate('Dashboard', {
+                  regformID: syncStorage.get('regform_id'),
+                });
+              }
+            }
+    
+            ).finally(() => {
+              setLoading(false);
+            });
+    
+        }
+      } else {
+          alert("The Nikkah date is not within the previous 90 days you are not eligible to proceed.");
+          // datevar  = 'No'
       }
-    ).then(resp => resp.json()).then(response => {
-      // console.log('asdfghjk', JSON.stringify(response));
-      console.log('response BM', response);
 
-      if (response.success != '') {
-        const regformID = response['BM Register']['id'];
-        const regform = response['BM Register'];
-        regformID != ''
-          ?
-          syncStorage.set('regform_id', regformID)
-          : null
 
-        navigation.navigate('Dashboard', {
-          regformID: syncStorage.get('regform_id'),
-        });
+    }else{
+
+
+        if(!sourceofincome){
+        ToastAndroid.show('Enter your Source of income', ToastAndroid.LONG);
+        return;
+      } else if(!bridename){
+        ToastAndroid.show('Please enter Bride Name', ToastAndroid.LONG);
+        return;
+      }else if(!bridecnic){
+        ToastAndroid.show('Enter Bride CNIC', ToastAndroid.LONG);
+        return;
+      }else if(!brideage){
+        ToastAndroid.show('Enter Bride Age', ToastAndroid.LONG);
+        return;
+      }else if(!groomname){
+        ToastAndroid.show('Enter Groom Name ', ToastAndroid.LONG);
+        return;
+      }else if(!groomfathername){
+        ToastAndroid.show('Enter Groom Father Name', ToastAndroid.LONG);
+        return;
+      }else if(!groomcnic){
+        ToastAndroid.show('Enter Groom CNIC', ToastAndroid.LONG);
+        return;
+      }else if(!groomaddress){
+        ToastAndroid.show('Enter Groom Address', ToastAndroid.LONG);
+        return;
+      }else if(!income){
+        ToastAndroid.show('Enter your Income', ToastAndroid.LONG);
+        return;
+      }else if(!married){
+        ToastAndroid.show('Select an Option', ToastAndroid.LONG);
+        return;
+      }
+      else if(!bcnicfImage){
+        ToastAndroid.show('Upload Bride CNIC Front Image', ToastAndroid.LONG);
+        return;
+      }else if(!bcnicbImage){
+        ToastAndroid.show('Upload Bride CNIC Back Image', ToastAndroid.LONG);
+        return;
+      }else if(!gcnicfImage){
+        ToastAndroid.show('Upload Groom CNIC Front Image', ToastAndroid.LONG);
+        return;
+      }else if(!gcnicbImage){
+        ToastAndroid.show('Upload Bride CNIC Back Image', ToastAndroid.LONG);
+        return;
+      }else{
+          /* Step 1 fields Get Bmregt*/
+          const bmuser_id = syncStorage.get('bmuser_id')
+          const district = syncStorage.get('district')
+          // console.log('district',district);
+          const Tehsil = syncStorage.get('tehsil')
+          console.log('Tehsil', Tehsil)
+          const imageProfile = syncStorage.get('image')
+          const imageProfilee = syncStorage.get('imageCap')
+          const fullname = syncStorage.get('applicantname')
+          const fathername = syncStorage.get('fathername')
+          // const pcrdp = syncStorage.get('Pcrdp')
+          const cnic = syncStorage.get('cnic')
+          const phone = syncStorage.get('contact')
+          const dob = syncStorage.get('dob')
+          const agegroup = syncStorage.get('age')
+          const gender = syncStorage.get('gender')
+          const paddress = syncStorage.get('postaladress')
+            const ppaddress = syncStorage.get('permanentAddress')
+
+
+          /* Step 2 Fields Get otherinfo*/
+        
+          // const reg_date = dd.slice(0, 9);
+          console.log('reg===', reg_date);
+          console.log('reg=== adate', adate);
+          const yourincome = syncStorage.get('yourincome')
+          const parentincome = syncStorage.get('parentincome')
+          const service = syncStorage.get('Service')
+          const otherservice = syncStorage.get('GovernmentData')
+          //  const uriaffidavit = syncStorage.get('uriaffidavit');
+          const affidavitImage = syncStorage.get('affidavitImage');
+          //  const affidavitType = syncStorage.get('affidavitType');
+          /* Step 4 Fields Get Relative Detail*/
+          console.log('asda', yourincome,parentincome,service,otherservice)
+          console.log('Family Data', familyData)
+          if (familyData != '' && familyData!=undefined) {
+            const regID = [];
+            const rnameData = [];
+            const rageData = [];
+            const rincomeData = [];
+            const roccupationData = [];
+            const rrelationData = [];
+            const reducationData = [];
+            var count = Object.keys(familyData).length;
+            console.log('Keys family dr', count);
+            for (var i = 0; i < count; i++) {
+              // regformIDData.push(familyData[i].regform_id);
+              rnameData.push(familyData[i].rname);
+              rageData.push(familyData[i].rage);
+              rincomeData.push(familyData[i].rincome);
+              roccupationData.push(familyData[i].roccupation);
+              rrelationData.push(familyData[i].rrelation);
+              reducationData.push(familyData[i].reducation);
+              regID.push(familyData[i].regform_id)
+
+              //  console.log('Family_dir_inner Name', rnameData)
+              //  console.log('Family_dir_inner relation', rageData)
+              //  console.log('Family_dir_inner Age', rincomeData)
+              //  console.log('Family_dir_inner education', reducationData)
+              //  console.log('Family_dir_inner icome', rrelationData)
+              //  console.log('Family_dir_inner Occ', roccupationData)
+              
+            
+            }
+
+            setNameArray(rnameData)
+            setAgeArray(rageData)
+            setOccupArray(roccupationData)
+            setIncomeArray(rincomeData)
+            setEducationArray(reducationData)
+            setRelationArray(rrelationData)
+            setRegID(regID)
+            
+          }
+          /* Step 4 Fields Get Select Category*/
+
+          /* User ID */
+
+          //  const pwdpinfos_id = syncStorage.get('pwdinfo_id');
+
+          //  const formData = new FormData();
+
+
+          console.log(JSON.stringify(NameArray),AgeArray,EducationArray)
+          //  if (uriaffidavit == '') {
+          //  }
+          //  else {
+          //    formData.append('affidavite', {
+          //      uri: Platform.OS === 'android' ? uriaffidavit : uriaffidavit.replace('file://', ''),
+          //      type: affidavitType,
+          //      name: affidavitImage
+          //    });
+          //  }
+
+          //relativedetail info 
+          //  formData.append('rname[]', JSON.stringify(NameArray))
+          //  formData.append('rrelation[]', JSON.stringify(RelationArray))
+          //  formData.append('roccupation[]', JSON.stringify(OccupyArray))
+          //  formData.append('rage[]', JSON.stringify(AgeArray))
+          //  formData.append('reducation[]', JSON.stringify(EducationArray))
+          //  formData.append('rincome[]', JSON.stringify(IncomeArray))
+
+
+          //Marriage fields starts from here
+
+          //    console.log('Sourceofincome', sourceofincome)
+          //    console.log('Bridename', bridename)
+          //    console.log('Bridecnic', bridecnic)
+          //    console.log('Brideage', brideage)
+          //    console.log('Groomname', groomname)
+          //    console.log('Groomfathername', groomfathername)
+          //    console.log('Groomcnic', groomcnic)
+          //    console.log('Groomaddress', groomaddress)
+          //    console.log('Income',income)
+          //    console.log('Margdate', margdate)
+          //    console.log('Adate', adate)
+          //    console.log('Married', married)
+          //    console.log('Regname',regname)
+          //    console.log('Regaddress',regaddress)
+
+          // formData.append('sourceofincome', sourceofincome)
+          // formData.append('bridename', bridename)
+          // formData.append('bridecnic', bridecnic)
+          // formData.append('brideage', brideage)
+          // formData.append('groomname', groomname)
+          // formData.append('groomfathername', groomfathername)
+          // formData.append('groomcnic', groomcnic)
+          // formData.append('groomaddress', groomaddress)
+          // formData.append('income', income)
+          // formData.append('margdate', JSON.stringify(margdate));
+          // // formData.append('margdate',margdate)
+          // formData.append('married', married)
+          // // formData.append('adate',adate)
+          // formData.append('adate', JSON.stringify(adate));
+          // formData.append('regname', regname)
+          // formData.append('regaddress', regaddress)
+
+
+          // if (uribcnicf == '') {
+          // } else {
+          //   formData.append('bridecnicfront', {
+          //     uri: Platform.OS === 'android' ? uribcnicf : uribcnicf.replace('file://', ''),
+          //     type: bcnicfType,
+          //     name: bcnicfName
+          //   });
+          // }
+
+          // if (uribcnicb == '') {
+          // } else {
+          //   formData.append('bridecnicback', {
+          //     uri: Platform.OS === 'android' ? uribcnicb : uribcnicb.replace('file://', ''),
+          //     type: bcnicbType,
+          //     name: bcnicbName
+          //   });
+          // }
+
+          // if (urigcnicf == '') {
+          // } else {
+          //   formData.append('groomcnicfront', {
+          //     uri: Platform.OS === 'android' ? urigcnicf : urigcnicf.replace('file://', ''),
+          //     type: gcnicfType,
+          //     name: gcnicfName
+          //   });
+          // }
+
+          // if (urigcnicb == '') {
+          // } else {
+          //   formData.append('groomcnicback', {
+          //     uri: Platform.OS === 'android' ? urigcnicb : urigcnicb.replace('file://', ''),
+          //     type: gcnicbType,
+          //     name: gcnicbName
+          //   });
+          // }
+          console.log('formData Arrays', NameArray);
+        
+          setLoading(true)
+          fetch(
+            `${baseUrl[0]}/regformmarriallpost`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'multipart/application/json',
+                'Accept': 'application/json',
+                'enctype':"multipart/form-data"
+              },
+              body: JSON.stringify({ user_id: `${bmuser_id}`, district: `${district}`,tehsil: `${Tehsil}`,image: `${imageProfilee}`,applicantname: `${fullname}`,
+                cnic: `${cnic}`,contact: `${phone}`,fathername:`${fathername}`,dob: `${dob}`,agegroup: `${agegroup}`,gender: `${gender}`,address: `${paddress}`,paddress: `${ppaddress}`,
+                reg_date: `${reg_date}`,yourincome: `${yourincome}`,parentincome:`${parentincome}`,service:`${service}`,GovernmentData:`${otherservice}`,
+              affidavitImage: `${affidavitImage}`,rname:`${NameArray}`,rage:`${AgeArray}`,
+                roccupation:`${OccupyArray}`,rincome:`${IncomeArray}`,reducation:`${EducationArray}`,rrelation:`${RelationArray}`,
+                sourceofincome:`${sourceofincome}`,bridename:`${bridename}`,bridecnic:`${bridecnic}`,brideage:`${brideage}`,groomname:`${groomname}`,groomfathername:`${groomfathername}`,groomcnic:`${groomcnic}`,
+                groomaddress:`${groomaddress}`,income:`${income}`,margdate:`${margdate}`,married:`${married}`,adate:`${adate}`,regname:`${regname}`,regaddress:`${regaddress}`,
+                groomcnicfront:`${capGCnicF}`,groomcnicback:`${capGcnicBack}`,bridecnicfront:`${capBfCnic}`,bridecnicback:`${capBcnicback}`
+                
+              })
+            }
+          ).then(resp => resp.json()).then(response => {
+            // console.log('asdfghjk', JSON.stringify(response));
+            console.log('response BM', response);
+
+            if (response.success != '') {
+              const regformID = response['BM Register']['id'];
+              const regform = response['BM Register'];
+              regformID != ''
+                ?
+                syncStorage.set('regform_id', regformID)
+                : null
+
+              navigation.navigate('Dashboard', {
+                regformID: syncStorage.get('regform_id'),
+              });
+            }
+          }
+
+          ).finally(() => {
+            setLoading(false);
+          });
+
       }
     }
+  };
 
-    ).finally(() => {
-      setLoading(false);
-    });
+  function checkdat() {
+    // Get today's date
+    const todayDate = new Date();
 
-  }
-};
+    // Calculate the date 90 days ago from today
+    const ninetyDaysAgo = new Date();
+    ninetyDaysAgo.setDate(todayDate.getDate() - 90);
+
+    // Get the user-input target date from the HTML input field
+    const targetDateInput = document.getElementById('adate');
+    const targetDate = new Date(targetDateInput.value);
+    
+    // Check if the target date is within the previous 90 days
+    if (ninetyDaysAgo <= targetDate && targetDate <= todayDate) {
+        alert("The Nikkah date is within the previous 90 days you are eligible to proceed.");
+         datevar = 'Yes';
+    } else {
+        alert("The Nikkah date is not within the previous 90 days you are not eligible to proceed.");
+        datevar  = 'No'
+    }
+    console.log(datevar);
+}
 
 
   return (
@@ -691,45 +1036,45 @@ console.log('Family Data', familyData)
                   : null}
 
                 {/* FILES */}
-                <Text style={{ marginTop: 15, fontWeight: "bold", color: "#000000" }} >دُلہن کے شناختی کارڈ کی تصویر (سامنے سے)
+                <Text style={{ marginTop: 15, fontWeight: "bold", color: "#000000" }} >دُلہن کے شناختی کارڈ کی تصویر (سامنے سے)<Text style={{color:'red'}}> *</Text>
 </Text>
 
                 <View style={{ marginTop: 5, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
                   <TouchableOpacity onPress={bridecnicfront} style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 60 }}>
-                    {uribcnicf != '' ?
-                      <Text style={{ color: "#000000", padding: 5 }}>{bcnicfName}</Text>
-                      : null}
+                  {bcnicfImage != '' ?
+                <Image source={{uri:bcnicfImage}} style={{width: '100%', height: 60,resizeMode : 'contain' }} />
+              :null}
                   </TouchableOpacity>
                 </View>
 
 
-                <Text style={{ marginTop: 40, fontWeight: "bold", color: "#000000" }} >دُلہن کے شناختی کارڈ کی تصویر (پچھلی جانب سے)</Text>
+                <Text style={{ marginTop: 40, fontWeight: "bold", color: "#000000" }} >دُلہن کے شناختی کارڈ کی تصویر (پچھلی جانب سے)<Text style={{color:'red'}}> *</Text></Text>
 
                 <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
                   <TouchableOpacity onPress={bridecnicback} style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 60 }}>
-                    {uribcnicb != '' ?
-                      <Text style={{ color: "#000000", padding: 5 }}>{bcnicfName}</Text>
-                      : null}
+                  {bcnicbImage != '' ?
+                <Image source={{uri:bcnicbImage}} style={{width: '100%', height: 60,resizeMode : 'contain' }} />
+              :null}
                   </TouchableOpacity>
                 </View>
 
 
-                <Text style={{ marginTop: 40, fontWeight: "bold", color: "#000000" }} >دُلہا کے شناختی کارڈ کی تصویر (سامنے سے)</Text>
+                <Text style={{ marginTop: 40, fontWeight: "bold", color: "#000000" }} >دُلہا کے شناختی کارڈ کی تصویر (سامنے سے)<Text style={{color:'red'}}> *</Text></Text>
                 <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
                   <TouchableOpacity onPress={groomcnicfront} style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 60 }}>
-                    {urigcnicf != '' ?
-                      <Text style={{ color: "#000000", padding: 5 }}>{gcnicfName}</Text>
-                      : null}
+                  {gcnicfImage != '' ?
+                <Image source={{uri:gcnicfImage}} style={{width: '100%', height: 60,resizeMode : 'contain' }} />
+              :null}
                   </TouchableOpacity>
                 </View>
 
-                <Text style={{ marginTop: 40, fontWeight: "bold", color: "#000000" }} >دُلہا کے شناختی کارڈ کی تصویر (پچھلی جانب سے)</Text>
+                <Text style={{ marginTop: 40, fontWeight: "bold", color: "#000000" }} >دُلہا کے شناختی کارڈ کی تصویر (پچھلی جانب سے)<Text style={{color:'red'}}> *</Text></Text>
 
                 <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
                   <TouchableOpacity onPress={groomcnicback} style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 60 }}>
-                    {urigcnicb != '' ?
-                      <Text style={{ color: "#000000", padding: 5 }}>{gcnicbName}</Text>
-                      : null}
+                  {gcnicbImage != '' ?
+                <Image source={{uri:gcnicbImage}} style={{width: '100%', height: 60,resizeMode : 'contain' }} />
+              :null}
                   </TouchableOpacity>
                 </View>
 

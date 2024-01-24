@@ -9,7 +9,7 @@ import React, {useEffect, useCallback, useState} from 'react';
 import {RadioButton} from 'react-native-paper';
 import DocumentScanner from 'react-native-document-scanner-plugin';
 import DocumentPicker,{types} from 'react-native-document-picker';
-
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 import {
   SafeAreaView,
@@ -41,6 +41,7 @@ import {
 } from 'react-native';
 import pwdIMage from '../../assets/images/background.png';
 import syncStorage from 'react-native-sync-storage';
+import baseUrl from '../Components/Url';
 
 const BmRegistration = ({navigation}) => {
   const [district, setdistrit]        = useState('');
@@ -50,6 +51,7 @@ const BmRegistration = ({navigation}) => {
    const [Focus, setFocus] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
   const [imageProfile, setimageprofile] = useState('');
+  const [capImageProfile, setCapImageProfile] = useState('');
   const [fullname, setFullName] = useState('');
   const [Name, setName] = useState('');
   // const [name, getName] = useState('');
@@ -66,22 +68,39 @@ const BmRegistration = ({navigation}) => {
   const [regdate, setregdate]= useState('');
   const [Tehsil, setTehsil]                       = useState('');
   const [TehsilID, setTehsilId]                       = useState('');
+  const [DistrictId, setDistrictId]                       = useState('');
   const [tehsiluser, setTehsilUser]                       = useState('');
   const [loading, setLoading] = useState(false);
   const [Profileimg, setProfileimg] = useState('');
 
   const img = async () => {
-    DocumentPicker.pick({
-      allowMultiSelection: false,
-      type: [DocumentPicker.types.images],
-    })
-      .then((response) =>
-   {   
-      // console.log('response',JSON.stringify(response[0], null, 2))
-      setimageprofile(response[0].uri)
-   })
 
-   
+    const options = {
+      mediaType: 'photo',
+      includeBase64: true,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error: ', response.error);
+      } else {
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        setimageprofile(imageUri);
+     
+        console.log('Image profile',imageUri)
+        const fileBase64        = response.assets[0].base64
+        setCapImageProfile(fileBase64)
+        // console.log(fileName,fileExtension, fielUri)
+        // setLibraryfile(fileBase64)
+        // setCapturedImage(imageUri);
+        // setimageprofile(response[0].uri)
+      }
+    });
+  
   }
 
 
@@ -90,7 +109,7 @@ const BmRegistration = ({navigation}) => {
     
     setLoading(true)
     const bmuser_id = syncStorage.get('bmuser_id');
-    fetch(`https://bm.punjab.gov.pk/api/getUser/${bmuser_id}`, {
+    fetch(`${baseUrl[0]}/getUser/${bmuser_id}`, {
       method: 'GET',
       headers:{
         'Accept': 'application/json',
@@ -196,7 +215,7 @@ const BmRegistration = ({navigation}) => {
 
     // console.log('districtofd functino', districtofdid)
     // console.log('Board id', BoardID)
-    fetch(`https://dpmis.punjab.gov.pk/api/pwdapp/Districtofd`,{
+    fetch(`${baseUrl[1]}/pwdapp/Districtofd`,{
       method: 'GET',
       headers:{
         'Accept': 'application/json',
@@ -214,6 +233,7 @@ const BmRegistration = ({navigation}) => {
       districtofdReponse.map((item, i) => {
         if(item.id == districtofdid){
           setdistrit(item.name)
+          setDistrictId(item.id)
           getTehsil(item.id)
         }
       });
@@ -228,7 +248,7 @@ const BmRegistration = ({navigation}) => {
     console.log('ID District', district_id)
     console.log('ID District tehgsil', "ENter")
     setLoading(true)
-    fetch(`https://dpmis.punjab.gov.pk/api/app/tehsil/${district_id}`, {
+    fetch(`${baseUrl[1]}/app/tehsil/${district_id}`, {
       method: 'GET',
       headers:{
         'Accept': 'application/json',
@@ -243,8 +263,10 @@ const BmRegistration = ({navigation}) => {
         tehsilresponse.map((item, i) => {
           const tehsilCheck = syncStorage.get('tehsil');
           console.log('Tehsil check', tehsilCheck)
+          // console.log('data tehsil', item.id)
           if(item.id == tehsilCheck ){
             setTehsil(item.tname)
+            setTehsilId(item.id)
           }
         });
       
@@ -279,16 +301,16 @@ const BmRegistration = ({navigation}) => {
   const monthlyincomedata = [
     { label: '0', value: '0' },
     { label: '1-20k', value: '1-20k' },
-    { label: '20k-40k', value: '20k-40k' },
-    { label: '40k-60k', value: '40k-60k' },
-    { label: '60k and above', value: '60k and above' },    
+    { label: '21k-40k', value: '21k-40k' },
+    { label: '41k-60k', value: '41k-60k' },
+    { label: '61k and above', value: '61k and above' },    
   ];
   const monthlyincomeparentdata = [
     { label: '0', value: '0' },
     { label: '1-20k', value: '1-20k' },
-    { label: '20k-40k', value: '20k-40k' },
-    { label: '40k-60k', value: '40k-60k' },
-    { label: '60k and above', value: '60k and above' },    
+    { label: '21k-40k', value: '21k-40k' },
+    { label: '41k-60k', value: '41k-60k' },
+    { label: '61k and above', value: '61k and above' },    
   ];
 
 
@@ -332,8 +354,8 @@ const BmRegistration = ({navigation}) => {
 
   console.log('---bmuserid;', bmuserid); 
   console.log('image', imageProfile);
-  console.log('district', district);
-  console.log('tehsil', Tehsil);
+  console.log('district', DistrictId);
+  console.log('tehsil', TehsilID);
   console.log('fullname', fullname);
   console.log('contact', contact);
   console.log('cnic', cnic);
@@ -349,8 +371,9 @@ const BmRegistration = ({navigation}) => {
 
   syncStorage.set('bmuserid;', bmuserid);
   syncStorage.set('image', imageProfile);
-  syncStorage.set('district', district);
-  syncStorage.set('tehsil', Tehsil);
+  syncStorage.set('imageCap', capImageProfile);
+  syncStorage.set('district', DistrictId);
+  syncStorage.set('tehsil', TehsilID);
   syncStorage.set('applicantname', fullname);
   syncStorage.set('contact', contact);
   syncStorage.set('cnic', cnic);

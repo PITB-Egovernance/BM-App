@@ -25,12 +25,112 @@ const RelativeDetails = ({navigation}) => {
   const [familyData, setFamilyData]       = useState([]);
   const regform_id                      = null;
   // const regform_id = '321';
+  const rdata = [
+    { label: 'Mother', value: 'Mother' },
+    { label: 'Father', value: 'Father' },
+    { label: 'Husband', value: 'Husband' },
+    { label: 'Wife', value: 'Wife' },
+    { label: 'Son', value: 'Son' },
+    { label: 'Daughter', value: 'Daughter' },
+    { label: 'Sister', value: 'Sister'},
+    { label: 'Brother', value: 'Brother'},
+  ];
+ 
+  const monthlyIncome = [
+    { label: '0', value: '0' },
+    { label: '1-20k', value: '1-20k' },
+    { label: '21k-40k', value: '21k-40k' },
+    { label: '41k-60k', value: '41k-60k' },
+    { label: '61k and above', value: '61k and above' },
+   
+  ];
 
+  const agegroup = [
+    { label: '0-5',   value: '0-5' },
+    { label: '6-10',  value: '6-10' },
+    { label: '11-15', value: '11-15' },
+    { label: '16-20', value: '16-20' },
+    { label: '21-25', value: '21-25' },
+    { label: '26-30', value: '26-30' },
+    { label: '31-35', value: '31-35' },
+    { label: '36-40', value: '36-40' },
+    { label: '41-45', value: '41-45' },
+    { label: '46-50', value: '46-50' },
+    { label: '51-55', value: '51-55' },
+    { label: '56-60', value: '56-60' },
+    { label: '61-65', value: '61-65' },
+    { label: '66-70', value: '66-70' },
+    { label: '71-75', value: '71-75' },
+    { label: '76-100', value: '76-100' },
+    { label: '101-120', value:'101-120' },
+  ];
 
+  const classYears = [
+    { label: 'None',   value: 'None' },
+    { label: 'Nursery',  value: 'Nursery' },
+    { label: 'Prep', value: 'Prep' },
+    { label: '1 Years', value: '1' },
+    { label: '2 Years', value: '2' },
+    { label: '3 Years', value: '3' },
+    { label: '4 Years', value: '4' },
+    { label: '5 Years', value: '5' },
+    { label: '6 Years', value: '6' },
+    { label: '7 Years', value: '7' },
+    { label: '8 Years', value: '8' },
+    { label: '9 Years', value: '9' },
+    { label: '10 Years', value: '10' },
+    { label: '11 Years', value: '11' },
+    { label: '12 Years', value: '12' },
+    { label: '13 Years', value: '13' },
+    { label: '14 Years', value: '14' },
+    { label: '15 Years', value: '15' },
+    { label: '16 Years', value: '16' },
+  
+  ];
   const NextStep1 = () => {
-    setErrorValidate(true)
-     navigation.navigate('SelectCategory')
+   
 
+    // if(!familyData){
+    //   setErrorValidate(true)
+    //   ToastAndroid.show('Please fill all teh fields', ToastAndroid.LONG);
+    //   return;
+
+    // }else if(familyData){
+
+   
+    //   setErrorValidate(true)
+    //   if(!rname){
+    //     ToastAndroid.show('Please Enter your Name', ToastAndroid.LONG);
+    //     return;
+    //   }
+    //     else if(!rrelation){
+    //       ToastAndroid.show('Please Enter your Relation', ToastAndroid.LONG);
+    //       return;
+    //   }
+
+    //   else if(!rincome){
+    //     ToastAndroid.show('Please enter your Income', ToastAndroid.LONG);
+    //     return;
+    //   }
+
+    //   else if(!reducation){
+    //     ToastAndroid.show('Please enter your Education', ToastAndroid.LONG);
+    //     return;
+    //   }
+    //   else if(!roccupation){
+    //     ToastAndroid.show('Please enter your Occupation', ToastAndroid.LONG);
+    //     return;
+    //   }
+    //   else if(!rage){
+    //     ToastAndroid.show('Select Your Age', ToastAndroid.LONG);
+    //     return;
+    //   }else{
+    //     navigation.navigate('SelectCategory')
+    //   }
+    // }else{
+
+      navigation.navigate('SelectCategory')
+    // }
   }
 
   // const family_bm = syncStorage.get('family_details');
@@ -41,37 +141,37 @@ const RelativeDetails = ({navigation}) => {
     console.log(regform_id, rname, rincome, rage, rrelation, reducation, roccupation);
 
 
-  //   setErrorValidate(true)
-  //   if(!rname){
-  //     ToastAndroid.show('Please Enter your Name', ToastAndroid.LONG);
-  //     return;
-  //   }
-  //   else if(!rrelation){
-  //      ToastAndroid.show('Please Enter your Relation', ToastAndroid.LONG);
-  //      return;
-  //  }
+    //   setErrorValidate(true)
+    // if(!rname){
+    //   ToastAndroid.show('Please Enter your Name', ToastAndroid.LONG);
+    //   return;
+    // }
+    //   else if(!rrelation){
+    //     ToastAndroid.show('Please Enter your Relation', ToastAndroid.LONG);
+    //     return;
+    // }
 
-  //  else if(!rincome){
-  //    ToastAndroid.show('Please enter your Income', ToastAndroid.LONG);
-  //    return;
-  //  }
+    // else if(!rincome){
+    //   ToastAndroid.show('Please enter your Income', ToastAndroid.LONG);
+    //   return;
+    // }
 
-  //  else if(!reducation){
-  //   ToastAndroid.show('Please enter your Education', ToastAndroid.LONG);
-  //   return;
-  // }
-  // else if(!roccupation){
-  //   ToastAndroid.show('Please enter your Occupation', ToastAndroid.LONG);
-  //   return;
-  // }
-  //  else if(!rage){
-  //    ToastAndroid.show('Select Your Age', ToastAndroid.LONG);
-  //    return;
-  //  }else{
-  //    navigation.navigate('FamilyDetails')
-  //     if(rname != '' && rincome != ''  && rage != '' && rrelation != '' && reducation != '' && roccupation != '')
-  //     {
-
+    // else if(!reducation){
+    //   ToastAndroid.show('Please enter your Education', ToastAndroid.LONG);
+    //   return;
+    // }
+    // else if(!roccupation){
+    //   ToastAndroid.show('Please enter your Occupation', ToastAndroid.LONG);
+    //   return;
+    // }
+    // else if(!rage){
+    //   ToastAndroid.show('Select Your Age', ToastAndroid.LONG);
+    //   return;
+    // }else{
+    //    navigation.navigate('FamilyDetails')
+    //     if(rname != '' && rincome != ''  && rage != '' && rrelation != '' && reducation != '' && roccupation != '')
+    //     {
+      
         let fmData= familyData;
           fmData.push({ 
             regform_id : regform_id,
@@ -84,6 +184,7 @@ const RelativeDetails = ({navigation}) => {
           });
 
         setFamilyData(fmData);
+        syncStorage.set('BMfamily_details', familyData);
         setRname('');
         setRrelation('');
         setRincome('');
@@ -95,7 +196,7 @@ const RelativeDetails = ({navigation}) => {
     //   }
     // };
     
-     syncStorage.set('BMfamily_details', familyData);
+    
   }
   const familylist = () => {
     return familyData.map(element => {
@@ -162,50 +263,81 @@ const RelativeDetails = ({navigation}) => {
 
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>درخواست گزار کے ساتھ رشتہ:</Text>
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:40}}>
-                  <TextInput 
+                  
+                   <View style={styles.container}>
 
-                    placeholderTextColor='grey'
-                    placeholderColor='black' 
-                    placeholder='اپنا رشتہ درج کریں'
-                    style={[styles.FamilyTextInput
-                      ,{borderColor: !rrelation && errorValidate ? 'red':'#fff'}
-                    ]} 
-                    onChangeText={(rrelation) => setRrelation(rrelation)}
-                    value={rrelation}  
-                  />
+                    <Dropdown
+                    style={[styles.dropdown, { borderColor: !rrelation && errorValidate ? 'red' : '#fff'}]}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    itemTextStyle={styles.itemTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                      data={rdata}
+                      // search
+                      labelField="label"
+                      valueField="value"
+                      placeholder={'اپنا رشتہ درج کریں'}
+                      searchPlaceholder="Search..."
+                      value={rrelation} 
+
+                      onChange={item => {
+                        setRrelation(item.value);
+                      }}
+                    />
+                    </View>
                 </View>
 
   
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>عمر:</Text>
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:40}}>
-                  <TextInput 
+                 
+                   <View style={styles.container}>
 
-                    placeholderTextColor='grey'
-                    placeholderColor='black' 
-                    placeholder='عمر درج کریں'
-                    maxLength={3}
-                    keyboardType='numeric'
-                    style={[styles.FamilyTextInput
-                      ,{borderColor: !rage && errorValidate ? 'red':'#fff'}
-                    ]} 
-                    onChangeText={(rage) => setRage(rage)}
-                    value={rage}  
-                  />
+                    <Dropdown
+                    style={[styles.dropdown, { borderColor: !rage && errorValidate ? 'red' : '#fff'}]}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    itemTextStyle={styles.itemTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                      data={agegroup}
+                      // search
+                      labelField="label"
+                      valueField="value"
+                      placeholder={'عمر درج کریں'}
+                      searchPlaceholder="Search..."
+                      value={rage} 
+
+                      onChange={item => {
+                        setRage(item.value);
+                      }}
+                    />
+                    </View>
                 </View>
             
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>تعلیم:</Text>
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:40}}>
-                  <TextInput 
+                  
+                  <View style={styles.container}>
 
-                    placeholderTextColor='grey'
-                    placeholderColor='black' 
-                    placeholder='تعلیم درج کریں'
-                    style={[styles.FamilyTextInput
-                      ,{borderColor: !reducation && errorValidate ? 'red':'#fff'}
-                    ]} 
-                    onChangeText={(reducation) => setReducation(reducation)}
-                    value={reducation}  
-                  />
+                    <Dropdown
+                    style={[styles.dropdown, { borderColor: !reducation && errorValidate ? 'red' : '#fff'}]}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    itemTextStyle={styles.itemTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                      data={classYears}
+                      // search
+                      labelField="label"
+                      valueField="value"
+                      placeholder={'تعلیم درج کریں'}
+                      searchPlaceholder="Search..."
+                      value={reducation} 
+
+                      onChange={item => {
+                        setReducation(item.value);
+                      }}
+                    />
+                  </View>
                 </View>
 
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>رشتہ دار کا پیشہ:</Text>
@@ -226,7 +358,7 @@ const RelativeDetails = ({navigation}) => {
                 
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>ماہانہ آمدنی:</Text>
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40}}>
-                  <TextInput  placeholderColor="#c4c3cb"
+                  {/* <TextInput  placeholderColor="#c4c3cb"
                   placeholderTextColor='grey'
                   placeholder='اپنی آمدنی درج کریں۔'
                   keyboardType='numeric'
@@ -236,7 +368,28 @@ const RelativeDetails = ({navigation}) => {
                   ]}   
                   onChangeText={(rincome) => setRincome(rincome)}
                   value={rincome} 
-                  />
+                  /> */}
+                  <View style={styles.container}>
+
+                    <Dropdown
+                    style={[styles.dropdown, { borderColor: !rincome && errorValidate ? 'red' : '#fff'}]}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    itemTextStyle={styles.itemTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                      data={monthlyIncome}
+                      // search
+                      labelField="label"
+                      valueField="value"
+                      placeholder={'اپنی آمدنی درج کریں'}
+                      searchPlaceholder="Search..."
+                      value={rincome} 
+
+                      onChange={item => {
+                        setRincome(item.value);
+                      }}
+                    />
+                  </View>
                 </View>
             
               

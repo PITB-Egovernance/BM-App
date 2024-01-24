@@ -1,7 +1,7 @@
 // import * as React from 'react';
 // import * as React from 'react';
-import { Checkbox } from 'react-native-paper';
-import React, { useState, useRef } from 'react';
+import {Checkbox} from 'react-native-paper';
+import React, {useState, useRef, useEffect} from 'react';
 import Loader from '../Components/Loader';
 import {
   ScrollView,
@@ -11,310 +11,439 @@ import {
   ImageBackground,
   title,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   ToastAndroid,
+  Keyboard,
   Dimensions,
   Modal,
   loading,
-  Image
+  Image,
 } from 'react-native';
 
-import { KeyboardAvoidingView, TextInput } from "react-native";
-import pwdIMage from '../../assets/images/background.png';
+import {KeyboardAvoidingView, TextInput} from 'react-native';
+import backimage from '../../assets/images/back.png';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import certificate from '../../assets/images/certificate.png';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import syncStorage from 'react-native-sync-storage';
+import baseUrl from '../Components/Url';
 
-const Login = ({ navigation }) => {
+const Login = ({navigation}) => {
   const firstTextInput = useRef(null);
   const secondTextInput = useRef(null);
 
-  const [modalVisibleHelp, setModalVisibleHelp] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
   const [errorValidate, setErrorValidate] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [cnic, setCnic]              = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [cnic, setCnic] = useState('');
   const [loading, setLoading] = useState(false);
   const [checked, setChecked] = useState(false);
 
+
   const handleSubmitFirstTextInput = () => {
+    secondTextInput.current.focus();
     // secondTextInput.current.focus();
   };
+  useEffect(() => {}, []);
 
   const handleSubmitLogin = () => {
-    console.log('cnic: ',email, 'password: ',password);
+    console.log('cnic: ', email, 'password: ', password);
     onLoginPress();
   };
 
   const onLoginPress = () => {
-
-    console.log('Cnic', email)
-    console.log('Password', password)
-
-
+    console.log('Cnic', email);
+    console.log('Password', password);
+  
     setErrorValidate(true);
+  
     if (!email) {
-      ToastAndroid.show('Please enter your cnic', ToastAndroid.LONG);
+      ToastAndroid.show('Please enter your CNIC', ToastAndroid.LONG);
       return;
     } else if (!password) {
       ToastAndroid.show('Please enter your password', ToastAndroid.LONG);
       return;
-    }
-     else {
+    } else {
       setLoading(true);
+  
+      //  alert(baseUrl[0])
       // Perform the login API call here
-      fetch(
-        `https://bm.punjab.gov.pk/api/LoginBMApi`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-          body: JSON.stringify({ cnic: `${email}`, password: `${password}` })
+      fetch(`${baseUrl[0]}/LoginBMApi`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
         },
-      )
-        .then(resp => resp.json())
-        .then(response => {
-          if (response.status == '200') {
-            // Handle successful login
-          // console.log('Login Response', response.user.id);
-          const user = response.user.id != '' ? response.user.id : null;
-          const name = response.user.name != '' ? response.user.name:null;
-          const district_id = response.user.district_id != '' ? response.user.district_id:null;
-          const tehsil_id = response.user.tehsil_id != '' ? response.user.tehsil_id:null;
+        body: JSON.stringify({ cnic: `${email}`, password: `${password}` }),
+      })
+        .then((resp) => resp.json())
+        .then((response) => {
 
-          syncStorage.set('bmuser_id',user);
-          navigation.navigate('Dashboard',{
-              userId:user,
-              Username:name,
-              District:district_id,
-              Tehsil:tehsil_id,
-          });
-          } else {
+          console.log('Response', response)
+          if (response.status == 200) {
+
+            if(response.user.status != 1){
+
+              const user_id  = response.user.id;
+              const phone    = response.user.contact;
+
+              console.log('Phone:',phone,'User ID:',user_id);
+              fetch(`${baseUrl[0]}/resend-otp`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Accept: 'application/json',
+                },
+                body: JSON.stringify({ user_id: `${user_id}`, phone: `${phone}` }),
+              })
+                .then((resp) => resp.json())
+                .then((responseOTp) => {
+
+
+                  console.log('OTP Response', responseOTp.cnic,responseOTp.otp);
+                  // navigation.navigate('Login');
+                  navigation.navigate('OTP',{
+                    cnic:responseOTp.cnic,
+                    code:responseOTp.otp
+                  });
+                })
+               
+
+            }else{
+
+              
+              
+                const userRole = response.user.roles[0];
+                console.log('Login BM APi Role', userRole)
+                
+                const user          = response.user.id != '' ? response.user.id : null;
+                const name          = response.user.name != '' ? response.user.name : null;
+                const district_id   = response.user.district != '' ? response.user.district : null;
+                const tehsil_id     = response.user.tehsil != '' ? response.user.tehsil : null;
+                const cnic          = response.user.cnic != '' ? response.user.cnic : null;
+      
+                syncStorage.set('bmuser_id', user);
+      
+                // role is chairman 
+                if (userRole == 'Chairman') {
+                  navigation.navigate('ChairmanDashboard', {
+                    userId: user,
+                    Username: name,
+                    District: district_id,
+                    Tehsil: tehsil_id,
+                  });
+                }
+                else if (userRole == 'member') {
+                  navigation.navigate('MemberDashboard', {
+                    userId: user,
+                    Username: name,
+                    District: district_id,
+                    Tehsil: tehsil_id,
+                  });
+                } else {
+                  // Default navigation for other roles
+                  navigation.navigate('Dashboard', {
+                    userId: user,
+                    Username: name,
+                    District: district_id,
+                    Tehsil: tehsil_id,
+                    Cnic:cnic
+                  });
+                }
+                setModalVisible(false);
+            } 
+          }else {
             // Handle login error
             ToastAndroid.show(response.message, ToastAndroid.LONG);
-          }
+          } 
         })
         .catch((error) => console.error(error))
         .finally(() => {
           setLoading(false);
         });
     }
-    // navigation.navigate('Dashboard');
+  };
+  
+  const handleCloseModal = () => {
+    Keyboard.dismiss(); // Dismiss the keyboard and remove focus
+    setModalVisible(false);
+  };
+  
+  const resetModalState = () => {
+    Keyboard.dismiss(); // Dismiss the keyboard and remove focus
+    setEmail('');
+    setPassword('');
+    setErrorValidate(false);
+  };
+  
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+    setErrorValidate(false);
   };
 
+
   return (
-    <View>
-      <ImageBackground source={pwdIMage} style={{ width: '100%', height: '100%', opacity: 0.9, alignSelf: 'center' }}>
-        <Loader loading={loading} />
-        <View style={{ flex: 1 }}>
-          <View style={{ flex: 0.15,}}>
-            {/* <View style={{ paddingTop: 20, width: '30%', marginLeft: '60%' }} > */}
-              {/* <TouchableOpacity
-                onPress={() => navigation.navigate('Register')}
-                style={styles.buttonStyle}
-                activeOpacity={0.5}>
-                <Text style={[styles.text, { textAlign: 'center' }]}>
-                  Register
-                </Text>
-              </TouchableOpacity> */}
-            {/* </View> */}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={{flex: 1}}>
+        <ImageBackground
+          source={backimage}
+          style={styles.backgroundimage}
+          resizeMode="stretch">
+          <Loader loading={loading} />
+          <View style={styles.buttonviewstyle}>
+            <TouchableOpacity onPress={toggleModal} style={styles.button1}>
+              <Text style={styles.buttontext}>Login</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Register')}
+              style={styles.button2}>
+              <Text style={styles.buttontext}>Applicant Register</Text>
+            </TouchableOpacity>
           </View>
-          <View style={{ flex: 0.75, }}>
-            <ScrollView
-              keyboardShouldPersistTaps="handled"
-            >
-              <View style={{ padding: 40, flex: 1, justifyContent: 'center' }}>
-                <KeyboardAvoidingView enabled>
-                  <View style={{ width: '100%', backgroundColor: '#fff', height: 440, padding: 0, borderRadius: 10, }}>
-                    <View style={[styles.loginFormView, {}]}>
-                    <View style={{ backgroundColor: '#588739', borderTopRightRadius: 10, borderTopLeftRadius:10 }}>
-                    <Text style={[styles.logoText, { textAlign: 'center', color: '#fff', fontWeight: 'bold', fontSize: 30, padding:15 }]}>Login</Text>
+        </ImageBackground>
+
+        <Modal
+          animationType="fade"
+          animationInTiming={500}
+          animationOutTiming={1000}
+          backdropTransitionInTiming={500}
+          backdropTransitionOutTiming={1000}
+          avoidKeyboard={true}
+          transparent={true}
+          visible={isModalVisible}
+          
+          onRequestClose={handleCloseModal}
+         >
+         <KeyboardAvoidingView style={{ flex: 1,position:'relative', }}>
+            <View style={[styles.modalContainer, { padding: 20 }]}>
+                <View style={styles.closeButtonContainer}>
+                  {/* <TouchableOpacity
+                    style={styles.closeButton}
+                    onPress={handleCloseModal}
+                  >
+                    <Text style={styles.closeButtonText}>✕</Text>
+                  </TouchableOpacity> */}
+                </View>
+
+                <View style={styles.loginboxview}>
+                  <View style={styles.headerContainer}>
+                    <View style={styles.greenview}>
+                      <Text style={styles.loginText}>Login</Text>
                     </View>
-
-                      <View style={{paddingTop:20,paddingLeft:20,paddingRight:20}}>
-                      <Text style={{ marginTop: 30, fontWeight: "bold", color: "#000000" }}>شناختی کارڈ/بے فارم:</Text>
-
-                      <View style={{ marginTop: 10, backgroundColor: '#c0c0c0', borderRadius: 5, height: 40 }}>
-
-                        <TextInput
-                          placeholderTextColor='grey'
-                          ref={firstTextInput}
-                          maxLength={13}
-                          keyboardType="numeric"
-                          onSubmitEditing={handleSubmitFirstTextInput}
-                          placeholder="شناختی کارڈ/ب فارم نمبر درج کریں"
-                          placeholderColor="#c4c3cb"
-                          style={[styles.loginFormTextInput
-                            , { borderColor: !email && errorValidate ? 'red' : '#fff' }
-                          ]}
-                          placeholderStyle={{ paddingHorizontal: 20 }}
-                          onChangeText={(email) => setEmail(email)}
-                          value={email}
-                        />
-
-                      </View>
-                      </View>             
-                      <View style={{padding:20}}>
-                      <Text style={{fontWeight: "bold", color: "#000000" }}>پاس ورڈ:</Text>
-                      <View style={{ marginTop: 10, backgroundColor: '#c0c0c0', borderRadius: 5, height: 40 }}>
-                        <TextInput
-                          placeholderTextColor='grey'
-                          ref={secondTextInput}
-                          onSubmitEditing={handleSubmitLogin}
-                          placeholder="پاس ورڈ"
-                          placeholderColor="#c4c3cb"
-                          autoCapitalize='none'
-                          secureTextEntry={true}
-                          onChangeText={(password) => setPassword(password)}
-                          value={password}
-                          style={[styles.loginFormTextInput, { borderColor: !password && errorValidate ? 'red' : '#fff' }]}
-                        />
-                      </View>
+                    <View style={styles.closeButtonContainer}>
                       <TouchableOpacity
-                        onPress={() => navigation.navigate('ResetPass')}>
-                        <Text style={[styles.passtext, { textAlign: 'left' }]}>آپ پاس ورڈ بھول گئے؟</Text>
-
+                        style={styles.closeButton}
+                        onPress={handleCloseModal}
+                      >
+                        <Text style={styles.closeButtonText}>✕</Text>
                       </TouchableOpacity>
-                      </View>
-                     
-                      <View style={{ padding: 20,paddingBottom:10, alignItems: 'center' }}>
-                        <TouchableOpacity
-                          onPress={onLoginPress}
-                          style={styles.ButtonStyle}
-                          activeOpacity={0.5}>
-                          <Text style={[styles.text, { textAlign: 'center' }]}>Login</Text>
-                        </TouchableOpacity>
-                      </View>
-                      <TouchableOpacity
-                        onPress={() => navigation.navigate('Register')}>
-                        <Text style={[styles.Text]}>بطور نیا صارف اندراج کریں</Text>
-
-                      </TouchableOpacity>
-                      <TouchableOpacity style={{ opacity: 0.8, alignItems: 'center',  height:45}}
-                        onPress={() => setModalVisibleHelp(true)}
-                        >
-                      </TouchableOpacity>
-                      {/* <Modal
-                          animationType="fade"
-                          transparent
-                          visible={modalVisibleHelp}
-                          onRequestClose={() => setModalVisibleHelp(false)}
-                        >
-                          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)', padding: 20 }}>
-                            <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 20 }}>
-                              <Text style={{ color: 'black', textAlign: "center", fontSize: 15, marginTop: 10 }}>
-                              اگر آپ کے پاس معذوری سرٹیفیکیٹ ہے اور PCRDP نمبر اور CNIC نمبر موجود ہےتو اپنے CNIC کے ذریعے اس سسٹم میں لاگ ان کریں اور اگر آپ کو اپنا password بھول چکا ہے تو forget password پر کلک کر کے اپنا CNIC اور معذوری سرٹیفیکیٹ نمبر درج کر کے new password سیٹ کر سکتے ہیں۔ لاگ ان کرتے وقت اگر username یا password میں کوئی مشکل پیش آئے تو اپنے District Director سے رابطہ کریں۔
-                              </Text>
-                              <View style={{ flexDirection: 'row' }}>
-                                <TouchableOpacity
-                                  onPress={this.handleSpeechForget}
-                                  style={styles.SpeakButton}
-                                  activeOpacity={0.5}>
-                                  <Text style={[styles.text, { textAlign: 'center', color: '#fff' }]}>Speak 🔊</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                  onPress={this.handleStopSpeechForget}
-                                  style={styles.SpeakButton}
-                                  activeOpacity={0.5}>
-                                  <Text style={[styles.text, { textAlign: 'center', color: '#fff' }]}>Stop  🔇</Text>
-                                </TouchableOpacity>
-                              </View>
-                              <View style={{ flexDirection: "row" }}>
-                                <TouchableOpacity
-                                  style={styles.SpeakButton}
-                                  activeOpacity={0.5}
-                                  onPress={() => setModalVisibleHelp(false)}
-                                >
-                                  <Text style={[styles.text, { textAlign: 'center', color: '#fff', fontSize: 16, fontFamily: 'sans-serif' }]}>Skip</Text>
-                                </TouchableOpacity>
-                              </View>
-                            </View>
-                          </View>
-                        </Modal> */}
                     </View>
                   </View>
-                </KeyboardAvoidingView>
-              </View>
-            </ScrollView>
-          </View>
-        </View>
-      </ImageBackground>
-    </View>
 
+
+                  <View style={styles.inputfieldparentview}>
+                    <Text style={styles.inputfieldheadingview1}>
+                      شناختی کارڈ/بے فارم:
+                    </Text>
+
+                    <View style={styles.textinputview}>
+                      <TextInput
+                        placeholderTextColor="grey"
+                        ref={firstTextInput}
+                        maxLength={13}
+                        onSubmitEditing={handleSubmitFirstTextInput}
+                        placeholder="شناختی کارڈ/ب فارم"
+                        placeholderColor="#c4c3cb"
+                        style={[
+                          styles.loginFormTextInput,
+                          { borderColor: !email && errorValidate ? 'red' : '#fff' },
+                        ]}
+                        // placeholderStyle={{ paddingHorizontal: 20 }}
+                        onChangeText={email => setEmail(email)}
+                        value={email}
+                      />
+                    </View>
+                  </View>
+
+                  <View style={{ padding: 20 }}>
+                    <Text style={styles.inputfieldheadingview1}>پاس ورڈ:</Text>
+
+                    <View style={styles.textinputview}>
+                      <TextInput
+                        placeholderTextColor="grey"
+                        ref={secondTextInput}
+                        placeholderStyle={{ paddingHorizontal: 40 }}
+                        onSubmitEditing={handleSubmitLogin}
+                        placeholder="پاس ورڈ"
+                        placeholderColor="#c4c3cb"
+                        autoCapitalize="none"
+                        secureTextEntry={!showPassword}
+                        onChangeText={text => setPassword(text)}
+                        value={password}
+                        style={[
+                          styles.loginFormTextInput,
+                          { borderColor: !password && errorValidate ? 'red' : '#fff' },
+                        ]}
+                      />
+                    </View>
+
+                    <TouchableOpacity onPress={() => navigation.navigate('ResetPass')}>
+                      <Text style={[styles.passtext, { textAlign: 'left' }]}>
+                        Forgot/Reset Psssword
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  <View style={{ padding: 20, paddingBottom: 10, alignItems: 'center' }}>
+                    <TouchableOpacity onPress={onLoginPress} style={styles.ButtonStyle} activeOpacity={0.5}>
+                      <Text style={[styles.text, { textAlign: 'center' }]}>Login</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+            </View>
+          </KeyboardAvoidingView>
+        </Modal>
+      </View>
+    </TouchableWithoutFeedback>
   );
-
-}
+};
 const styles = StyleSheet.create({
-  SpeakButton: {
-    justifyContent: 'center',
-    width: '35%',
-    padding: 10,
-    marginTop: 15,
-    // marginLeft: '15%',
-    flex: 1,
-    marginRight: 5,
-    borderRadius: 10,
-    backgroundColor: '#002D62',
-    color: '#fff'
+  greenview: {
+    backgroundColor: '#588739',
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
   },
-  closeIcon: {
-    marginLeft: '90%'
+  backgroundimage: {
+    width: null,
+    height: null,
+    flex: 1,
+  },
+  loginboxview: {
+    width: '100%',
+    backgroundColor: '#fff',
+    height: 440,
+    padding: 0,
+    borderRadius: 10,
+    opacity: 0.9,
+  },
+  loginheading: {},
+  buttonviewstyle: {
+    position: 'absolute',
+    bottom: '20%',
+    width: '100%',
+    paddingHorizontal: '5%',
+  },
+  buttontext: {
+    color: 'white',
+    fontSize: 15,
+  },
+  button1: {
+    borderRadius: 5,
+    width: '40%',
+    alignSelf: 'center',
+    marginBottom: '5%',
+    backgroundColor: '#588739',
+    padding: '2%',
+    alignItems: 'center',
+  },
+  button2: {
+    borderRadius: 5,
+    width: '60%',
+    alignSelf: 'center',
+    marginBottom: '5%',
+    backgroundColor: '#588739',
+    padding: '2%',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalText: {
+    fontSize: 20,
+    color: 'white',
+    marginBottom: 20,
+  },
+  input: {
+    backgroundColor: 'white',
+    width: '80%',
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 5,
   },
   loginFormTextInput: {
-
     flex: 1,
     color: 'black',
     borderWidth: 1,
     borderRadius: 5,
     height: 40,
+    padding: 10,
+    // color: '#fff',
     // borderColor: '',
+  },
+  eyeIcon: {
+    padding: 10,
+  },
+  loginButton: {
+    backgroundColor: '#588739',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
 
   },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  closeButtonContainer: {
+    position: 'absolute',
+    top: '20%',
+    right: 10,
+    zIndex: 1,
+    height:30,
+    width:20
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  closeButton: {
+    backgroundColor: '#fff',
+    padding: 5,
+    borderRadius: 5,
+    // marginTop:'20%'
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  closeButtonText: {
+    color: '#000',
+    fontSize: 13, // Adjust the font size as needed
   },
-  highlight: {
-    fontWeight: '700',
-  },
-  buttonStyle: {
-    justifyContent: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 25,
-    borderRadius: 10,
-    backgroundColor: '#002D62',
-  },
+    
   text: {
     color: 'white',
     fontSize: 15,
-    fontFamily: "sans-serif",
-
+    fontFamily: 'sans-serif',
   },
-  ButtonStyle: {
-    justifyContent: 'center',
-    width: '80%',
-    padding: 8,
-    // paddingVertical: 10,
-    borderRadius: 10,
-    // paddingHorizontal: 15,
-    backgroundColor: '#588739',
-  },
-  Text: {
-    color: 'black',
+  loginText: {
     textAlign: 'center',
-    textDecorationLine: 'underline',
-    fontSize: 14,
-    // marginTop:5
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 30,
+    padding: 15,
+  },
+  inputfieldparentview: {
+    paddingTop: 20,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  inputfieldheadingview1: {
+    marginTop: 30,
+    fontWeight: 'bold',
+    color: '#000000',
+  },
+  textinputview: {
+    marginTop: 10,
+    backgroundColor: '#c0c0c0',
+    borderRadius: 5,
+    height: 40,
+    flexDirection: 'row', // Align items horizontally
+    alignItems: 'center', // Center items vertically
   },
   passtext: {
     color: 'black',
@@ -324,18 +453,14 @@ const styles = StyleSheet.create({
     marginTop: 2,
     // marginTop:5
   },
-  Boxtext: {
-    color: '#002D62',
-    textAlign: 'left',
-    // marginLeft:-8,
-    fontSize: 15,
+  ButtonStyle: {
+    justifyContent: 'center',
+    width: '70%',
+    padding: 8,
+    // paddingVertical: 10,
+    borderRadius: 5,
+    // paddingHorizontal: 15,
+    backgroundColor: '#588739',
   },
-  Checkbox: {
-    marginTop: 8,
-  },
-  smsimage: {
-    
-  },
-
 });
 export default Login;

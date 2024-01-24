@@ -10,6 +10,7 @@ import { Text,
 import pwdIMage from '../../assets/images/background.png'
 import Loader from '../Components/Loader';
 import Footer from '../Components/Footer'; 
+import baseUrl from '../Components/Url';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -66,7 +67,9 @@ const Register = ({navigation}) => {
   }, []);
 
   const getProvince = () => {
-    fetch('https://dpmis.punjab.gov.pk/api/app/province', {
+
+
+    fetch(`${baseUrl[0]}/bmprovince`, {
       method: 'GET',
       headers: {
           'Accept': 'application/json',
@@ -75,16 +78,18 @@ const Register = ({navigation}) => {
     .then(response => response.json())
     .then(response => {
 
+      // console.log('Province', response[0].id)
       // {response:{provinces:{{'id','name'}, object2, object3, object4}}}
-      var count = Object.keys(response.provinces).length; /* 4 */
+      var count = Object.keys(response).length; /* 4 */
       if(count > 0){
         let dropDownData = [];
-        for (var i = 0; i < count; i++) {
+        // for (var i = 0; i < count; i++) {
+
           dropDownData.push({
-            value: response.provinces[i].id,
-            label: response.provinces[i].name,
+            value: response[0].id,
+            label:response[0].pname,
           });
-        }
+        // }
         setProvince(dropDownData);
       }
     });
@@ -93,7 +98,7 @@ const Register = ({navigation}) => {
   const getDivision = (provinceID) => {
     console.log('ID P', provinceID)
     const province_id  = provinceID;
-    fetch(`https://dpmis.punjab.gov.pk/api/app/getdivisions/${provinceID}`, {
+    fetch(`${baseUrl[0]}/bmdivision/${provinceID}`, {
       method: 'GET',
       headers:{},
     })
@@ -102,10 +107,10 @@ const Register = ({navigation}) => {
 
       console.log('Division', responseDivision.divisions)
       var count = Object.keys(responseDivision.divisions).length;
-      console.log('Divison COunt', count)
+      // console.log('Divison COunt', count)
       let divisionData = [];
       for (var i = 0; i < count; i++) {
-          divisionData.push({ value: responseDivision.divisions[i].id, label: responseDivision.divisions[i].name });
+          divisionData.push({ value: responseDivision.divisions[i].id, label: responseDivision.divisions[i].divname });
       }
       // console.log(JSON.stringify(divisionData))
       setDivision(divisionData);
@@ -116,7 +121,7 @@ const Register = ({navigation}) => {
 
   const getDistrict = (divisonId) =>{
 
-    fetch(`https://dpmis.punjab.gov.pk/api/app/getdistricts/${divisonId}`, {
+    fetch(`${baseUrl[0]}/bmdistrict/${divisonId}`, {
       method: 'GET',
       headers:{},
     })
@@ -129,7 +134,7 @@ const Register = ({navigation}) => {
       console.log('Districts COunt', count)
       let districtsData = [];
       for (var i = 0; i < count; i++) {
-        districtsData.push({ value: responseDistrict.districts[i].id, label: responseDistrict.districts[i].name });
+        districtsData.push({ value: responseDistrict.districts[i].id, label: responseDistrict.districts[i].dname });
       }
       // console.log(JSON.stringify(Data))
       setDistrict(districtsData);
@@ -138,7 +143,7 @@ const Register = ({navigation}) => {
 
   const getTehsil = (dist_id) => {
     const district_id  = dist_id;
-    fetch(`https://dpmis.punjab.gov.pk/api/app/tehsil/${district_id}`, {
+    fetch(`${baseUrl[0]}/bmtehsil/${district_id}`, {
       method: 'GET',
       headers:{
         'Accept': 'application/json',
@@ -149,11 +154,11 @@ const Register = ({navigation}) => {
     .then(resp => resp.json())
     .then(responseTehsil => {
       console.log('Tehsil : ', responseTehsil)
-      var count = Object.keys(responseTehsil.tehsil).length;
+      var count = Object.keys(responseTehsil.tehsils).length;
       console.log('Tehsil COunt', count)
       let tehsilData = [];
       for (var i = 0; i < count; i++) {
-        tehsilData.push({ value: responseTehsil.tehsil[i].id, label: responseTehsil.tehsil[i].tname });
+        tehsilData.push({ value: responseTehsil.tehsils[i].id, label: responseTehsil.tehsils[i].tname });
       }
       console.log(JSON.stringify(tehsilData))
       setTehsil(tehsilData);
@@ -162,7 +167,7 @@ const Register = ({navigation}) => {
 
   // const getBoard = (ditrictId) =>{
 
-  //   fetch(`https://dpmis.punjab.gov.pk/api/app/getboards/${ditrictId}`, {
+  //   fetch(`${baseUrl[1]}/app/getboards/${ditrictId}`, {
   //     method: 'GET',
   //     headers:{},
   //   })
@@ -221,7 +226,7 @@ const Register = ({navigation}) => {
     }else{
       setLoading(true)
       fetch(
-        `https://bm.punjab.gov.pk/api/registerBMApi`,
+        `${baseUrl[0]}/registerBMApi`,
         {
           method: 'POST',
           headers:{
@@ -266,7 +271,7 @@ return (
             showsHorizontalScrollIndicator={false}>
             <View>
               <View>
-              <Text style={[{textAlign: 'center',color: '#002D62', fontWeight: "bold",fontSize: 30}]}>Register</Text>
+              <Text style={[{textAlign: 'center',color: '#588739', fontWeight: "bold",fontSize: 30}]}>اندراج</Text>
               </View>
               
               <Text style={{marginTop:10,fontWeight:"bold",color:"#000000"}}>نام:</Text>
@@ -553,7 +558,7 @@ ButtonStyle:{
   width:'40%',
   padding:10,
   borderRadius: 12,
-  backgroundColor: '#002D62',
+  backgroundColor: '#588739',
   marginTop:10,
   marginLeft:80
 },

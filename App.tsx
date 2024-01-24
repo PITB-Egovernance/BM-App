@@ -19,7 +19,11 @@ import BMshow from './src/BmRegistration/BMshow';
 import ResetPassword from './src/Auth/ResetPassword';
 import OTPForResetPass from './src/Auth/OTPForResetPass';
 import ChangePassword from './src/Auth/ChangePassword';
+import ChairmanDashboard from './src/Auth/ChairmanDashboard';
+import MemberDashboard from './src/Auth/MemberDashboard';
+import UserDetails from './src/Auth/UserDetails';
 import Footer from './src/Components/Footer';
+import datatable from './src/Auth/datatable'
 
 // import PwdCertificate from './src/PwdRegistration/PwdCertificatebByDD/PwdCertificate';
 // import Step4 from './src/PwdRegistration/PwdCertificates/DraftCertificate';
@@ -54,6 +58,9 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import MyComponent from './src/Auth/datatable';
+import { Alert,Platform, BackHandler, Linking,ToastAndroid } from 'react-native';
+import VersionCheck from 'react-native-version-check';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -66,27 +73,76 @@ function App(): JSX.Element {
 
   
   useEffect(() => {
-    // Ignore log notification by message:
-      LogBox.ignoreLogs(['Warning: ...']);
+    // Ignore log notifications by message:
+    LogBox.ignoreLogs(['Warning: ...']);
 
-      // Ignore all log notifications:
-      
-      LogBox.ignoreAllLogs();
-      console.disableYellowBox = true;
-      YellowBox.ignoreWarnings(['Warning: ...']);
+    // Ignore all log notifications:
+    LogBox.ignoreAllLogs();
+
+    // Hide yellow box warnings:
+    console.warn = () => {};
+
     SplashScreen.hide();
-  },500);
+    checkAppVersion();
+
+ 
+  }, []);
+  const checkAppVersion = async () => {
+    
+      const latestVersion = Platform.OS === 'ios'? await fetch(`https://itunes.apple.com/in/lookup?bundleId= put her your bundleId like com.app`)
+      .then(r => r.json())
+      .then((res) => { 
+        console.log('test ', res)
+        return res?.results[0]?.version })
+      : await VersionCheck.getLatestVersion({
+          provider: 'playStore',
+          packageName: 'pk.gov.pitb.baitulmaal',
+          ignoreErrors: true,
+      });
+
+      
+      const currentVersion  = VersionCheck.getCurrentVersion();
+      const appurl          = await VersionCheck.getPlayStoreUrl();
+      console.log('Latest version', latestVersion, 'Current Version',currentVersion)
+   
+      if (latestVersion > currentVersion) {
+        Alert.alert(
+          'Update Required',
+          'A new version of the app is available. Please update to continue using the app.',
+          [
+            {
+              text: 'Update Now',
+              onPress: () => {
+                Linking.openURL(appurl)
+              },
+            },
+          ],
+          { cancelable: false }
+        );
+      } else {
+        
+        ToastAndroid.show('Baitulmaal App is already up to date', ToastAndroid.LONG);
+        return;
+      }
+    
+  };
+ 
   return (
     <NavigationContainer>
       
-      <Stack.Navigator options={{headerShown: false}} >
-        <Stack.Screen name="Login"      component={Login} initialRouteName="Login" options={{headerShown: false}}/>
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Login">
+        <Stack.Screen name="Login"      component={Login}/>
         <Stack.Screen name="Register"   component={Register} options={{headerShown: false}}/>
         <Stack.Screen name="OTP"   component={OTP} options={{headerShown: false}}/>
         <Stack.Screen name="Dashboard"  component={Dashboard} options={{headerShown: false}}/>
         <Stack.Screen name="ResetPass"      component={ResetPassword} options={{headerShown: false}}/>
         <Stack.Screen name="OTPForResetPass"      component={OTPForResetPass} options={{headerShown: false}}/>
         <Stack.Screen name="ChangePassword"      component={ChangePassword} options={{headerShown: false}}/>
+        <Stack.Screen name='ChairmanDashboard'  component={ChairmanDashboard} options={{headerShown: false,orientation:'landscape_right'}}/>
+        <Stack.Screen name='MemberDashboard' component={MemberDashboard} options={{headerShown: false,orientation:'landscape_right'}}/>
+        <Stack.Screen name='datatable' component={MyComponent} options={{headerShown:false}}/> 
+        <Stack.Screen name ='UserDetails' component={UserDetails}  options={{headerShown: true}}/>
+
 
         {/* <Stack.Screen name="Baitulmal" component={} options={{headerShown: false}}/> */}
        

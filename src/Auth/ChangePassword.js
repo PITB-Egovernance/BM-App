@@ -18,12 +18,14 @@ const handleSubmitPress = () => {
   if (password !== confirmpassword) {
     ToastAndroid.show('Passwords do not match', ToastAndroid.LONG);
     return;
-  }
+  }else{
+
+
   // else if(!password ){
   //   ToastAndroid.show('Please enter your Password', ToastAndroid.LONG);
   //   return;
   // }
-
+setloading(true)
   const requestData = {
     id: route.params.userId,
     password: password,
@@ -53,7 +55,13 @@ const handleSubmitPress = () => {
       setloading(false);
       console.error('Error changing password:', error);
       ToastAndroid.show('Error changing password. Please try again later.', ToastAndroid.LONG);
-    });
+    }).finally(() => {
+  
+      setLoading(false);
+    }
+    );;
+
+  }
 };
 
 

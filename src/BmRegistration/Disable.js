@@ -33,6 +33,8 @@ import DocumentPicker, {
   isInProgress,
   types,
 } from 'react-native-document-picker';
+import baseUrl from '../Components/Url';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 
 const Disable = ({ navigation }) => {
@@ -48,27 +50,25 @@ const Disable = ({ navigation }) => {
 
   // step2  Death Certuficate      
   const [dImage, setDImage] = useState('');
-  const [urid, setURID] = useState('');
-  const [dName, setDName] = useState('');
-  const [dType, setDType] = useState('');
-
+  const [capDeath, setCapDeath] = useState('');
+ 
   // step2  Disability Certuficate      
   const [disImage, setDisImage] = useState('');
-  const [uridis, setURIDis] = useState('');
-  const [disName, setDisName] = useState('');
-  const [disType, setDisType] = useState('');
+  const [capDisbale, setCapDisable] = useState('');
 
   // step2  CNIC front       
   const [cnicfImage, setCnicfImage] = useState('');
+  const [capFCnic, setCapFCnic] = useState('');
   const [uricnicf, setURICnicf] = useState('');
-  const [cnicfName, setCnicfName] = useState('');
-  const [cnicfType, setCnicfType] = useState('');
 
   // step2  CNIC Back     
   const [backcnicImage, setBackcnicImage] = useState('');
+  const [capCnicback, setCapCnicBack] = useState('');
   const [uribackcnic, setURIBackcnic] = useState('');
-  const [backcnicName, setBackcnicName] = useState('');
-  const [backcnicType, setBackcnicType] = useState('');
+  
+
+  const [urid, setURID] = useState('');
+  const [uridis, setURIDis] = useState('');
 
   const SkillData = [
     { label: 'Yes', value: 'Yes' },
@@ -94,62 +94,106 @@ const Disable = ({ navigation }) => {
 
   // step3
   const deathcerti = async () => {
-    DocumentPicker.pick({
-      allowMultiSelection: false,
-      type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
-    })
-      .then((response) => {
-        // console.log('response',JSON.stringify(response[0], null, 2))
-        setDImage(response[0].uri)
-        setURID(response[0].uri)
-        setDName(response[0].name)
-        setDType(response[0].type)
-      })
+    
+    const options = {
+      mediaType: 'photo',
+      includeBase64: true,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+  
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error: ', response.error);
+      } else {
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        setDImage(imageUri);
+        setURID(imageUri)
+        // console.log('Image cnic back',imageUri)
+        const fileBase64        = response.assets[0].base64
+        setCapDeath(fileBase64)
+      }
+    });
   }
   // step3
   const disablecerti = async () => {
-    DocumentPicker.pick({
-      allowMultiSelection: false,
-      type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
-    })
-      .then((response) => {
-        // console.log('response',JSON.stringify(response[0], null, 2))
-        setDisImage(response[0].uri)
-        setURIDis(response[0].uri)
-        setDisName(response[0].name)
-        setDisType(response[0].type)
-      })
+    
+    const options = {
+      mediaType: 'photo',
+      includeBase64: true,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+  
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error: ', response.error);
+      } else {
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        setDisImage(imageUri);
+        setURIDis(imageUri)
+        console.log('Image cnic back',imageUri)
+        const fileBase64        = response.assets[0].base64
+        setCapDisable(fileBase64)
+      }
+    });
   }
 
 
   // step3
   const cnicfront = async () => {
-    DocumentPicker.pick({
-      allowMultiSelection: false,
-      type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
-    })
-      .then((response) => {
-        // console.log('response',JSON.stringify(response[0], null, 2))
-        setCnicfImage(response[0].uri)
-        setURICnicf(response[0].uri)
-        setCnicfName(response[0].name)
-        setCnicfType(response[0].type)
-      })
+    
+    const options = {
+      mediaType: 'photo',
+      includeBase64: true,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+  
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error: ', response.error);
+      } else {
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        setCnicfImage(imageUri);
+        setURICnicf(imageUri)
+        // console.log('Image cnic back',imageUri)
+        const fileBase64        = response.assets[0].base64
+        setCapFCnic(fileBase64)
+      }
+    });
   }
 
   // step3
   const backcnic = async () => {
-    DocumentPicker.pick({
-      allowMultiSelection: false,
-      type: [DocumentPicker.types.images, DocumentPicker.types.pdf],
-    })
-      .then((response) => {
-        // console.log('response',JSON.stringify(response[0], null, 2))
-        setBackcnicImage(response[0].uri)
-        setURIBackcnic(response[0].uri)
-        setBackcnicName(response[0].name)
-        setBackcnicType(response[0].type)
-      })
+    
+    const options = {
+      mediaType: 'photo',
+      includeBase64: true,
+      maxHeight: 2000,
+      maxWidth: 2000,
+    };
+  
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('Image picker error: ', response.error);
+      } else {
+        let imageUri = response.uri || response.assets?.[0]?.uri;
+        setBackcnicImage(imageUri);
+        setURIBackcnic(imageUri)
+        console.log('Image cnic back',imageUri)
+        const fileBase64        = response.assets[0].base64
+        setCapCnicBack(fileBase64)
+      }
+    });
   }
 
   const [NameArray, setNameArray] = useState([]);
@@ -188,212 +232,165 @@ const Disable = ({ navigation }) => {
   };
 
 
-
-
-
   const DisableSubmit = () => {
     setErrorValidate(true)
     if(!expensedetail){
-    ToastAndroid.show('Enter your Expense Details', ToastAndroid.LONG);
-    return;
-  } else if(!residence){
-    ToastAndroid.show('Select Residential Status', ToastAndroid.LONG);
-    return;
-  }else if(!skill){
-    ToastAndroid.show('Select your Skill', ToastAndroid.LONG);
-    return;
-  }else if(!need){
-    ToastAndroid.show('Select Your Need', ToastAndroid.LONG);
-    return;
-  }else if(!purpose){
-    ToastAndroid.show('Enter your Purpose', ToastAndroid.LONG);
-    return;
-  }else if(!property){
-    ToastAndroid.show('Enter Groom Father Name', ToastAndroid.LONG);
-    return;
-  }else if(!urid){
-    ToastAndroid.show('Upload Death Certificate', ToastAndroid.LONG);
-    return;
-  }
-  // else if(!uridis){
-  //   ToastAndroid.show('Enter Groom Address', ToastAndroid.LONG);
-  //   return;
-  // }
-  else if(!uricnicf){
-    ToastAndroid.show('Upload CNIC Front Image', ToastAndroid.LONG);
-    return;
-  }else if(!uribackcnic){
-    ToastAndroid.show('Upload CNIC Back Image', ToastAndroid.LONG);
-    return;
-  }else{
-    /* Step 1 fields Get Bmregt*/
- const bmuser_id = syncStorage.get('bmuser_id')
- const district = syncStorage.get('district')
- // console.log('district',district);
- const Tehsil = syncStorage.get('tehsil')
- console.log('Tehsil', Tehsil)
- const imageProfile = syncStorage.get('image')
- const fullname = syncStorage.get('applicantname')
- const fathername = syncStorage.get('fathername')
- // const pcrdp = syncStorage.get('Pcrdp')
- const cnic = syncStorage.get('cnic')
- const phone = syncStorage.get('contact')
- const dob = syncStorage.get('dob')
- const agegroup = syncStorage.get('age')
- const gender = syncStorage.get('gender')
- const paddress = syncStorage.get('postaladress')
- const ppaddress = syncStorage.get('permanentAddress')
-
-
- /* Step 2 Fields Get otherinfo*/
- const reg_date = syncStorage.get('reg_date')
- // const reg_date = dd.slice(0, 9);
- console.log('reg===', reg_date);
- const yourincome = syncStorage.get('yourincome')
- const parentincome = syncStorage.get('parentincome')
- const service = syncStorage.get('Service')
- const otherservice = syncStorage.get('GovernmentData')
- const uriaffidavit = syncStorage.get('uriaffidavit');
- const affidavitImage = syncStorage.get('affidavitImage');
- const affidavitType = syncStorage.get('affidavitType');
- /* Step 4 Fields Get Relative Detail*/
-console.log('asda', yourincome,parentincome,service,otherservice)
-console.log('Family Data', familyData)
- if (familyData != '') {
-   const regID = [];
-   const rnameData = [];
-   const rageData = [];
-   const rincomeData = [];
-   const roccupationData = [];
-   const rrelationData = [];
-   const reducationData = [];
-   var count = Object.keys(familyData).length;
-   console.log('Keys family dr', count);
-   for (var i = 0; i < count; i++) {
-     // regformIDData.push(familyData[i].regform_id);
-     rnameData.push(familyData[i].rname);
-     rageData.push(familyData[i].rage);
-     rincomeData.push(familyData[i].rincome);
-     roccupationData.push(familyData[i].roccupation);
-     rrelationData.push(familyData[i].rrelation);
-     reducationData.push(familyData[i].reducation);
-     regID.push(familyData[i].regform_id)
-
-    //  console.log('Family_dir_inner Name', rnameData)
-    //  console.log('Family_dir_inner relation', rageData)
-    //  console.log('Family_dir_inner Age', rincomeData)
-    //  console.log('Family_dir_inner education', reducationData)
-    //  console.log('Family_dir_inner icome', rrelationData)
-    //  console.log('Family_dir_inner Occ', roccupationData)
-    
-  
-   }
-
-   setNameArray(rnameData)
-   setAgeArray(rageData)
-   setOccupArray(roccupationData)
-   setIncomeArray(rincomeData)
-   setEducationArray(reducationData)
-   setRelationArray(rrelationData)
-   setRegID(regID)
-   
- }
- /* Step 4 Fields Get Select Category*/
-
- /* User ID */
-
- //  const pwdpinfos_id = syncStorage.get('pwdinfo_id');
-
-//  const formData = new FormData();
-
-
- console.log(JSON.stringify(NameArray),AgeArray,EducationArray)
-
-    // if (urid == '') {
-    // } else {
-    //   formData.append('deathcerti', {
-    //     uri: Platform.OS === 'android' ? urid : urid.replace('file://', ''),
-    //     type: dType,
-    //     name: dName
-    //   });
-
-    // }
-
-    // if (uridis == '') {
-    // } else {
-    //   formData.append('disablecerti', {
-    //     uri: Platform.OS === 'android' ? uridis : uridis.replace('file://', ''),
-    //     type: disType,
-    //     name: disName
-    //   });
-
-    // }
-
-    // if (uricnicf == '') {
-    // } else {
-    //   formData.append('cnicfront', {
-    //     uri: Platform.OS === 'android' ? uricnicf : uricnicf.replace('file://', ''),
-    //     type: cnicfType,
-    //     name: cnicfName
-    //   });
-
-    // }
-
-    // if (uribackcnic == '') {
-    // } else {
-    //   formData.append('backcnic', {
-    //     uri: Platform.OS === 'android' ? uribackcnic : uribackcnic.replace('file://', ''),
-    //     type: backcnicType,
-    //     name: backcnicName
-    //   });
-
-    // }
-
-    console.log('formData Arrays', NameArray);
-
-    setLoading(true)
-    fetch(
-      `https://bm.punjab.gov.pk/api/regformdisallpost`,
-      {
-        method: 'POST',
-        headers:{
-          'Accept':'application/json',
-          'Content-Type': 'multipart/application/json',
-        },
-        body: JSON.stringify({ user_id: `${bmuser_id}`, district: `${district}`,tehsil: `${Tehsil}`,image: `${imageProfile}`,applicantname: `${fullname}`,
-        cnic: `${cnic}`,contact: `${phone}`,fathername:`${fathername}`,dob: `${dob}`,agegroup: `${agegroup}`,gender: `${gender}`,address: `${paddress}`,paddress: `${ppaddress}`,
-        reg_date: `${reg_date}`,yourincome: `${yourincome}`,parentincome:`${parentincome}`,service:`${service}`,GovernmentData:`${otherservice}`,
-        uriaffidavit: `${uriaffidavit}`,affidavitImage: `${affidavitImage}`,affidavitType: `${affidavitType}`,rname:`${NameArray}`,rage:`${AgeArray}`,
-        roccupation:`${OccupyArray}`,rincome:`${IncomeArray}`,reducation:`${EducationArray}`,rrelation:`${RelationArray}`,
-        expensedetail:`${expensedetail}`,residence:`${residence}`,skill:`${skill}`,need:`${need}`,purpose:`${purpose}`,property:`${property}`,deathcerti:`${urid}`,
-        disablecerti:`${uridis}`,cnicfront:`${uricnicf}`,backcnic:`${uribackcnic}`
-        
-      })
-      }
-    )
-    .then(resp => resp.json()).then(response => 
-      { 
-        console.log('response BM', response);
-        if (response.success != '') {
-          const regformID = response['BM Register']['id'];
-          const regform = response['BM Register'];
-          regformID != ''
-            ?
-            syncStorage.set('regform_id', regformID)
-            : null
-
-          navigation.navigate('Dashboard', {
-            regformID: syncStorage.get('regform_id'),
-          
-          });
-        }
+      ToastAndroid.show('Enter your Expense Details', ToastAndroid.LONG);
+      return;
+    } else if(!residence){
+      ToastAndroid.show('Select Residential Status', ToastAndroid.LONG);
+      return;
+    }else if(!skill){
+      ToastAndroid.show('Select your Skill', ToastAndroid.LONG);
+      return;
+    }else if(!need){
+      ToastAndroid.show('Select Your Need', ToastAndroid.LONG);
+      return;
+    }else if(!purpose){
+      ToastAndroid.show('Enter your Purpose', ToastAndroid.LONG);
+      return;
+    }else if(!property){
+      ToastAndroid.show('Enter Groom Father Name', ToastAndroid.LONG);
+      return;
     }
-    ).finally(() =>{
-      setLoading(false);
-    });
+    else if(!uricnicf){
+      ToastAndroid.show('Upload CNIC Front Image', ToastAndroid.LONG);
+      return;
+    }else if(!uribackcnic){
+      ToastAndroid.show('Upload CNIC Back Image', ToastAndroid.LONG);
+      return;
+    }else{
+      /* Step 1 fields Get Bmregt*/
+      const bmuser_id = syncStorage.get('bmuser_id')
+      const district = syncStorage.get('district')
+      // console.log('district',district);
+      const Tehsil = syncStorage.get('tehsil')
+      console.log('Tehsil', Tehsil)
+      const imageProfile = syncStorage.get('image')
+      const imageProfilee = syncStorage.get('imageCap')
+      const fullname = syncStorage.get('applicantname')
+      const fathername = syncStorage.get('fathername')
+      // const pcrdp = syncStorage.get('Pcrdp')
+      const cnic = syncStorage.get('cnic')
+      const phone = syncStorage.get('contact')
+      const dob = syncStorage.get('dob')
+      const agegroup = syncStorage.get('age')
+      const gender = syncStorage.get('gender')
+      const paddress = syncStorage.get('postaladress')
+      const ppaddress = syncStorage.get('permanentAddress')
 
-  }
-};
+
+      /* Step 2 Fields Get otherinfo*/
+      const reg_date = syncStorage.get('reg_date')
+      // const reg_date = dd.slice(0, 9);
+      console.log('reg===', reg_date);
+      const yourincome = syncStorage.get('yourincome')
+      const parentincome = syncStorage.get('parentincome')
+      const service = syncStorage.get('Service')
+      const otherservice = syncStorage.get('GovernmentData')
+      const uriaffidavit = syncStorage.get('uriaffidavit');
+      const affidavitImage = syncStorage.get('affidavitImage');
+      const affidavitType = syncStorage.get('affidavitType');
+      /* Step 4 Fields Get Relative Detail*/
+      console.log('asda', yourincome,parentincome,service,otherservice)
+      console.log('Family Data', familyData)
+      if (familyData != '' && familyData!=undefined) {
+        const regID = [];
+        const rnameData = [];
+        const rageData = [];
+        const rincomeData = [];
+        const roccupationData = [];
+        const rrelationData = [];
+        const reducationData = [];
+        var count = Object.keys(familyData).length;
+        console.log('Keys family dr', count);
+        for (var i = 0; i < count; i++) {
+          // regformIDData.push(familyData[i].regform_id);
+          rnameData.push(familyData[i].rname);
+          rageData.push(familyData[i].rage);
+          rincomeData.push(familyData[i].rincome);
+          roccupationData.push(familyData[i].roccupation);
+          rrelationData.push(familyData[i].rrelation);
+          reducationData.push(familyData[i].reducation);
+          regID.push(familyData[i].regform_id)
+
+          //  console.log('Family_dir_inner Name', rnameData)
+          //  console.log('Family_dir_inner relation', rageData)
+          //  console.log('Family_dir_inner Age', rincomeData)
+          //  console.log('Family_dir_inner education', reducationData)
+          //  console.log('Family_dir_inner icome', rrelationData)
+          //  console.log('Family_dir_inner Occ', roccupationData)
+        
+      
+        }
+
+      setNameArray(rnameData)
+      setAgeArray(rageData)
+      setOccupArray(roccupationData)
+      setIncomeArray(rincomeData)
+      setEducationArray(reducationData)
+      setRelationArray(rrelationData)
+      setRegID(regID)
+      
+      }
+      /* Step 4 Fields Get Select Category*/
+
+      /* User ID */
+
+      //  const pwdpinfos_id = syncStorage.get('pwdinfo_id');
+
+      //  const formData = new FormData();
+
+
+      console.log(JSON.stringify(NameArray),AgeArray,EducationArray)
+
+
+      console.log('formData Arrays', NameArray);
+
+      setLoading(true)
+      fetch(
+        `${baseUrl[0]}/regformdisallpost`,
+        {
+          method: 'POST',
+          headers:{
+            'Accept':'application/json',
+            'Content-Type': 'multipart/application/json',
+            'enctype':"multipart/form-data"
+          },
+          body: JSON.stringify({ user_id: `${bmuser_id}`, district: `${district}`,tehsil: `${Tehsil}`,image: `${imageProfilee}`,applicantname: `${fullname}`,
+          cnic: `${cnic}`,contact: `${phone}`,fathername:`${fathername}`,dob: `${dob}`,agegroup: `${agegroup}`,gender: `${gender}`,address: `${paddress}`,paddress: `${ppaddress}`,
+          reg_date: `${reg_date}`,yourincome: `${yourincome}`,parentincome:`${parentincome}`,service:`${service}`,GovernmentData:`${otherservice}`,
+          affidavitImage: `${affidavitImage}`,rname:`${NameArray}`,rage:`${AgeArray}`,
+          roccupation:`${OccupyArray}`,rincome:`${IncomeArray}`,reducation:`${EducationArray}`,rrelation:`${RelationArray}`,
+          expensedetail:`${expensedetail}`,residence:`${residence}`,skill:`${skill}`,need:`${need}`,purpose:`${purpose}`,property:`${property}`,deathcerti:`${capDeath}`,
+          disablecerti:`${capDisbale}`,cnicfront:`${capFCnic}`,backcnic:`${capCnicback}`
+          
+        })
+        }
+      )
+      .then(resp => resp.json()).then(response => 
+        { 
+          console.log('response BM', response);
+          if (response.success != '') {
+            const regformID = response['BM Register']['id'];
+            const regform = response['BM Register'];
+            regformID != ''
+              ?
+              syncStorage.set('regform_id', regformID)
+              : null
+
+            navigation.navigate('Dashboard', {
+              regformID: syncStorage.get('regform_id'),
+            
+            });
+          }
+      }
+      ).finally(() =>{
+        setLoading(false);
+      });
+
+    }
+  };
  
   return (
     <View>
@@ -554,8 +551,8 @@ console.log('Family Data', familyData)
             
             <View style={{marginTop:5,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
             <TouchableOpacity onPress={deathcerti} style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:60 }}>
-              {urid != '' ?
-                <Text  style={{color:"#000000", padding:5}}>{dName}</Text>
+              {dImage != '' ?
+                <Image source={{uri:dImage}} style={{width: '100%', height: 60,resizeMode : 'contain' }} />
               :null}
             </TouchableOpacity>
           </View>
@@ -564,9 +561,10 @@ console.log('Family Data', familyData)
             
             <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
             <TouchableOpacity onPress={disablecerti} style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:60 }}>
-              {uridis != '' ?
-                <Text  style={{color:"#000000", padding:5}}>{disName}</Text>
+              {disImage != '' ?
+               <Image source={{uri:disImage}} style={{width: '100%', height: 60,resizeMode : 'contain' }} />
               :null}
+               
             </TouchableOpacity>
           </View>
 
@@ -575,8 +573,8 @@ console.log('Family Data', familyData)
             
             <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
             <TouchableOpacity onPress={cnicfront} style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:60}}>
-              {uricnicf != '' ?
-                <Text  style={{color:"#000000", padding:5}}>{cnicfName}</Text>
+              {cnicfImage != '' ?
+                <Image source={{uri:cnicfImage}} style={{width: '100%', height: 60,resizeMode : 'contain' }} />
               :null}
             </TouchableOpacity>
           </View>
@@ -585,8 +583,8 @@ console.log('Family Data', familyData)
             
             <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
             <TouchableOpacity onPress={backcnic} style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:60 }}>
-              {uribackcnic != '' ?
-                <Text  style={{color:"#000000", padding:5}}>{backcnicName}</Text>
+              {backcnicImage != '' ?
+                <Image source={{uri:backcnicImage}} style={{width: '100%', height: 60,resizeMode : 'contain' }} />
               :null}
             </TouchableOpacity>
           </View>

@@ -1,11 +1,17 @@
 import React, { useState, useRef } from 'react';
-import {Image, View,ToastAndroid, TextInput, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+import {Image, View,ToastAndroid, TextInput, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import Loader from '../Components/Loader';
 import IconSecond from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
+import backimage from '../../assets/images/bait-ul-mall.png';
+import baseUrl from '../Components/Url';
 
 const OTPScreen = ({route}) => {
+  const screenWidth = Dimensions.get('window').width;
+  //height and width of logo adjusting from here//
+  const imageWidth = screenWidth * 0.5;
+  const imageHeight = imageWidth; 
  
   const [otp, setOTP] = useState('');
   const [loading, setLoading] = useState(false);
@@ -33,14 +39,16 @@ const OTPScreen = ({route}) => {
     // setLoading(true);
     console.log(
      'CNic', route.params.cnic,
-     'otp', otp 
+     'otp', otp,
+     'otpfromnaviagte',route.params.code
     )
     if(route.params.code != otp){
       ToastAndroid.show('Incorrect OTP', ToastAndroid.LONG);
        return;
     }else{
 
-      fetch('https://bm.punjab.gov.pk/api/verify', {
+      setLoading(true)
+      fetch(`${baseUrl[0]}/verify`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,6 +59,7 @@ const OTPScreen = ({route}) => {
         .then((resp) => resp.json())
         .then((response) => {
           console.log('otp check ', response);
+          ToastAndroid.show('Otp verified successfully!', ToastAndroid.LONG);
           navigation.navigate('Login');
         })
         .catch((error) => {
@@ -82,8 +91,8 @@ const OTPScreen = ({route}) => {
 
   return (
     <View style={styles.container}>
-        <Loader loading={loading} />
-        <View style={styles.section1}>
+          <Loader loading={loading} />
+        {/* <View style={styles.section1}>
           <View style={styles.subView}>
             <View style={styles.subViewText}>
               <Text adjustsFontSizeToFit style={styles.eCatalogText}>
@@ -91,16 +100,22 @@ const OTPScreen = ({route}) => {
               </Text>
             </View>
             <View style={styles.subViewIcon}>
-              {/* <Image/> */}
-            {/* <Icon
-              style={styles.searchIcon}
-              name={'lock'} 
-              size={60}
-              color="#002D62"
-            /> */}
+
             </View>
           </View>
-        </View>
+        </View> */}
+         <View style={styles.section1}>
+        {/* <Image
+          source={backimage}
+          style={{
+            width: imageWidth,
+            height: imageHeight,
+            resizeMode: 'cover',
+            color:'#588739'
+            
+          }}
+        /> */}
+      </View>
       <View style={styles.headingContainer}>
         <Text style={styles.heading}>Code Verification</Text>
       </View>
@@ -164,7 +179,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     fontStyle:'CenturyGothic',
-    color: '#002D62',
+    color: '#588739',
   },
   otpInputContainer: {
     flexDirection: 'row',

@@ -34,6 +34,7 @@ import certificate from '../../assets/images/certificate.png';
 import Tts from 'react-native-tts';
 import syncStorage from 'react-native-sync-storage';
 import Footer from '../Components/Footer';
+import baseUrl from '../Components/Url';
 
 const Tracking = ({ route, navigation }) => {
 
@@ -91,6 +92,8 @@ const Tracking = ({ route, navigation }) => {
   const [modalVisibleSecond, setModalVisibleSecond] = useState(false);
 
   useEffect(() => {
+
+   
     if (requestDataReassesment == '' || requestDataReassesment == undefined || requestDataReassesment == 'undefined' || requestDataReassesment == null) {
       setddaRequest('');
       setResAppoint('');
@@ -105,7 +108,9 @@ const Tracking = ({ route, navigation }) => {
   })
 
   const checkAssesmentDetail = () => {
-    fetch(`https://dpmis.punjab.gov.pk/api/pwdapp/apiassessment/${pwdInfoID}`, {
+
+    console.log('Base url dpmis', baseUrl[1])
+    fetch(`${baseUrl[1]}/pwdapp/apiassessment/${pwdInfoID}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

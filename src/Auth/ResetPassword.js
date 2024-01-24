@@ -23,6 +23,7 @@ const ResetPassword = () => {
       // setloading(true);
       const requestData = { cnic, contact };
 
+      setloading(true)
       fetch('https://bm.punjab.gov.pk/api/sendotpforresetpass', {
         method: 'POST',
         headers: {
@@ -53,7 +54,7 @@ const ResetPassword = () => {
 
   return (
     <View style={styles.container}>
-        <Loader loading={loading} />
+         <Loader loading={loading} />
       <View style={styles.headingContainer}>
         <Text style={styles.heading}>Enter Details</Text>
       </View>
