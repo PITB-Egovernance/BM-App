@@ -207,104 +207,96 @@ const Login = ({navigation}) => {
 
         <Modal
           animationType="fade"
-          animationInTiming={500}
-          animationOutTiming={1000}
-          backdropTransitionInTiming={500}
-          backdropTransitionOutTiming={1000}
-          avoidKeyboard={true}
           transparent={true}
           visible={isModalVisible}
-          
           onRequestClose={handleCloseModal}
-         >
-         <KeyboardAvoidingView style={{ flex: 1,position:'relative', }}>
-            <View style={[styles.modalContainer, { padding: 20 }]}>
-                <View style={styles.closeButtonContainer}>
-                  {/* <TouchableOpacity
-                    style={styles.closeButton}
-                    onPress={handleCloseModal}
-                  >
-                    <Text style={styles.closeButtonText}>✕</Text>
-                  </TouchableOpacity> */}
-                </View>
-
-                <View style={styles.loginboxview}>
-                  <View style={styles.headerContainer}>
-                    <View style={styles.greenview}>
-                      <Text style={styles.loginText}>Login</Text>
-                    </View>
-                    <View style={styles.closeButtonContainer}>
-                      <TouchableOpacity
-                        style={styles.closeButton}
-                        onPress={handleCloseModal}
-                      >
-                        <Text style={styles.closeButtonText}>✕</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-
-
-                  <View style={styles.inputfieldparentview}>
-                    <Text style={styles.inputfieldheadingview1}>
-                      شناختی کارڈ/بے فارم:
-                    </Text>
-
-                    <View style={styles.textinputview}>
-                      <TextInput
-                        placeholderTextColor="grey"
-                        ref={firstTextInput}
-                        maxLength={13}
-                        onSubmitEditing={handleSubmitFirstTextInput}
-                        placeholder="شناختی کارڈ/ب فارم"
-                        placeholderColor="#c4c3cb"
-                        style={[
-                          styles.loginFormTextInput,
-                          { borderColor: !email && errorValidate ? 'red' : '#fff' },
-                        ]}
-                        // placeholderStyle={{ paddingHorizontal: 20 }}
-                        onChangeText={email => setEmail(email)}
-                        value={email}
-                      />
-                    </View>
-                  </View>
-
-                  <View style={{ padding: 20 }}>
-                    <Text style={styles.inputfieldheadingview1}>پاس ورڈ:</Text>
-
-                    <View style={styles.textinputview}>
-                      <TextInput
-                        placeholderTextColor="grey"
-                        ref={secondTextInput}
-                        placeholderStyle={{ paddingHorizontal: 40 }}
-                        onSubmitEditing={handleSubmitLogin}
-                        placeholder="پاس ورڈ"
-                        placeholderColor="#c4c3cb"
-                        autoCapitalize="none"
-                        secureTextEntry={!showPassword}
-                        onChangeText={text => setPassword(text)}
-                        value={password}
-                        style={[
-                          styles.loginFormTextInput,
-                          { borderColor: !password && errorValidate ? 'red' : '#fff' },
-                        ]}
-                      />
-                    </View>
-
-                    <TouchableOpacity onPress={() => navigation.navigate('ResetPass')}>
-                      <Text style={[styles.passtext, { textAlign: 'left' }]}>
-                        Forgot/Reset Psssword
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-
-                  <View style={{ padding: 20, paddingBottom: 10, alignItems: 'center' }}>
-                    <TouchableOpacity onPress={onLoginPress} style={styles.ButtonStyle} activeOpacity={0.5}>
-                      <Text style={[styles.text, { textAlign: 'center' }]}>Login</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
+        >
+          <View style={[styles.modalContainer, { padding: 20 }]}>
+            <View style={styles.closeButtonContainer}>
+              {/* <TouchableOpacity
+                style={styles.closeButton}
+                onPress={handleCloseModal}
+              >
+                <Text style={styles.closeButtonText}>✕</Text>
+              </TouchableOpacity> */}
             </View>
-          </KeyboardAvoidingView>
+
+            <View style={styles.loginboxview}>
+            <View style={styles.headerContainer}>
+  <View style={styles.greenview}>
+    <Text style={styles.loginText}>Login</Text>
+  </View>
+  <View style={styles.closeButtonContainer}>
+    <TouchableOpacity
+      style={styles.closeButton}
+      onPress={handleCloseModal}
+    >
+      <Text style={styles.closeButtonText}>✕</Text>
+    </TouchableOpacity>
+  </View>
+</View>
+
+
+              <View style={styles.inputfieldparentview}>
+                <Text style={styles.inputfieldheadingview1}>
+                  شناختی کارڈ/بے فارم:
+                </Text>
+
+                <View style={styles.textinputview}>
+                  <TextInput
+                    placeholderTextColor="grey"
+                    ref={firstTextInput}
+                    maxLength={13}
+                    keyboardType="numeric"
+                    onSubmitEditing={handleSubmitFirstTextInput}
+                    placeholder="شناختی کارڈ/ب فارم نمبر درج کریں"
+                    placeholderColor="#c4c3cb"
+                    style={[
+                      styles.loginFormTextInput,
+                      { borderColor: !email && errorValidate ? 'red' : '#fff' },
+                    ]}
+                    placeholderStyle={{ paddingHorizontal: 20 }}
+                    onChangeText={email => setEmail(email)}
+                    value={email}
+                  />
+                </View>
+              </View>
+
+              <View style={{ padding: 20 }}>
+                <Text style={styles.inputfieldheadingview1}>پاس ورڈ:</Text>
+
+                <View style={styles.textinputview}>
+                  <TextInput
+                    placeholderTextColor="grey"
+                    ref={secondTextInput}
+                    onSubmitEditing={handleSubmitLogin}
+                    placeholder="پاس ورڈ"
+                    placeholderColor="#c4c3cb"
+                    autoCapitalize="none"
+                    secureTextEntry={!showPassword}
+                    onChangeText={text => setPassword(text)}
+                    value={password}
+                    style={[
+                      styles.loginFormTextInput,
+                      { borderColor: !password && errorValidate ? 'red' : '#fff' },
+                    ]}
+                  />
+                </View>
+
+                <TouchableOpacity onPress={() => navigation.navigate('ResetPass')}>
+                  <Text style={[styles.passtext, { textAlign: 'left' }]}>
+                    آپ پاس ورڈ بھول گئے؟
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={{ padding: 20, paddingBottom: 10, alignItems: 'center' }}>
+                <TouchableOpacity onPress={onLoginPress} style={styles.ButtonStyle} activeOpacity={0.5}>
+                  <Text style={[styles.text, { textAlign: 'center' }]}>Login</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
         </Modal>
       </View>
     </TouchableWithoutFeedback>
@@ -312,7 +304,7 @@ const Login = ({navigation}) => {
 };
 const styles = StyleSheet.create({
   greenview: {
-    backgroundColor: '#588739',
+    backgroundColor: '#3a4e35',
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
   },
@@ -345,7 +337,7 @@ const styles = StyleSheet.create({
     width: '40%',
     alignSelf: 'center',
     marginBottom: '5%',
-    backgroundColor: '#588739',
+    backgroundColor: '#3a4e35',
     padding: '2%',
     alignItems: 'center',
   },
@@ -354,7 +346,7 @@ const styles = StyleSheet.create({
     width: '60%',
     alignSelf: 'center',
     marginBottom: '5%',
-    backgroundColor: '#588739',
+    backgroundColor: '#3a4e35',
     padding: '2%',
     alignItems: 'center',
   },
@@ -407,12 +399,12 @@ const styles = StyleSheet.create({
   closeButton: {
     backgroundColor: '#fff',
     padding: 5,
-    borderRadius: 5,
+    borderRadius: 50,
     // marginTop:'20%'
   },
   closeButtonText: {
     color: '#000',
-    fontSize: 13, // Adjust the font size as needed
+    fontSize: 10, // Adjust the font size as needed
   },
     
   text: {
@@ -460,7 +452,7 @@ const styles = StyleSheet.create({
     // paddingVertical: 10,
     borderRadius: 5,
     // paddingHorizontal: 15,
-    backgroundColor: '#588739',
+    backgroundColor: '#3a4e35',
   },
 });
 export default Login;

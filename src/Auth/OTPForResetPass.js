@@ -130,7 +130,7 @@ const OTPForResetPass = () => {
         <Text style={styles.verifyButtonText}>Verify OTP</Text>
       </TouchableOpacity>
       <View style={styles.bottomTextContainer}>
-        <Text style={styles.bottomText}>OTP will be sent to your device</Text>
+        {/* <Text style={styles.bottomText}>OTP will be sent to your device</Text> */}
       </View>
     </View>
   );

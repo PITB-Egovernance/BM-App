@@ -91,7 +91,7 @@ const OTPScreen = ({route}) => {
 
   return (
     <View style={styles.container}>
-          <Loader loading={loading} />
+        <Loader loading={loading} />
         {/* <View style={styles.section1}>
           <View style={styles.subView}>
             <View style={styles.subViewText}>
@@ -105,16 +105,15 @@ const OTPScreen = ({route}) => {
           </View>
         </View> */}
          <View style={styles.section1}>
-        {/* <Image
+        <Image
           source={backimage}
           style={{
             width: imageWidth,
             height: imageHeight,
             resizeMode: 'cover',
-            color:'#588739'
             
           }}
-        /> */}
+        />
       </View>
       <View style={styles.headingContainer}>
         <Text style={styles.heading}>Code Verification</Text>
@@ -139,7 +138,7 @@ const OTPScreen = ({route}) => {
         <Text style={styles.verifyButtonText}>Verify OTP</Text>
       </TouchableOpacity>
       <View style={styles.bottomTextContainer}>
-        <Text style={styles.bottomText}>OTP will be sent to your device</Text>
+        {/* <Text style={styles.bottomText}>OTP will be sent to your device</Text> */}
       </View>
       {/* <TouchableOpacity style={styles.resendButton}>
         <Text style={styles.resendButtonText}>Resend OTP</Text>
@@ -179,7 +178,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     fontStyle:'CenturyGothic',
-    color: '#588739',
+    color: '#002D62',
   },
   otpInputContainer: {
     flexDirection: 'row',

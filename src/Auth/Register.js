@@ -7,7 +7,7 @@ import { Text,
   Dimensions,
   TouchableOpacity,
   ToastAndroid } from 'react-native';
-import pwdIMage from '../../assets/images/background.png'
+  import pwdIMage from '../../assets/images/back2.png'
 import Loader from '../Components/Loader';
 import Footer from '../Components/Footer'; 
 import baseUrl from '../Components/Url';
@@ -558,7 +558,7 @@ ButtonStyle:{
   width:'40%',
   padding:10,
   borderRadius: 12,
-  backgroundColor: '#588739',
+  backgroundColor: '#3a4e35',
   marginTop:10,
   marginLeft:80
 },
