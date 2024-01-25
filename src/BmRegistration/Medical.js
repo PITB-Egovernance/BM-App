@@ -83,6 +83,70 @@ const Medical = ({navigation}) => {
  const [regId, setRegID] = useState([]);
 //  const [FormIdArray, setFormIDArray] = useState([]);
  const [RelationArray, setRelationArray] = useState([]);
+ const [warning, setWarning] = React.useState('');
+const handleInputChange = (input, fieldName) => {
+  // Check if the input contains non-English characters
+  const containsNonEnglish = /[^a-zA-Z ]/.test(input);
+
+  // Set the warning based on the presence of non-English characters
+  if (containsNonEnglish) {
+    setWarning('Please enter text in English only.');
+  } else {
+    setWarning('');
+  }
+
+  // Filter out non-English characters
+  const filteredInput = input.replace(/[^a-zA-Z ]/g, '');
+
+  switch (fieldName) {
+    case 'expensedetail':
+      setExpensedetail(filteredInput);
+      break;
+    case 'disease':
+      setDisease(filteredInput);
+      break;
+    case 'treatmentfrom':
+      setTreatmentfrom(filteredInput);  
+      break;
+    case 'treatmentexpense':
+      setTreatmentexpense(filteredInput); 
+      break;   
+    case 'name':
+      setName(filteredInput); 
+      break; 
+    case 'fname':
+      setFname(filteredInput);
+      break;     
+    default:
+      break;
+  }
+};
+//function to handle address input field for numeric and english only
+const handleInputChangeforaddress = (input, fieldName) => {
+  // Check if the input contains non-English characters
+  const containsNonEnglish = /[^a-zA-Z0-9 ]/.test(input);
+
+  // Set the warning based on the presence of non-English characters
+  if (containsNonEnglish) {
+    setWarning('Please enter text in English only.');
+  } else {
+    setWarning('');
+  }
+
+  // Filter out non-English characters
+  const filteredInput = input.replace(/[^a-zA-Z0-9 ]/g, '');
+
+  switch (fieldName) {
+    case 'address':
+        setAddress(filteredInput);
+        break;  
+      case 'paddress':
+        setPaddress(filteredInput);
+        break;  
+    default:
+      break;
+  }
+};
 
  const familyData = syncStorage.get('BMfamily_details');
   // const nameData = [];
@@ -347,6 +411,7 @@ console.log(JSON.stringify(NameArray),AgeArray,EducationArray) /* Step 4 Fields 
     });
 
 }
+
 };
 
 return (
@@ -405,7 +470,9 @@ return (
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb" 
                     placeholderTextColor='grey'
-                  onChangeText={(expensedetail) => setExpensedetail(expensedetail)}
+                    onChangeText={input => {
+                      handleInputChange(input, 'expensedetail');
+                    }}
                   value={expensedetail}
                   placeholder="اپنی تفصیلات درج کریں۔"
                   style={[styles.Step1FormTextInput
@@ -413,6 +480,9 @@ return (
                   ]}
                   />
                 </View>
+                {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
 
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>رہائش گاہ:</Text>
                 <RadioButton.Group  onValueChange={residence => setResidence(residence)} value={residence} style={{marginTop:10}}>
@@ -433,6 +503,7 @@ return (
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb" style={styles.Step1FormTextInput}
                   placeholderTextColor='grey'
+                  keyboardType="numeric"
                   onChangeText={(houserent) => setHouserent(houserent)}
                   value={houserent}
                   placeholder="گھر کا کرایہ درج کریں"
@@ -448,20 +519,27 @@ return (
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb" 
                   placeholderTextColor='grey'
-                  onChangeText={(disease) => setDisease(disease)}
+                  onChangeText={input => {
+                    handleInputChange(input, 'disease');
+                  }}
                   value={disease}
                   placeholder="آپ کی بیماری کی قسم"
                   style={[styles.Step1FormTextInput
                     , { borderColor: !disease && errorValidate ? 'red' : '#fff' }
                   ]}
                   />
-                </View>     
+                </View> 
+                {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}    
 
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>کہاں سے علاج کروا رہے ہیں؟</Text>
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb" 
                   placeholderTextColor='grey'
-                  onChangeText={(treatmentfrom) => setTreatmentfrom(treatmentfrom)}
+                  onChangeText={input => {
+                    handleInputChange(input, 'treatmentfrom');
+                  }}
                   value={treatmentfrom}
                   placeholder="کہاں سے علاج کروا رہے ہیں"
                   style={[styles.Step1FormTextInput
@@ -469,12 +547,17 @@ return (
                   ]}
                   />
                 </View> 
+                {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
 
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>آپ کے علاج کے اخراجات</Text>
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb" 
                   placeholderTextColor='grey'
-                  onChangeText={(treatmentexpense) => setTreatmentexpense(treatmentexpense)}
+                  onChangeText={input => {
+                    handleInputChange(input, 'treatmentexpense');
+                  }}
                   value={treatmentexpense}
                   placeholder="اپنے اخراجات درج کریں"
                   style={[styles.Step1FormTextInput
@@ -482,6 +565,9 @@ return (
                   ]}
                   />
                 </View> 
+                {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
                 <View style={styles.center}>   
                 <Text style={{marginTop:10,fontWeight:"bold",color:"#002D62"}}>معلوماتی فارم (بذریعہ)</Text>
                 </View>
@@ -490,7 +576,9 @@ return (
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb" 
                   placeholderTextColor='grey'
-                  onChangeText={(name) => setName(name)}
+                  onChangeText={input => {
+                    handleInputChange(input, 'name');
+                  }}
                   value={name}
                   placeholder="نام درج کریں"
                   style={[styles.Step1FormTextInput
@@ -498,11 +586,16 @@ return (
                   ]}
                   />
                 </View>
+                {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>والد کا نام:</Text>
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb" 
                   placeholderTextColor='grey'
-                  onChangeText={(fname) => setFname(fname)}
+                  onChangeText={input => {
+                    handleInputChange(input, 'fname');
+                  }}
                   value={fname}
                   placeholder="والد کا نام درج کریں"
                   style={[styles.Step1FormTextInput
@@ -510,7 +603,9 @@ return (
                   ]}
                   />
                 </View>
-
+                {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>شناختی کارڈ:</Text>
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb"
@@ -530,7 +625,9 @@ return (
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb" 
                   placeholderTextColor='grey'
-                  onChangeText={(address) => setAddress(address)}
+                  onChangeText={input => {
+                    handleInputChangeforaddress(input, 'address');
+                  }}
                   value={address}
                   placeholder="پتہ درج کریں"
                   style={[styles.Step1FormTextInput
@@ -538,12 +635,17 @@ return (
                   ]}
                   />
                 </View>
+                {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
 
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>مستقل پتہ:</Text>
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb"
                     placeholderTextColor='grey'
-                  onChangeText={(paddress) => setPaddress(paddress)}
+                    onChangeText={input => {
+                      handleInputChangeforaddress(input, 'paddress');
+                    }}
                   value={paddress}
                   placeholder="مستقل پتہ درج کریں"
                   style={[styles.Step1FormTextInput
@@ -551,6 +653,9 @@ return (
                   ]}
                   />
                 </View>
+                {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
 
             <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>مریض کے ساتھ رشتہ:</Text>
              <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40}}>

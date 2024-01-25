@@ -793,7 +793,66 @@ const Marriage = ({ navigation }) => {
     }
     console.log(datevar);
 }
+const [warning, setWarning] = React.useState('');
+const handleInputChange = (input, fieldName) => {
+  // Check if the input contains non-English characters
+  const containsNonEnglish = /[^a-zA-Z ]/.test(input);
 
+  // Set the warning based on the presence of non-English characters
+  if (containsNonEnglish) {
+    setWarning('Please enter text in English only.');
+  } else {
+    setWarning('');
+  }
+
+  // Filter out non-English characters
+  const filteredInput = input.replace(/[^a-zA-Z ]/g, '');
+
+  switch (fieldName) {
+    case 'sourceofincome':
+      setSourceofincome(filteredInput);
+      break;
+    case 'bridename':
+      setBridename(filteredInput);
+      break;
+    case 'groomname':
+      setGroomname(filteredInput);  
+      break;
+    case 'groomfathername':
+      setGroomfathername(filteredInput); 
+      break;   
+    case 'regname':
+      setRegname(filteredInput); 
+      break; 
+    case 'regaddress':
+      setRegaddress(filteredInput);
+      break;     
+    default:
+      break;
+  }
+};
+//function to handle address input field for numeric and english only
+const handleInputChangeforaddress = (input, fieldName) => {
+  // Check if the input contains non-English characters
+  const containsNonEnglish = /[^a-zA-Z0-9 ]/.test(input);
+
+  // Set the warning based on the presence of non-English characters
+  if (containsNonEnglish) {
+    setWarning('Please enter text in English only.');
+  } else {
+    setWarning('');
+  }
+
+  // Filter out non-English characters
+  const filteredInput = input.replace(/[^a-zA-Z0-9 ]/g, '');
+
+  switch (fieldName) {
+    case 'groomaddress':
+      setGroomaddress(filteredInput);
+    default:
+      break;
+  }
+};
 
   return (
     <View>
@@ -829,7 +888,9 @@ const Marriage = ({ navigation }) => {
                 <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
                   <TextInput placeholderColor="#c4c3cb" 
                     placeholderTextColor='grey'
-                    onChangeText={(sourceofincome) => setSourceofincome(sourceofincome)}
+                    onChangeText={input => {
+                      handleInputChange(input, 'sourceofincome');
+                    }}
                     value={sourceofincome}
                     placeholder="آمدنی کا ذریعہ درج کریں"
                     style={[styles.Step1FormTextInput
@@ -837,6 +898,9 @@ const Marriage = ({ navigation }) => {
                     ]}
                   />
                 </View>
+                {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
                 <View style={styles.center}>
                 <Text style={{ marginTop: 10, fontWeight: "bold", color: "#002D62", }}>دُلہن کے کوائف</Text>
                 </View>
@@ -844,7 +908,9 @@ const Marriage = ({ navigation }) => {
                 <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
                   <TextInput placeholderColor="#c4c3cb" 
                     placeholderTextColor='grey'
-                    onChangeText={(bridename) => setBridename(bridename)}
+                    onChangeText={input => {
+                      handleInputChange(input, 'bridename');
+                    }}
                     value={bridename}
                     placeholder="نام درج کریں"
                     style={[styles.Step1FormTextInput
@@ -852,6 +918,9 @@ const Marriage = ({ navigation }) => {
                     ]}
                   />
                 </View>
+                {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
                 <Text style={{ marginTop: 15, fontWeight: "bold", color: "#000000" }}>شناختی کارڈ نمبر:</Text>
                 <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
                   <TextInput placeholderColor="#c4c3cb" 
@@ -888,7 +957,9 @@ const Marriage = ({ navigation }) => {
                 <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
                   <TextInput placeholderColor="#c4c3cb" 
                     placeholderTextColor='grey'
-                    onChangeText={(groomname) => setGroomname(groomname)}
+                    onChangeText={input => {
+                      handleInputChange(input, 'groomname');
+                    }}
                     value={groomname}
                     placeholder="نام درج کریں"
                     style={[styles.Step1FormTextInput
@@ -896,13 +967,16 @@ const Marriage = ({ navigation }) => {
                     ]}
                   />
                 </View>
-
-
+                {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
                 <Text style={{ marginTop: 15, fontWeight: "bold", color: "#000000" }}>والد کا نام:</Text>
                 <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
                   <TextInput placeholderColor="#c4c3cb" 
                     placeholderTextColor='grey'
-                    onChangeText={(groomfathername) => setGroomfathername(groomfathername)}
+                    onChangeText={input => {
+                      handleInputChange(input, 'groomfathername');
+                    }}
                     value={groomfathername}
                     placeholder="والد کا نام درج کریں"
                     style={[styles.Step1FormTextInput
@@ -910,6 +984,9 @@ const Marriage = ({ navigation }) => {
                     ]}
                   />
                 </View>
+                {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
                 <Text style={{ marginTop: 15, fontWeight: "bold", color: "#000000" }}>شناختی کارڈ نمبر:</Text>
                 <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
                   <TextInput placeholderColor="#c4c3cb" 
@@ -929,7 +1006,9 @@ const Marriage = ({ navigation }) => {
                 <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
                   <TextInput placeholderColor="#c4c3cb" 
                     placeholderTextColor='grey'
-                    onChangeText={(groomaddress) => setGroomaddress(groomaddress)}
+                    onChangeText={input => {
+                      handleInputChangeforaddress(input, 'groomaddress');
+                    }}
                     value={groomaddress}
                     placeholder="پتہ درج کریں"
                     style={[styles.Step1FormTextInput
@@ -937,8 +1016,9 @@ const Marriage = ({ navigation }) => {
                     ]}
                   />
                 </View>
-
-
+                {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
                 <Text style={{ marginTop: 15, fontWeight: "bold", color: "#000000" }}>ماہانہ آمدنی:</Text>
                 <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
                   <View style={styles.container}>
@@ -1013,23 +1093,33 @@ const Marriage = ({ navigation }) => {
                     <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
                       <TextInput placeholderColor="#c4c3cb" 
                         placeholderTextColor='grey'
-                        onChangeText={(regname) => setRegname(regname)}
+                        onChangeText={input => {
+                          handleInputChange(input, 'regname');
+                        }}
                         value={regname}
                         placeholder="نام درج کریں"
                         style={[styles.Step1FormTextInput
                         ]}
                       />
                     </View>
+                    {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
 
                     <Text style={{ marginTop: 15, fontWeight: "bold", color: "#000000" }}>شادی رجسٹرار کا پتہ:</Text>
                     <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
                       <TextInput placeholderColor="#c4c3cb" style={styles.Step1FormTextInput}
                         placeholderTextColor='grey'
-                        onChangeText={(regaddress) => setRegaddress(regaddress)}
+                        onChangeText={input => {
+                          handleInputChange(input, 'regaddress');
+                        }}
                         value={regaddress}
                         placeholder="شادی رجسٹرار کا پتہ"
                       />
                     </View>
+                    {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
 
                   </View>
 

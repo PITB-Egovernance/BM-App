@@ -90,6 +90,33 @@ const Disable = ({ navigation }) => {
     { label: 'Yes', value: 'Yes' },
     { label: 'No', value: 'No' },
   ];
+  const [warning, setWarning] = React.useState('');
+  const handleInputChange = (input, fieldName) => {
+    // Check if the input contains non-English characters
+    const containsNonEnglish = /[^a-zA-Z ]/.test(input);
+
+    // Set the warning based on the presence of non-English characters
+    if (containsNonEnglish) {
+      setWarning('Please enter text in English only.');
+    } else {
+      setWarning('');
+    }
+
+    // Filter out non-English characters
+    const filteredInput = input.replace(/[^a-zA-Z ]/g, '');
+
+    // Update the state based on the fieldName
+    switch (fieldName) {
+      case 'expensedetail':
+        setExpensedetail(filteredInput);
+        break;
+      case 'purpose':
+        setPurpose(filteredInput);
+        break;
+      default:
+        break;
+    }
+  };
 
 
   // step3
@@ -415,7 +442,9 @@ const Disable = ({ navigation }) => {
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb" 
                     placeholderTextColor='grey'
-                  onChangeText={(expensedetail) => setExpensedetail(expensedetail)}
+                    onChangeText={input => {
+                      handleInputChange(input, 'expensedetail');
+                    }}
                   value={expensedetail}
                   placeholder="آپ کے اخراجات کی تفصیل"
                   style={[styles.Step1FormTextInput
@@ -423,6 +452,9 @@ const Disable = ({ navigation }) => {
                   ]}
                   />
                 </View>
+                {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
 
 
                 {/* Experience */}
@@ -445,6 +477,7 @@ const Disable = ({ navigation }) => {
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb"  style={styles.Step1FormTextInput}
                     placeholderTextColor='grey'
+                    keyboardType="numeric"
                   onChangeText={(houserent) => setHouserent(houserent)}
                   value={houserent}
                   placeholder="گھر کا کرایہ درج کریں"
@@ -511,7 +544,9 @@ const Disable = ({ navigation }) => {
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb"
                   placeholderTextColor='grey'
-                  onChangeText={(purpose) => setPurpose(purpose)}
+                  onChangeText={input => {
+                    handleInputChange(input, 'purpose');
+                  }}
                   value={purpose}
                   placeholder="اپنے مقصد کا ذکر کریں"
                   style={[styles.Step1FormTextInput
@@ -519,6 +554,9 @@ const Disable = ({ navigation }) => {
                   ]}
                   />
                 </View>
+                {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
 
            <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>درخواست گزار/ فیملی ممبر کی ذاتی جائیداد</Text>
              <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40}}>

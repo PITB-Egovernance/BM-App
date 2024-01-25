@@ -87,6 +87,34 @@ const RelativeDetails = ({navigation}) => {
     { label: '16 Years', value: '16' },
   
   ];
+  const [warning, setWarning] = React.useState('');
+  const handleInputChange = (input, fieldName) => {
+    // Check if the input contains non-English characters
+    const containsNonEnglish = /[^a-zA-Z ]/.test(input);
+  
+    // Set the warning based on the presence of non-English characters
+    if (containsNonEnglish) {
+      setWarning('Please enter text in English only.');
+    } else {
+      setWarning('');
+    }
+  
+    // Filter out non-English characters
+    const filteredInput = input.replace(/[^a-zA-Z ]/g, '');
+  
+    // Update the state based on the fieldName
+    switch (fieldName) {
+      case 'rname':
+        setRname(filteredInput);
+        break;
+      case 'roccupation':
+        setRoccupation(filteredInput);
+        break;
+      default:
+        break;
+    }
+  };
+  
   const NextStep1 = () => {
    
 
@@ -256,10 +284,15 @@ const RelativeDetails = ({navigation}) => {
                     style={[styles.FamilyTextInput
                       ,{borderColor: !rname && errorValidate ? 'red':'#fff'}
                     ]} 
-                    onChangeText={(rname) => setRname(rname)}
+                    onChangeText={input => {
+                      handleInputChange(input, 'rname');
+                    }} 
                     value={rname}  
                   />
                 </View>
+                {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
 
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>درخواست گزار کے ساتھ رشتہ:</Text>
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:40}}>
@@ -350,10 +383,15 @@ const RelativeDetails = ({navigation}) => {
                     style={[styles.FamilyTextInput
                       ,{borderColor: !roccupation && errorValidate ? 'red':'#fff'}
                     ]} 
-                    onChangeText={(roccupation) => setRoccupation(roccupation)}
+                    onChangeText={input => {
+                      handleInputChange(input, 'roccupation');
+                    }}
                     value={roccupation}  
                   />
                 </View>
+                {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
             
                 
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>ماہانہ آمدنی:</Text>
@@ -474,6 +512,9 @@ const styles = StyleSheet.create({
   },
   FamilyTextInput:{
       color:'black'
+  },
+  itemTextStyle:{
+    color:'black'
   },
   dropdown: {
     height: 40,

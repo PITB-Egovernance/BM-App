@@ -8,8 +8,8 @@
 import React, {useEffect, useCallback, useState} from 'react';
 import {RadioButton} from 'react-native-paper';
 import DocumentScanner from 'react-native-document-scanner-plugin';
-import DocumentPicker,{types} from 'react-native-document-picker';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import DocumentPicker, {types} from 'react-native-document-picker';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 import {
   SafeAreaView,
@@ -30,7 +30,7 @@ import {
 } from 'react-native';
 import {CheckBox} from 'react-native-elements';
 import {Dropdown} from 'react-native-element-dropdown';
-import { DatePickerInput } from 'react-native-paper-dates';
+import {DatePickerInput} from 'react-native-paper-dates';
 import Loader from '../Components/Loader';
 import {
   Alert,
@@ -44,11 +44,11 @@ import syncStorage from 'react-native-sync-storage';
 import baseUrl from '../Components/Url';
 
 const BmRegistration = ({navigation}) => {
-  const [district, setdistrit]        = useState('');
+  const [district, setdistrit] = useState('');
   const [errorValidate, setErrorValidate] = useState(false);
   const [bmuserid, setBmUserId] = useState('');
   const [bmuser_name, setBmuser_name] = useState('');
-   const [Focus, setFocus] = useState(false);
+  const [Focus, setFocus] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
   const [imageProfile, setimageprofile] = useState('');
   const [capImageProfile, setCapImageProfile] = useState('');
@@ -58,23 +58,52 @@ const BmRegistration = ({navigation}) => {
   const [contact, setcontact] = useState('');
   const [fathername, setfathername] = useState('');
   const [gender, setGender] = useState('');
-  const [yourincome, setYourincome]  = useState('');
-  const [parentincome, setParentincome]  = useState('');
-  const [postaladress, setmonthlypostaladress]  = useState('');
-  const [permanentAddress, setpermanentAddress]  = useState('');
+  const [yourincome, setYourincome] = useState('');
+  const [parentincome, setParentincome] = useState('');
+  const [postaladress, setmonthlypostaladress] = useState('');
+  const [permanentAddress, setpermanentAddress] = useState('');
   const [cnic, setCNIC] = useState('');
   const [age, setage] = useState('');
   const [dob, setDOB] = useState('');
-  const [regdate, setregdate]= useState('');
-  const [Tehsil, setTehsil]                       = useState('');
-  const [TehsilID, setTehsilId]                       = useState('');
-  const [DistrictId, setDistrictId]                       = useState('');
-  const [tehsiluser, setTehsilUser]                       = useState('');
+  const [regdate, setregdate] = useState('');
+  const [Tehsil, setTehsil] = useState('');
+  const [TehsilID, setTehsilId] = useState('');
+  const [DistrictId, setDistrictId] = useState('');
+  const [tehsiluser, setTehsilUser] = useState('');
   const [loading, setLoading] = useState(false);
   const [Profileimg, setProfileimg] = useState('');
+  const [warning, setWarning] = React.useState('');
+  const handleInputChange = (input, fieldName) => {
+    // Check if the input contains non-English characters
+    const containsNonEnglish = /[^a-zA-Z0-9 ]/.test(input);
+
+    // Set the warning based on the presence of non-English characters
+    if (containsNonEnglish) {
+      setWarning('Please enter text in English only.');
+    } else {
+      setWarning('');
+    }
+
+    // Filter out non-English characters
+    const filteredInput = input.replace(/[^a-zA-Z0-9 ]/g, '');
+
+    // Update the state based on the fieldName
+    switch (fieldName) {
+      case 'fathername':
+        setfathername(filteredInput);
+        break;
+      case 'monthlypostaladress':
+        setmonthlypostaladress(filteredInput);
+        break;
+      case 'permanentAddress':
+        setpermanentAddress(filteredInput);
+        break;
+      default:
+        break;
+    }
+  };
 
   const img = async () => {
-
     const options = {
       mediaType: 'photo',
       includeBase64: true,
@@ -82,7 +111,7 @@ const BmRegistration = ({navigation}) => {
       maxWidth: 2000,
     };
 
-    launchImageLibrary(options, (response) => {
+    launchImageLibrary(options, response => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -90,308 +119,293 @@ const BmRegistration = ({navigation}) => {
       } else {
         let imageUri = response.uri || response.assets?.[0]?.uri;
         setimageprofile(imageUri);
-     
-        console.log('Image profile',imageUri)
-        const fileBase64        = response.assets[0].base64
-        setCapImageProfile(fileBase64)
+
+        console.log('Image profile', imageUri);
+        const fileBase64 = response.assets[0].base64;
+        setCapImageProfile(fileBase64);
         // console.log(fileName,fileExtension, fielUri)
         // setLibraryfile(fileBase64)
         // setCapturedImage(imageUri);
         // setimageprofile(response[0].uri)
       }
     });
-  
-  }
+  };
 
-
-  useEffect(() =>{
+  useEffect(() => {
     // getuserId();
-    
-    setLoading(true)
+
+    setLoading(true);
     const bmuser_id = syncStorage.get('bmuser_id');
     fetch(`${baseUrl[0]}/getUser/${bmuser_id}`, {
       method: 'GET',
-      headers:{
-        'Accept': 'application/json',
-        'Content-Type':'application/json',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
         // 'secret':''
       },
     })
-    .then(userDetail => userDetail.json())
-    .then(respuserDetail => {
+      .then(userDetail => userDetail.json())
+      .then(respuserDetail => {
+        console.log('Resp User Detail;', respuserDetail.tehsil);
+        console.log('Resp User Detail;', respuserDetail.name);
+        console.log('Resp User Detail;', respuserDetail.contact);
+        // console.log('Resp User Detail;', respuserDetail.district)
+        console.log('Tehisl Set', respuserDetail.tehsil);
+        syncStorage.set('tehsil', respuserDetail.tehsil);
+        getdistrictofdData(respuserDetail.district);
+        // setTehsilUser(respuserDetail.tehsil);
+        // const image   = respuserDetail['Details'][0].image;
+        // console.log('image', image)
+        // setimage(image);
 
+        // const district  = respuserDetail['Details'][0].district;
+        // // console.log('district', district)
+        // setDistrictId(district);
+        // setDomicileDistrict(district);
 
-      console.log('Resp User Detail;', respuserDetail.tehsil)
-      console.log('Resp User Detail;', respuserDetail.name)
-      console.log('Resp User Detail;', respuserDetail.contact)
-      // console.log('Resp User Detail;', respuserDetail.district)
-      console.log('Tehisl Set', respuserDetail.tehsil)
-      syncStorage.set('tehsil', respuserDetail.tehsil)
-      getdistrictofdData(respuserDetail.district) 
-      // setTehsilUser(respuserDetail.tehsil); 
-      // const image   = respuserDetail['Details'][0].image;
-      // console.log('image', image)
-      // setimage(image);
+        // getDistrict([province,district]);
 
-      // const district  = respuserDetail['Details'][0].district;
-      // // console.log('district', district)  
-      // setDistrictId(district);
-      // setDomicileDistrict(district);
+        // const tehsil  = respuserDetail['Details'][0].tehsil;
+        // // console.log('tehsil', tehsil)
 
-      // getDistrict([province,district]);
+        // getTehsil([district, tehsil])
 
-      // const tehsil  = respuserDetail['Details'][0].tehsil;
-      // // console.log('tehsil', tehsil)
-    
-      // getTehsil([district, tehsil])
+        // const fullName    = respuserDetail['Details'][0].firstname+' '+respuserDetail['Details'][0].lastname;
+        //   // console.log('FullName', fullName)
+        // setFullName(fullName);
+        // getName(name);
 
-      // const fullName    = respuserDetail['Details'][0].firstname+' '+respuserDetail['Details'][0].lastname;
-      //   // console.log('FullName', fullName)
-      // setFullName(fullName);
-      // getName(name);
+        // const phone   = respuserDetail['Details'][0].phone;
+        // // console.log('phone', phone)
+        // setPhone(phone)
+        // const fullName  = respuserDetail.fullName;
+        // console.log('fullname',fullName);
+        // setFullName(fullName);
 
-      // const phone   = respuserDetail['Details'][0].phone;
-      // // console.log('phone', phone)
-      // setPhone(phone)
-      // const fullName  = respuserDetail.fullName;
-      // console.log('fullname',fullName);
-      // setFullName(fullName);
-      
-      // const district  = respuserDetail.district
-      // console.log('domicileDistrict',district)
-      // setDistrict(district);
-      const name  = respuserDetail.name
-      console.log('name',name)
-      setName(name);
-      setFullName(name);
-      const cnic   = respuserDetail.cnic;
-      console.log('cnic', cnic)
-      setCNIC(cnic);
-      const contact   = respuserDetail.contact;
-      console.log('contact', contact)
-      setcontact(contact);
-      // const districtofd = respuserDetail.districtofd;
-      // console.log('districtofd', districtofd)
-      // setdistrit(districtofd);
-       
-      // const father_spouse_name    = respuserDetail['Details'][0].father_spouse_name;
-      //   // console.log('father_spouse_name', father_spouse_name)
-      // setfather_spouse_name(father_spouse_name);
+        // const district  = respuserDetail.district
+        // console.log('domicileDistrict',district)
+        // setDistrict(district);
+        const name = respuserDetail.name;
+        console.log('name', name);
+        setName(name);
+        setFullName(name);
+        const cnic = respuserDetail.cnic;
+        console.log('cnic', cnic);
+        setCNIC(cnic);
+        const contact = respuserDetail.contact;
+        console.log('contact', contact);
+        setcontact(contact);
+        // const districtofd = respuserDetail.districtofd;
+        // console.log('districtofd', districtofd)
+        // setdistrit(districtofd);
 
-      // const dob  = respuserDetail['Details'][0].dob;
-      // // console.log('dob', dob)
-      // setDOB(dob);
+        // const father_spouse_name    = respuserDetail['Details'][0].father_spouse_name;
+        //   // console.log('father_spouse_name', father_spouse_name)
+        // setfather_spouse_name(father_spouse_name);
 
-      // const age   = respuserDetail['Details'][0].agegroup;
-      // // console.log('agegroup', agegroup)
-      // setage(age);
+        // const dob  = respuserDetail['Details'][0].dob;
+        // // console.log('dob', dob)
+        // setDOB(dob);
 
-      // const gender    = respuserDetail['Details'][0].gender;
-      // // console.log('gender', gender)
-      // setGender(gender);
+        // const age   = respuserDetail['Details'][0].agegroup;
+        // // console.log('agegroup', agegroup)
+        // setage(age);
 
-      // const monthlyincome = respuserDetail['Details'][0].monthlyincome;
-      // setmonthlyincome(monthlyincome);
+        // const gender    = respuserDetail['Details'][0].gender;
+        // // console.log('gender', gender)
+        // setGender(gender);
 
-      // const monthlyincomeparent = respuserDetail['Details'][0].monthlyincomeparent;
-      // setmonthlyincomeparent(monthlyincomeparent);
+        // const monthlyincome = respuserDetail['Details'][0].monthlyincome;
+        // setmonthlyincome(monthlyincome);
 
-      // const postaladress = respuserDetail['Details'][0].postaladress;
-      // setmonthlypostaladress(postaladress);
+        // const monthlyincomeparent = respuserDetail['Details'][0].monthlyincomeparent;
+        // setmonthlyincomeparent(monthlyincomeparent);
 
-      // const currentdate = respuserDetail['Details'][0].currentdate;
-      // setcurrentdate(currentdate);
+        // const postaladress = respuserDetail['Details'][0].postaladress;
+        // setmonthlypostaladress(postaladress);
 
-      //API end here
+        // const currentdate = respuserDetail['Details'][0].currentdate;
+        // setcurrentdate(currentdate);
 
-    }).finally(() => {
-      setLoading(false);
-    });
-
+        //API end here
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
-
-  const getdistrictofdData = (districtofdid) =>{
-
+  const getdistrictofdData = districtofdid => {
     // console.log('districtofd functino', districtofdid)
     // console.log('Board id', BoardID)
-    fetch(`${baseUrl[1]}/pwdapp/Districtofd`,{
+    fetch(`${baseUrl[1]}/pwdapp/Districtofd`, {
       method: 'GET',
-      headers:{
-        'Accept': 'application/json',
-          'Content-Type':'application/json',
-          
-          'secret':'pwdreg'
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+
+        secret: 'pwdreg',
       },
     })
-    .then(respdistrictofd => respdistrictofd.json())
-    .then(respdistrictofdName => {
-
-   console.log('pWD', respdistrictofdName)
-      const districtofdReponse = respdistrictofdName['PWD district'];
-      console.log('sdasdasdsadas', districtofdReponse)
-      districtofdReponse.map((item, i) => {
-        if(item.id == districtofdid){
-          setdistrit(item.name)
-          setDistrictId(item.id)
-          getTehsil(item.id)
-        }
+      .then(respdistrictofd => respdistrictofd.json())
+      .then(respdistrictofdName => {
+        console.log('pWD', respdistrictofdName);
+        const districtofdReponse = respdistrictofdName['PWD district'];
+        console.log('sdasdasdsadas', districtofdReponse);
+        districtofdReponse.map((item, i) => {
+          if (item.id == districtofdid) {
+            setdistrit(item.name);
+            setDistrictId(item.id);
+            getTehsil(item.id);
+          }
+        });
       });
-     
-    });
-  }
-  const getTehsil = (dist_id) => {
-    const district_id  = dist_id;
+  };
+  const getTehsil = dist_id => {
+    const district_id = dist_id;
 
-
-
-    console.log('ID District', district_id)
-    console.log('ID District tehgsil', "ENter")
-    setLoading(true)
+    console.log('ID District', district_id);
+    console.log('ID District tehgsil', 'ENter');
+    setLoading(true);
     fetch(`${baseUrl[1]}/app/tehsil/${district_id}`, {
       method: 'GET',
-      headers:{
-        'Accept': 'application/json',
-        'secret':'f08md117',
+      headers: {
+        Accept: 'application/json',
+        secret: 'f08md117',
         'Content-Type': 'application/json',
       },
     })
-    .then(resp => resp.json())
-    .then(responseTehsil => {
+      .then(resp => resp.json())
+      .then(responseTehsil => {
         const tehsilresponse = responseTehsil.tehsil;
-        console.log('tehsil reponse', tehsilresponse)
+        console.log('tehsil reponse', tehsilresponse);
         tehsilresponse.map((item, i) => {
           const tehsilCheck = syncStorage.get('tehsil');
-          console.log('Tehsil check', tehsilCheck)
+          console.log('Tehsil check', tehsilCheck);
           // console.log('data tehsil', item.id)
-          if(item.id == tehsilCheck ){
-            setTehsil(item.tname)
-            setTehsilId(item.id)
+          if (item.id == tehsilCheck) {
+            setTehsil(item.tname);
+            setTehsilId(item.id);
           }
         });
-      
-    }).finally(() => {
-      setLoading(false);
-    });
-  }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   const genderData = [
-    { label: 'Male', value: 'Male' },
-    { label: 'Female', value: 'Female' },
-    { label: 'Transgender', value: 'Transgender' },
+    {label: 'Male', value: 'Male'},
+    {label: 'Female', value: 'Female'},
+    {label: 'Transgender', value: 'Transgender'},
   ];
   const agedata = [
-    { label: '0-5', value: '0-5' },
-    { label: '5-10', value: '5-10' },
-    { label: '10-15', value: '10-15' },
-    { label: '15-20', value: '15-20' },
-    { label: '20-25', value: '20-25' },
-    { label: '25-30', value: '25-30' },
-    { label: '30-35', value: '30-35' },
-    { label: '35-40', value: '35-40' },
-    { label: '40-45', value: '40-45' },
-    { label: '45-50', value: '45-50' },
-    { label: '50-55', value: '50-55' },
-    { label: '55-60', value: '55-60' },
-    { label: '65-70', value: '65-70' },
-    { label: '70-75', value: '70-75' },
-    { label: '75-100', value: '75-100' },
-    { label: '100-120', value: '100-120' },
+    {label: '0-5', value: '0-5'},
+    {label: '5-10', value: '5-10'},
+    {label: '10-15', value: '10-15'},
+    {label: '15-20', value: '15-20'},
+    {label: '20-25', value: '20-25'},
+    {label: '25-30', value: '25-30'},
+    {label: '30-35', value: '30-35'},
+    {label: '35-40', value: '35-40'},
+    {label: '40-45', value: '40-45'},
+    {label: '45-50', value: '45-50'},
+    {label: '50-55', value: '50-55'},
+    {label: '55-60', value: '55-60'},
+    {label: '65-70', value: '65-70'},
+    {label: '70-75', value: '70-75'},
+    {label: '75-100', value: '75-100'},
+    {label: '100-120', value: '100-120'},
   ];
   const monthlyincomedata = [
-    { label: '0', value: '0' },
-    { label: '1-20k', value: '1-20k' },
-    { label: '21k-40k', value: '21k-40k' },
-    { label: '41k-60k', value: '41k-60k' },
-    { label: '61k and above', value: '61k and above' },    
+    {label: '0', value: '0'},
+    {label: '1-20k', value: '1-20k'},
+    {label: '21k-40k', value: '21k-40k'},
+    {label: '41k-60k', value: '41k-60k'},
+    {label: '61k and above', value: '61k and above'},
   ];
   const monthlyincomeparentdata = [
-    { label: '0', value: '0' },
-    { label: '1-20k', value: '1-20k' },
-    { label: '21k-40k', value: '21k-40k' },
-    { label: '41k-60k', value: '41k-60k' },
-    { label: '61k and above', value: '61k and above' },    
+    {label: '0', value: '0'},
+    {label: '1-20k', value: '1-20k'},
+    {label: '21k-40k', value: '21k-40k'},
+    {label: '41k-60k', value: '41k-60k'},
+    {label: '61k and above', value: '61k and above'},
   ];
 
-
- 
-  
-
-  
   const NextStep = () => {
-    setErrorValidate(true)
-    if(!imageProfile){
-    ToastAndroid.show('Please Upload your Profile Image', ToastAndroid.LONG);
-    return;
-  } else if(!fathername){
-    ToastAndroid.show('Please enter your Father or Spouse Name', ToastAndroid.LONG);
-    return;
-  }else if(!age){
-    ToastAndroid.show('Select your Age', ToastAndroid.LONG);
-    return;
-  }else if(!dob){
-    ToastAndroid.show('Select your Date of Birth', ToastAndroid.LONG);
-    return;
-  }else if(!gender){
-    ToastAndroid.show('Select your Gender', ToastAndroid.LONG);
-    return;
-  }else if(!yourincome){
-    ToastAndroid.show('Select your monthlyincome', ToastAndroid.LONG);
-    return;
-  }else if(!parentincome){
-    ToastAndroid.show('Select your monthlyincomeparent', ToastAndroid.LONG);
-    return;
-  }else if(!postaladress){
-    ToastAndroid.show('Enter your Postal Address', ToastAndroid.LONG);
-    return;
-  }else if(!permanentAddress){
-    ToastAndroid.show('Enter your Permanent Address', ToastAndroid.LONG);
-    return;
-  }else if(!regdate){
-    ToastAndroid.show('Select Current Date', ToastAndroid.LONG);
-    return;
-  }else{
+    setErrorValidate(true);
+    if (!imageProfile) {
+      ToastAndroid.show('Please Upload your Profile Image', ToastAndroid.LONG);
+      return;
+    } else if (!fathername) {
+      ToastAndroid.show(
+        'Please enter your Father or Spouse Name',
+        ToastAndroid.LONG,
+      );
+      return;
+    } else if (!age) {
+      ToastAndroid.show('Select your Age', ToastAndroid.LONG);
+      return;
+    } else if (!dob) {
+      ToastAndroid.show('Select your Date of Birth', ToastAndroid.LONG);
+      return;
+    } else if (!gender) {
+      ToastAndroid.show('Select your Gender', ToastAndroid.LONG);
+      return;
+    } else if (!yourincome) {
+      ToastAndroid.show('Select your monthlyincome', ToastAndroid.LONG);
+      return;
+    } else if (!parentincome) {
+      ToastAndroid.show('Select your monthlyincomeparent', ToastAndroid.LONG);
+      return;
+    } else if (!postaladress) {
+      ToastAndroid.show('Enter your Postal Address', ToastAndroid.LONG);
+      return;
+    } else if (!permanentAddress) {
+      ToastAndroid.show('Enter your Permanent Address', ToastAndroid.LONG);
+      return;
+    } else if (!regdate) {
+      ToastAndroid.show('Select Current Date', ToastAndroid.LONG);
+      return;
+    } else {
+      console.log('---bmuserid;', bmuserid);
+      console.log('image', imageProfile);
+      console.log('district', DistrictId);
+      console.log('tehsil', TehsilID);
+      console.log('fullname', fullname);
+      console.log('contact', contact);
+      console.log('cnic', cnic);
+      console.log('fathername', fathername);
+      console.log('age', age);
+      console.log('dob', dob);
+      console.log('gender', gender);
+      console.log('monthlyincome', yourincome);
+      console.log('monthlyincomeparent', parentincome);
+      console.log('postaladress', postaladress);
+      console.log('permanentAddress', permanentAddress);
+      console.log('reg_date', regdate);
 
-  console.log('---bmuserid;', bmuserid); 
-  console.log('image', imageProfile);
-  console.log('district', DistrictId);
-  console.log('tehsil', TehsilID);
-  console.log('fullname', fullname);
-  console.log('contact', contact);
-  console.log('cnic', cnic);
-  console.log('fathername', fathername);
-  console.log('age', age);
-  console.log('dob', dob);
-  console.log('gender', gender);
-  console.log('monthlyincome', yourincome);
-  console.log('monthlyincomeparent', parentincome);
-  console.log('postaladress', postaladress);
-  console.log('permanentAddress', permanentAddress);
-  console.log('reg_date', regdate);
+      syncStorage.set('bmuserid;', bmuserid);
+      syncStorage.set('image', imageProfile);
+      syncStorage.set('imageCap', capImageProfile);
+      syncStorage.set('district', DistrictId);
+      syncStorage.set('tehsil', TehsilID);
+      syncStorage.set('applicantname', fullname);
+      syncStorage.set('contact', contact);
+      syncStorage.set('cnic', cnic);
+      syncStorage.set('fathername', fathername);
+      syncStorage.set('age', age);
+      syncStorage.set('dob', dob);
+      syncStorage.set('gender', gender);
+      // syncStorage.set('monthlyincome', monthlyincome);
+      // syncStorage.set('monthlyincomeparent', monthlyincomeparent);
+      syncStorage.set('postaladress', postaladress);
+      syncStorage.set('permanentAddress', permanentAddress);
+      syncStorage.set('reg_date', regdate);
+      syncStorage.set('yourincome', yourincome);
+      syncStorage.set('parentincome', parentincome);
 
-  syncStorage.set('bmuserid;', bmuserid);
-  syncStorage.set('image', imageProfile);
-  syncStorage.set('imageCap', capImageProfile);
-  syncStorage.set('district', DistrictId);
-  syncStorage.set('tehsil', TehsilID);
-  syncStorage.set('applicantname', fullname);
-  syncStorage.set('contact', contact);
-  syncStorage.set('cnic', cnic);
-  syncStorage.set('fathername', fathername);
-  syncStorage.set('age', age);
-  syncStorage.set('dob', dob);
-  syncStorage.set('gender', gender);
-  // syncStorage.set('monthlyincome', monthlyincome);
-  // syncStorage.set('monthlyincomeparent', monthlyincomeparent);
-  syncStorage.set('postaladress', postaladress);
-  syncStorage.set('permanentAddress', permanentAddress);
-  syncStorage.set('reg_date', regdate);
-  syncStorage.set('yourincome', yourincome);
-  syncStorage.set('parentincome', parentincome);
-
-    navigation.navigate('Otherinformation');
-  
-  }  
+      navigation.navigate('Otherinformation');
+    }
   };
 
   return (
@@ -399,8 +413,8 @@ const BmRegistration = ({navigation}) => {
       <ImageBackground
         source={pwdIMage}
         style={{width: '100%', height: '100%', opacity: 0.9}}>
-          <Loader loading={loading} />
-        <View style={{padding:0, flex: 1, justifyContent: 'center'}}>
+        <Loader loading={loading} />
+        <View style={{padding: 0, flex: 1, justifyContent: 'center'}}>
           <View
             style={{
               width: '100%',
@@ -411,15 +425,14 @@ const BmRegistration = ({navigation}) => {
             }}>
             <ScrollView
               showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-            >
+              showsHorizontalScrollIndicator={false}>
               <View style={[styles.loginFormView, {}]}>
                 <View style={{}}>
                   <Text
                     style={[
                       styles.logoText,
                       {
-                        marginTop:10,
+                        marginTop: 10,
                         // paddingTop: -1,
                         textAlign: 'center',
                         color: '#002D62',
@@ -431,14 +444,35 @@ const BmRegistration = ({navigation}) => {
                   </Text>
                 </View>
 
-              <Text style={{marginTop:50,fontWeight:"bold",color:"#000000"}} >تصویر:</Text>
-              <View style={{marginTop:5,backgroundColor:'#D3D3D3',borderRadius:5, height:70 }}>
-                <TouchableOpacity onPress={img} style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:60 }}>
-                   <Image source={{uri:imageProfile}} style={{width: '100%', height: 60,resizeMode : 'contain' }} /> 
-                </TouchableOpacity>
-              </View>
-      
-                <Text style={[styles.fieldtext]}>ضلع:<Text style={{color:'red'}}> *</Text></Text>
+                <Text
+                  style={{marginTop: 50, fontWeight: 'bold', color: '#000000'}}>
+                  تصویر:
+                </Text>
+                <View
+                  style={{
+                    marginTop: 5,
+                    backgroundColor: '#D3D3D3',
+                    borderRadius: 5,
+                    height: 70,
+                  }}>
+                  <TouchableOpacity
+                    onPress={img}
+                    style={{
+                      marginTop: 10,
+                      backgroundColor: '#D3D3D3',
+                      borderRadius: 5,
+                      height: 60,
+                    }}>
+                    <Image
+                      source={{uri: imageProfile}}
+                      style={{width: '100%', height: 60, resizeMode: 'contain'}}
+                    />
+                  </TouchableOpacity>
+                </View>
+
+                <Text style={[styles.fieldtext]}>
+                  ضلع:<Text style={{color: 'red'}}> *</Text>
+                </Text>
                 {/* <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40}}>
                   <View style={styles.container}>
                     <Dropdown
@@ -474,16 +508,17 @@ const BmRegistration = ({navigation}) => {
                   <TextInput
                     editable={false}
                     placeholderColor="#c4c3cb"
-                    placeholderTextColor='grey'
+                    placeholderTextColor="grey"
                     // placeholder="اپنا نام درج کریں"
-                    style={[styles.Step1FormTextInput
-                    ]}
+                    style={[styles.Step1FormTextInput]}
                     // onChangeText={fullname => setFullName(fullname)}
                     value={district}
                   />
                 </View>
 
-                <Text style={[styles.fieldtext]}>تحصیل: <Text style={{color:'red'}}> *</Text></Text>
+                <Text style={[styles.fieldtext]}>
+                  تحصیل: <Text style={{color: 'red'}}> *</Text>
+                </Text>
                 {/* <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40}}>
                   <View style={styles.container}>
                     <Dropdown
@@ -517,18 +552,16 @@ const BmRegistration = ({navigation}) => {
                   <TextInput
                     editable={false}
                     placeholderColor="#c4c3cb"
-                    placeholderTextColor='grey'
+                    placeholderTextColor="grey"
                     // placeholder="اپنا نام درج کریں"
-                    style={[styles.Step1FormTextInput
-                    ]}
+                    style={[styles.Step1FormTextInput]}
                     // onChangeText={fullname => setFullName(fullname)}
                     value={Tehsil}
                   />
                 </View>
 
-                <Text
-                  style={[styles.fieldtext]}>
-                  نام:<Text style={{color:'red'}}> *</Text>
+                <Text style={[styles.fieldtext]}>
+                  نام:<Text style={{color: 'red'}}> *</Text>
                 </Text>
                 <View
                   style={{
@@ -540,18 +573,16 @@ const BmRegistration = ({navigation}) => {
                   <TextInput
                     editable={false}
                     placeholderColor="#c4c3cb"
-                    placeholderTextColor='grey'
+                    placeholderTextColor="grey"
                     placeholder="اپنا نام درج کریں"
-                    style={[styles.Step1FormTextInput
-                    ]}
+                    style={[styles.Step1FormTextInput]}
                     // onChangeText={fullname => setFullName(fullname)}
                     value={Name}
                   />
                 </View>
 
-                <Text
-                  style={[styles.fieldtext]}>
-                  رابطہ نمبر:<Text style={{color:'red'}}> *</Text>
+                <Text style={[styles.fieldtext]}>
+                  رابطہ نمبر:<Text style={{color: 'red'}}> *</Text>
                 </Text>
                 <View
                   style={{
@@ -563,19 +594,19 @@ const BmRegistration = ({navigation}) => {
                   <TextInput
                     editable={false}
                     placeholderColor="#c4c3cb"
-                    keyboardType='numeric'
-                    placeholderTextColor='grey'
+                    keyboardType="numeric"
+                    placeholderTextColor="grey"
                     placeholder="اپنا موبائل نمبر درج کریں"
-                    style={[styles.Step1FormTextInput
-                      , { borderColor: !contact && errorValidate ? 'red' : '#fff' }
+                    style={[
+                      styles.Step1FormTextInput,
+                      {borderColor: !contact && errorValidate ? 'red' : '#fff'},
                     ]}
                     onChangeText={contact => setcontact(contact)}
                     value={contact}
                   />
                 </View>
-                <Text
-                  style={[styles.fieldtext]}>
-                  شناختی کارڈ/بے فارم:<Text style={{color:'red'}}> *</Text>
+                <Text style={[styles.fieldtext]}>
+                  شناختی کارڈ/بے فارم:<Text style={{color: 'red'}}> *</Text>
                 </Text>
                 <View
                   style={{
@@ -587,21 +618,21 @@ const BmRegistration = ({navigation}) => {
                   <TextInput
                     editable={false}
                     // placeholderColor="#c4c3cb"
-                    placeholderTextColor='grey'
-                    keyboardType='numeric'
+                    placeholderTextColor="grey"
+                    keyboardType="numeric"
                     maxLength={13}
                     placeholder="اپنا شناختی کارڈ نمبر درج کریں"
-                    style={[styles.Step1FormTextInput
-                      , { borderColor: !cnic && errorValidate ? 'red' : '#fff' }
+                    style={[
+                      styles.Step1FormTextInput,
+                      {borderColor: !cnic && errorValidate ? 'red' : '#fff'},
                     ]}
                     onChangeText={Cnic => setCNIC(Cnic)}
                     value={cnic}
                   />
                 </View>
 
-                <Text
-                  style={[styles.fieldtext]}>
-                  والد/شوہر کا نام:<Text style={{color:'red'}}> *</Text>
+                <Text style={[styles.fieldtext]}>
+                  والد/شوہر کا نام:<Text style={{color: 'red'}}> *</Text>
                 </Text>
                 <View
                   style={{
@@ -610,134 +641,172 @@ const BmRegistration = ({navigation}) => {
                     borderRadius: 3,
                     height: 40,
                   }}>
-                  <TextInput 
-                    editable={true}
-                    placeholderColor="#c4c3cb"
-                    placeholder="والد/شوہر کا نام درج کریں"
-                    placeholderTextColor='grey'
-                    style={[styles.Step1FormTextInput
-                      , { borderColor: !fathername && errorValidate ? 'red' : '#fff' }
-                    ]}
-                    onChangeText={fathername =>
-                    setfathername(fathername)
-                    }
-                    value={fathername}
-                  />
+                  <>
+                    <TextInput
+                      editable={true}
+                      placeholderColor="#c4c3cb"
+                      placeholder="والد/شوہر کا نام درج کریں"
+                      placeholderTextColor="grey"
+                      style={[
+                        styles.Step1FormTextInput,
+                        {
+                          borderColor:
+                            !fathername && errorValidate ? 'red' : '#fff',
+                        },
+                      ]}
+                      onChangeText={input => {
+                        handleInputChange(input, 'fathername');
+                      }}
+                      value={fathername}
+                    />
+                  </>
                 </View>
-                <Text style={{ marginTop: 15, fontWeight: "bold", color: "#000000" }}>پیدائش کی تاریخ:<Text style={{color:'red'}}> *</Text></Text>
-                <TouchableOpacity style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
+                {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
+                <Text
+                  style={{marginTop: 15, fontWeight: 'bold', color: '#000000'}}>
+                  پیدائش کی تاریخ:<Text style={{color: 'red'}}> *</Text>
+                </Text>
+                <TouchableOpacity
+                  style={{
+                    marginTop: 10,
+                    backgroundColor: '#D3D3D3',
+                    borderRadius: 5,
+                    height: 40,
+                  }}>
                   <DatePickerInput
                     locale="en"
                     label="" // No value provided for label
                     value={dob}
-                    onChange={(dob) => setDOB(dob)}
+                    onChange={dob => setDOB(dob)}
                     mode={'flat'}
-                    style={{ height: 50, backgroundColor: '#D3D3D3' }}
+                    style={{height: 50, backgroundColor: '#D3D3D3'}}
                     // style={[styles.view, { borderColor: !dob && errorValidate ? 'red' : '#fff'}]}
                   />
                 </TouchableOpacity>
 
-
-                <Text style={[styles.fieldtext]}>عمر:<Text style={{color:'red'}}> *</Text></Text>
-                  <View style={[styles.view]}>
-                    <View style={styles.container}>
-
-                      <Dropdown
-                        style={[styles.dropdown, { borderColor: !age && errorValidate ? 'red' : '#fff'}]}
-                        placeholderStyle={styles.placeholderStyle}
-                        selectedTextStyle={styles.selectedTextStyle}
-                        inputSearchStyle={styles.inputSearchStyle}
-                        itemTextStyle={styles.itemTextStyle}
-                        data={agedata}
-                        // search
-                        labelField="label"
-                        valueField="value"
-                        placeholder={'عمر منتخب کریں'}
-                        searchPlaceholder="Search..."
-                        value={age}
-
-                        onChange={item => {
-                          setage(item.value);
-                        }}
-                      />
-                    </View>
+                <Text style={[styles.fieldtext]}>
+                  عمر:<Text style={{color: 'red'}}> *</Text>
+                </Text>
+                <View style={[styles.view]}>
+                  <View style={styles.container}>
+                    <Dropdown
+                      style={[
+                        styles.dropdown,
+                        {borderColor: !age && errorValidate ? 'red' : '#fff'},
+                      ]}
+                      placeholderStyle={styles.placeholderStyle}
+                      selectedTextStyle={styles.selectedTextStyle}
+                      inputSearchStyle={styles.inputSearchStyle}
+                      itemTextStyle={styles.itemTextStyle}
+                      data={agedata}
+                      // search
+                      labelField="label"
+                      valueField="value"
+                      placeholder={'عمر منتخب کریں'}
+                      searchPlaceholder="Search..."
+                      value={age}
+                      onChange={item => {
+                        setage(item.value);
+                      }}
+                    />
                   </View>
-                <Text style={[styles.fieldtext]}>جنس:<Text style={{color:'red'}}> *</Text></Text>
-                  <View style={[styles.view]}>
-                    <View style={styles.container}>
-
-                      <Dropdown
-                        style={[styles.dropdown, { borderColor: !gender && errorValidate ? 'red' : '#fff'}]}
-                        placeholderStyle={styles.placeholderStyle}
-                        selectedTextStyle={styles.selectedTextStyle}
-                        inputSearchStyle={styles.inputSearchStyle}
-                        itemTextStyle={styles.itemTextStyle}
-                        data={genderData}
-                        // search
-                        labelField="label"
-                        valueField="value"
-                        placeholder={'جنس کا انتخاب کریں'}
-                        searchPlaceholder="Search..."
-                        value={gender}
-
-                        onChange={item => {
-                          setGender(item.value);
-                        }}
-                      />
-                    </View>
+                </View>
+                <Text style={[styles.fieldtext]}>
+                  جنس:<Text style={{color: 'red'}}> *</Text>
+                </Text>
+                <View style={[styles.view]}>
+                  <View style={styles.container}>
+                    <Dropdown
+                      style={[
+                        styles.dropdown,
+                        {
+                          borderColor:
+                            !gender && errorValidate ? 'red' : '#fff',
+                        },
+                      ]}
+                      placeholderStyle={styles.placeholderStyle}
+                      selectedTextStyle={styles.selectedTextStyle}
+                      inputSearchStyle={styles.inputSearchStyle}
+                      itemTextStyle={styles.itemTextStyle}
+                      data={genderData}
+                      // search
+                      labelField="label"
+                      valueField="value"
+                      placeholder={'جنس کا انتخاب کریں'}
+                      searchPlaceholder="Search..."
+                      value={gender}
+                      onChange={item => {
+                        setGender(item.value);
+                      }}
+                    />
                   </View>
-                  <Text style={[styles.fieldtext]}>ماہانہ آمدنی:<Text style={{color:'red'}}> *</Text></Text>
-                  <View style={[styles.view]}>
-                    <View style={styles.container}>
-
-                      <Dropdown
-                        style={[styles.dropdown, { borderColor: !yourincome && errorValidate ? 'red' : '#fff'}]} // Apply custom style for invalid selection
-                        placeholderStyle={styles.placeholderStyle}
-                        selectedTextStyle={styles.selectedTextStyle}
-                        inputSearchStyle={styles.inputSearchStyle}
-                        itemTextStyle={styles.itemTextStyle}
-                        data={monthlyincomedata}
-                        // search
-                        labelField="label"
-                        valueField="value"
-                        placeholder={'ماہانہ آمدنی کا انتخاب کریں'}
-                        // searchPlaceholder="Search..."
-                        value={yourincome}
-
-                        onChange={item => {
-                          setYourincome(item.value);
-                        }}
-                      />
-                    </View>
+                </View>
+                <Text style={[styles.fieldtext]}>
+                  ماہانہ آمدنی:<Text style={{color: 'red'}}> *</Text>
+                </Text>
+                <View style={[styles.view]}>
+                  <View style={styles.container}>
+                    <Dropdown
+                      style={[
+                        styles.dropdown,
+                        {
+                          borderColor:
+                            !yourincome && errorValidate ? 'red' : '#fff',
+                        },
+                      ]} // Apply custom style for invalid selection
+                      placeholderStyle={styles.placeholderStyle}
+                      selectedTextStyle={styles.selectedTextStyle}
+                      inputSearchStyle={styles.inputSearchStyle}
+                      itemTextStyle={styles.itemTextStyle}
+                      data={monthlyincomedata}
+                      // search
+                      labelField="label"
+                      valueField="value"
+                      placeholder={'ماہانہ آمدنی کا انتخاب کریں'}
+                      // searchPlaceholder="Search..."
+                      value={yourincome}
+                      onChange={item => {
+                        setYourincome(item.value);
+                      }}
+                    />
                   </View>
-                  <Text style={[styles.fieldtext]}>ماہانہ آمدن (والدین/سرپرست):<Text style={{color:'red'}}> *</Text></Text>
-                  <View style={[styles.view]}>
-                    <View style={styles.container}>
-
-                      <Dropdown
-                        style={[styles.dropdown, { borderColor: !parentincome && errorValidate ? 'red' : '#fff'}]}
-                        placeholderStyle={styles.placeholderStyle}
-                        selectedTextStyle={styles.selectedTextStyle}
-                        inputSearchStyle={styles.inputSearchStyle}
-                        itemTextStyle={styles.itemTextStyle}
-                        data={monthlyincomeparentdata}
-                        // search
-                        labelField="label"
-                        valueField="value"
-                        placeholder={'ماہانہ آمدنی کا انتخاب کریں'}
-                        // searchPlaceholder="Search..."
-                        value={parentincome}
-
-                        onChange={item => {
-                          setParentincome(item.value);
-                        }}
-                      />
-                    </View>
+                </View>
+                <Text style={[styles.fieldtext]}>
+                  ماہانہ آمدن (والدین/سرپرست):
+                  <Text style={{color: 'red'}}> *</Text>
+                </Text>
+                <View style={[styles.view]}>
+                  <View style={styles.container}>
+                    <Dropdown
+                      style={[
+                        styles.dropdown,
+                        {
+                          borderColor:
+                            !parentincome && errorValidate ? 'red' : '#fff',
+                        },
+                      ]}
+                      placeholderStyle={styles.placeholderStyle}
+                      selectedTextStyle={styles.selectedTextStyle}
+                      inputSearchStyle={styles.inputSearchStyle}
+                      itemTextStyle={styles.itemTextStyle}
+                      data={monthlyincomeparentdata}
+                      // search
+                      labelField="label"
+                      valueField="value"
+                      placeholder={'ماہانہ آمدنی کا انتخاب کریں'}
+                      // searchPlaceholder="Search..."
+                      value={parentincome}
+                      onChange={item => {
+                        setParentincome(item.value);
+                      }}
+                    />
                   </View>
+                </View>
 
-                <Text
-                  style={[styles.fieldtext]}>
-                  ڈاک کا پتا:<Text style={{color:'red'}}> *</Text>
+                <Text style={[styles.fieldtext]}>
+                  ڈاک کا پتا:<Text style={{color: 'red'}}> *</Text>
                 </Text>
                 <View
                   style={{
@@ -746,24 +815,29 @@ const BmRegistration = ({navigation}) => {
                     borderRadius: 3,
                     height: 40,
                   }}>
-                  <TextInput 
+                  <TextInput
                     editable={true}
                     placeholderColor="#c4c3cb"
                     placeholder="ڈاک کا پتہ درج کریں"
-                    placeholderTextColor='grey'
-                     style={[styles.Step1FormTextInput
-                      , { borderColor: !postaladress && errorValidate ? 'red' : '#fff' }
+                    placeholderTextColor="grey"
+                    style={[
+                      styles.Step1FormTextInput,
+                      {
+                        borderColor:
+                          !postaladress && errorValidate ? 'red' : '#fff',
+                      },
                     ]}
-                    onChangeText={postaladress =>
-                      setmonthlypostaladress(postaladress)
-                    }
+                    onChangeText={input => {
+                      handleInputChange(input, 'monthlypostaladress');
+                    }}
                     value={postaladress}
                   />
                 </View>
-
-                <Text
-                  style={[styles.fieldtext]}>
-                  مستقل پتہ:<Text style={{color:'red'}}> *</Text>
+                {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
+                <Text style={[styles.fieldtext]}>
+                  مستقل پتہ:<Text style={{color: 'red'}}> *</Text>
                 </Text>
                 <View
                   style={{
@@ -772,49 +846,66 @@ const BmRegistration = ({navigation}) => {
                     borderRadius: 3,
                     height: 40,
                   }}>
-                  <TextInput 
+                  <TextInput
                     editable={true}
                     placeholderColor="#c4c3cb"
                     placeholder="مستقل پتہ درج کریں"
-                    placeholderTextColor='grey'
-                    style={[styles.Step1FormTextInput
-                      , { borderColor: !permanentAddress && errorValidate ? 'red' : '#fff' }
+                    placeholderTextColor="grey"
+                    style={[
+                      styles.Step1FormTextInput,
+                      {
+                        borderColor:
+                          !permanentAddress && errorValidate ? 'red' : '#fff',
+                      },
                     ]}
-                    onChangeText={permanentAddress =>
-                      setpermanentAddress(permanentAddress)
-                    }
+                    onChangeText={input => {
+                      handleInputChange(input, 'permanentAddress');
+                    }}
                     value={permanentAddress}
                   />
                 </View>
+                {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
 
-                <Text style={{ marginTop: 15, fontWeight: "bold", color: "#000000" }}>موجودہ تاریخ:<Text style={{color:'red'}}> *</Text></Text>
-                  <TouchableOpacity style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
-
-                    <DatePickerInput
-                      locale="en"
-                      label=""
-                      value={regdate}
-                      onChange={(regdate) => setregdate(regdate)}
-                      mode={'flat'}
-                      style={{ height: 50, backgroundColor: '#D3D3D3' }}
-                      // style={[styles.view , { borderColor: !currentdate && errorValidate ? 'red' : '#fff'}]}
-                    />
-                  </TouchableOpacity>
-
+                <Text
+                  style={{marginTop: 15, fontWeight: 'bold', color: '#000000'}}>
+                  موجودہ تاریخ:<Text style={{color: 'red'}}> *</Text>
+                </Text>
+                <TouchableOpacity
+                  style={{
+                    marginTop: 10,
+                    backgroundColor: '#D3D3D3',
+                    borderRadius: 5,
+                    height: 40,
+                  }}>
+                  <DatePickerInput
+                    locale="en"
+                    label=""
+                    value={regdate}
+                    onChange={regdate => setregdate(regdate)}
+                    mode={'flat'}
+                    style={{height: 50, backgroundColor: '#D3D3D3'}}
+                    // style={[styles.view , { borderColor: !currentdate && errorValidate ? 'red' : '#fff'}]}
+                  />
+                </TouchableOpacity>
 
                 <View>
-              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      justifyContent: 'flex-end',
+                    }}>
                     <TouchableOpacity
                       style={styles.button}
                       activeOpacity={0.5}
-                      onPress={NextStep}
-                    >
-                  <Text style={[styles.text, { textAlign: 'center' }]}>
-                    NEXT
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
+                      onPress={NextStep}>
+                      <Text style={[styles.text, {textAlign: 'center'}]}>
+                        NEXT
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             </ScrollView>
@@ -851,12 +942,12 @@ const styles = StyleSheet.create({
     height: 40,
     borderColor: '#dadae8',
   },
-  fieldtext:{
-    marginTop: 15, 
-    fontWeight: 'bold', 
-    color: '#000000'
+  fieldtext: {
+    marginTop: 15,
+    fontWeight: 'bold',
+    color: '#000000',
   },
-  Textinput:{
+  Textinput: {
     flex: 1,
     color: 'black',
     borderWidth: 1,
@@ -864,16 +955,16 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     borderColor: '#dadae8',
-    placeholderTextColor:'grey'
+    placeholderTextColor: 'grey',
   },
-  Dropdown:{
+  Dropdown: {
     height: 40,
     borderColor: 'gray',
     borderWidth: 0.5,
     borderRadius: 5,
     paddingHorizontal: 8,
-    backgroundColor:'#D3D3D3',
-    margin: 0
+    backgroundColor: '#D3D3D3',
+    margin: 0,
   },
   dropdown: {
     height: 40,
@@ -884,11 +975,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#D3D3D3',
     margin: 0,
   },
-  view:{
+  view: {
     marginTop: 10,
     backgroundColor: '#D3D3D3',
     borderRadius: 5,
-    height: 40 
+    height: 40,
   },
   button: {
     justifyContent: 'center',
@@ -913,19 +1004,18 @@ const styles = StyleSheet.create({
   placeholderStyle: {
     color: 'grey',
     fontSize: 14,
-    margin: 2
+    margin: 2,
   },
   selectedTextStyle: {
     fontSize: 16,
     color: 'black',
   },
   itemTextStyle: {
-    color: 'black'
+    color: 'black',
   },
-  inputSearchStyle : {
-    color:'black'
-  }
-  
+  inputSearchStyle: {
+    color: 'black',
+  },
 });
 
 export default BmRegistration;
