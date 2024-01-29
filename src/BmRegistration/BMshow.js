@@ -87,7 +87,18 @@ const [cnicbdis,setCnicbdis] = useState('');
   const [schoolname, setSchoolname] = useState('');
   const [grade, setGrade] = useState('');
   const [tmarks, setTmarks] = useState('');
-  const [obmarks, setObmarks] = useState('');
+  const [addCert, setAddmissionCertedu] = useState('');
+  const [deathedu, setDeathEdu] = useState('');
+  const [disedu, setDisEdu] = useState('');
+  const [fatehrcnicf, setFathercnicf] = useState('');
+  const [fatehrcnicb, setFathercnicb] = useState('');
+  const [hosteledu, setHosteledu] = useState('');
+  const [nonhosteledu, setNonHosteledu] = useState('');
+  const [schooledu, setSchooledu] = useState('');
+  const [resultedu, setResultedu] = useState('');
+  const [scniceduf, setscniceduf] = useState('');
+  const [scnicedub, setscnicedub] = useState('');
+  const [slipedu, setslipedu] = useState('');
   
   const [dname, setdname]      = useState('');
   const [dfile, setdfile]  = useState('');
@@ -240,6 +251,34 @@ const [cnicbdis,setCnicbdis] = useState('');
             setTmarks(tmarks);
             const obmarks  = resppwd['BM  Education'][0].obmarks;
             setObmarks(obmarks);
+            
+            const admcerti  = resppwd['BM  Education'][0].admcerti;
+            setAddmissionCertedu(admcerti);
+            const deathcerti  = resppwd['BM  Education'][0].deathcerti;
+            setDeathEdu(deathcerti);
+            const disablecerti  = resppwd['BM  Education'][0].disablecerti;
+            setDisEdu(disablecerti);
+
+            const fcnic  = resppwd['BM  Education'][0].fcnic;
+            setFathercnicf(fcnic);
+            const fcnicback  = resppwd['BM  Education'][0].fcnicback;
+            setFathercnicb(fcnicback);
+            const hostelcerti  = resppwd['BM  Education'][0].hostelcerti;
+            setHosteledu(hostelcerti);
+            const nohostelcerti  = resppwd['BM  Education'][0].nohostelcerti;
+            setNonHosteledu(nohostelcerti);
+
+            const resultcard  = resppwd['BM  Education'][0].resultcard;
+            setResultedu(resultcard);
+            const scholcerti  = resppwd['BM  Education'][0].scholcerti;
+            setSchooledu(scholcerti);
+            const scnic  = resppwd['BM  Education'][0].scnic;
+            setscniceduf(scnic);
+            const scnicback  = resppwd['BM  Education'][0].scnicback;
+            setscnicedub(scnicback);
+            const slip  = resppwd['BM  Education'][0].slip;
+            setslipedu(slip);
+
           }else if(medical!=undefined){
 
 
@@ -1214,174 +1253,90 @@ const [cnicbdis,setCnicbdis] = useState('');
                         />
                         </View>
 
-                        {/* <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Father/Guardian CNIC Front:</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:40}}>
-                        <TextInput
-                          placeholderColor="#c4c3cb"
-                          placeholder={afile}
-                          style={[styles.BMshowFormTextInput
-                            // ,{borderColor: !firstName && errorValidate ? 'red':'#fff'}
-                          ]}
-
-                          value={afile}
-
-                        />
+                        <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Father/Guardian CNIC Front:</Text>
+                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
+                          {fatehrcnicf!='' ? 
+                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/fathercnic/${fatehrcnicf}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
+                          :''}
                         </View>
 
+
                         <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Father/Guardian CNIC Back:</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:40}}>
-                        <TextInput
-                          placeholderColor="#c4c3cb"
-                          placeholder={afile}
-                          style={[styles.BMshowFormTextInput
-                            // ,{borderColor: !firstName && errorValidate ? 'red':'#fff'}
-                          ]}
-
-                          value={afile}
-
-                        />
+                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
+                          {fatehrcnicb!='' ? 
+                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/fathercnic/${fatehrcnicb}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
+                          :''}
                         </View>
 
                         <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Student CNIC Front</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:40}}>
-                        <TextInput
-                          placeholderColor="#c4c3cb"
-                          placeholder={afile}
-                          style={[styles.BMshowFormTextInput
-                            // ,{borderColor: !firstName && errorValidate ? 'red':'#fff'}
-                          ]}
-
-                          value={afile}
-
-                        />
+                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
+                          {scniceduf!='' ? 
+                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/studentcnic/${scniceduf}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
+                          :''}
                         </View>
 
                         <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Student CNIC Back</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:40}}>
-                        <TextInput
-                          placeholderColor="#c4c3cb"
-                          placeholder={afile}
-                          style={[styles.BMshowFormTextInput
-                            // ,{borderColor: !firstName && errorValidate ? 'red':'#fff'}
-                          ]}
-
-                          value={afile}
-
-                        />
+                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
+                          {scnicedub!='' ? 
+                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/studentcnic/${scnicedub}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
+                          :''}
                         </View>
 
                         <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Father/Guardian Salary Slip</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:40}}>
-                        <TextInput
-                          placeholderColor="#c4c3cb"
-                          placeholder={afile}
-                          style={[styles.BMshowFormTextInput
-                            // ,{borderColor: !firstName && errorValidate ? 'red':'#fff'}
-                          ]}
-
-                          value={afile}
-
-                        />
+                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
+                          {slipedu!='' ? 
+                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/salaryslip/${slipedu}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
+                          :''}
                         </View>
 
                         <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Death Certificate Of Father(If Orphan)</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:40}}>
-                        <TextInput
-                          placeholderColor="#c4c3cb"
-                          placeholder={afile}
-                          style={[styles.BMshowFormTextInput
-                            // ,{borderColor: !firstName && errorValidate ? 'red':'#fff'}
-                          ]}
-
-                          value={afile}
-
-                        />
+                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
+                          {deathedu!='' ? 
+                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/death/${deathedu}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
+                          :''}
                         </View>
 
 
                         <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Disability Certificate (If Disable)</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:40}}>
-                        <TextInput
-                          placeholderColor="#c4c3cb"
-                          placeholder={afile}
-                          style={[styles.BMshowFormTextInput
-                            // ,{borderColor: !firstName && errorValidate ? 'red':'#fff'}
-                          ]}
-
-                          value={afile}
-
-                        />
+                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
+                          {disedu!='' ? 
+                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/disability/${disedu}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
+                          :''}
                         </View>
-
                         <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Admission Certificate Of Institute</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:40}}>
-                        <TextInput
-                          placeholderColor="#c4c3cb"
-                          placeholder={afile}
-                          style={[styles.BMshowFormTextInput
-                            // ,{borderColor: !firstName && errorValidate ? 'red':'#fff'}
-                          ]}
-
-                          value={afile}
-
-                        />
+                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
+                          {addCert!='' ? 
+                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/admission/${addCert}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
+                          :''}
                         </View>
 
                         <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Result Card Of Previous Final Exam</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:40}}>
-                        <TextInput
-                          placeholderColor="#c4c3cb"
-                          placeholder={afile}
-                          style={[styles.BMshowFormTextInput
-                            // ,{borderColor: !firstName && errorValidate ? 'red':'#fff'}
-                          ]}
-
-                          value={afile}
-
-                        />
+                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
+                          {resultedu!='' ? 
+                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/resultcard/${resultedu}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
+                          :''}
                         </View>
 
                         <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Scholarship Certificate</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:40}}>
-                        <TextInput
-                          placeholderColor="#c4c3cb"
-                          placeholder={afile}
-                          style={[styles.BMshowFormTextInput
-                            // ,{borderColor: !firstName && errorValidate ? 'red':'#fff'}
-                          ]}
-
-                          value={afile}
-
-                        />
+                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
+                          {schooledu!='' ? 
+                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/scholarship/${schooledu}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
+                          :''}
                         </View>
 
                         <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Hostel Residence Certificate</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:40}}>
-                        <TextInput
-                          placeholderColor="#c4c3cb"
-                          placeholder={afile}
-                          style={[styles.BMshowFormTextInput
-                            // ,{borderColor: !firstName && errorValidate ? 'red':'#fff'}
-                          ]}
-
-                          value={afile}
-
-                        />
+                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
+                          {hosteledu!='' ? 
+                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/hostel/${hosteledu}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
+                          :''}
                         </View>
 
                         <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>If Educational Institute Do Not Offer Hostel Residence, Attach Certificate</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:40}}>
-                        <TextInput
-                          placeholderColor="#c4c3cb"
-                          placeholder={afile}
-                          style={[styles.BMshowFormTextInput
-                            // ,{borderColor: !firstName && errorValidate ? 'red':'#fff'}
-                          ]}
-
-                          value={afile}
-
-                        />
-                        </View> */}
+                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
+                          {nonhosteledu!='' ? 
+                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/nohostel/${nonhosteledu}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
+                          :''}
+                        </View>
                     </View>
                         :<View>
                         <Text style={{padding:20,color:'#444',fontStyle:'normal', fontWeight:'700'}}>No Record Found of Education Stipend</Text>
