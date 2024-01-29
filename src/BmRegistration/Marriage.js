@@ -76,7 +76,71 @@ const Marriage = ({ navigation }) => {
   // step2  groom CNIC Back       
   const [gcnicbImage, setGcnicbImage] = useState('');
   const [capGcnicBack, setCapGcnicBack] = useState('');
+  const [warning, setWarning] = React.useState('');
 
+  const handleInputChange = (input, fieldName) => {
+    // Check if the input contains non-English characters
+    const containsNonEnglish = /[^a-zA-Z ]/.test(input);
+  
+    // Set the warning based on the presence of non-English characters
+    if (containsNonEnglish) {
+      setWarning('Please enter text in English only.');
+    } else {
+      setWarning('');
+    }
+  
+    // Filter out non-English characters
+    const filteredInput = input.replace(/[^a-zA-Z ]/g, '');
+  
+    switch (fieldName) {
+      case 'sourceofincome':
+        setSourceofincome(filteredInput);
+        break;
+      case 'bridename':
+        setBridename(filteredInput);
+        break;
+      case 'groomname':
+        setGroomname(filteredInput);  
+        break;
+      case 'groomfathername':
+        setGroomfathername(filteredInput); 
+        break;   
+      case 'regname':
+        setRegname(filteredInput); 
+        break; 
+      case 'regaddress':
+        setRegaddress(filteredInput);
+        break;     
+      default:
+        break;
+    }
+  };
+  //function to handle address input field for numeric and english only
+  const handleInputChangeforaddress = (input, fieldName) => {
+    // Check if the input contains non-English characters
+    const containsNonEnglish = /[^a-zA-Z0-9 ]/.test(input);
+  
+    // Set the warning based on the presence of non-English characters
+    if (containsNonEnglish) {
+      setWarning('Please enter text in English only.');
+    } else {
+      setWarning('');
+    }
+  
+    // Filter out non-English characters
+    const filteredInput = input.replace(/[^a-zA-Z0-9 ]/g, '');
+  
+    switch (fieldName) {
+      case 'groomaddress':
+        setGroomaddress(filteredInput);
+        break;
+        case 'regaddress':
+          setRegaddress(filteredInput);
+          break;     
+      default:
+        break;
+    }
+  };
 
   // step3 bride cnic front
   const bridecnicfront = async () => {
@@ -213,7 +277,7 @@ const Marriage = ({ navigation }) => {
 
   const MarriageStep = () => {
 
-    const reg_date = syncStorage.get('reg_date')
+    const reg_date = syncStorage.get('reg_date');
     console.log('MArried', married)
     setErrorValidate(true)
 
@@ -225,7 +289,7 @@ const Marriage = ({ navigation }) => {
       // Calculate the date 90 days ago from today
       const ninetyDaysAgo = new Date();
       ninetyDaysAgo.setDate(reg_date.getDate() - 90);
-  
+      
       // Get the user-input target date from the HTML input field
       const targetDateInput = adate;
       const targetDate = new Date(targetDateInput);
@@ -793,66 +857,7 @@ const Marriage = ({ navigation }) => {
     }
     console.log(datevar);
 }
-const [warning, setWarning] = React.useState('');
-const handleInputChange = (input, fieldName) => {
-  // Check if the input contains non-English characters
-  const containsNonEnglish = /[^a-zA-Z ]/.test(input);
 
-  // Set the warning based on the presence of non-English characters
-  if (containsNonEnglish) {
-    setWarning('Please enter text in English only.');
-  } else {
-    setWarning('');
-  }
-
-  // Filter out non-English characters
-  const filteredInput = input.replace(/[^a-zA-Z ]/g, '');
-
-  switch (fieldName) {
-    case 'sourceofincome':
-      setSourceofincome(filteredInput);
-      break;
-    case 'bridename':
-      setBridename(filteredInput);
-      break;
-    case 'groomname':
-      setGroomname(filteredInput);  
-      break;
-    case 'groomfathername':
-      setGroomfathername(filteredInput); 
-      break;   
-    case 'regname':
-      setRegname(filteredInput); 
-      break; 
-    case 'regaddress':
-      setRegaddress(filteredInput);
-      break;     
-    default:
-      break;
-  }
-};
-//function to handle address input field for numeric and english only
-const handleInputChangeforaddress = (input, fieldName) => {
-  // Check if the input contains non-English characters
-  const containsNonEnglish = /[^a-zA-Z0-9 ]/.test(input);
-
-  // Set the warning based on the presence of non-English characters
-  if (containsNonEnglish) {
-    setWarning('Please enter text in English only.');
-  } else {
-    setWarning('');
-  }
-
-  // Filter out non-English characters
-  const filteredInput = input.replace(/[^a-zA-Z0-9 ]/g, '');
-
-  switch (fieldName) {
-    case 'groomaddress':
-      setGroomaddress(filteredInput);
-    default:
-      break;
-  }
-};
 
   return (
     <View>
@@ -888,6 +893,7 @@ const handleInputChangeforaddress = (input, fieldName) => {
                 <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
                   <TextInput placeholderColor="#c4c3cb" 
                     placeholderTextColor='grey'
+                    
                     onChangeText={input => {
                       handleInputChange(input, 'sourceofincome');
                     }}
@@ -901,6 +907,7 @@ const handleInputChangeforaddress = (input, fieldName) => {
                 {warning !== '' && (
                   <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
                 )}
+
                 <View style={styles.center}>
                 <Text style={{ marginTop: 10, fontWeight: "bold", color: "#002D62", }}>دُلہن کے کوائف</Text>
                 </View>
@@ -908,6 +915,7 @@ const handleInputChangeforaddress = (input, fieldName) => {
                 <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
                   <TextInput placeholderColor="#c4c3cb" 
                     placeholderTextColor='grey'
+                    // onChangeText={(bridename) => setBridename(bridename)}
                     onChangeText={input => {
                       handleInputChange(input, 'bridename');
                     }}
@@ -957,6 +965,7 @@ const handleInputChangeforaddress = (input, fieldName) => {
                 <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
                   <TextInput placeholderColor="#c4c3cb" 
                     placeholderTextColor='grey'
+                    // onChangeText={(groomname) => setGroomname(groomname)}
                     onChangeText={input => {
                       handleInputChange(input, 'groomname');
                     }}
@@ -970,6 +979,7 @@ const handleInputChangeforaddress = (input, fieldName) => {
                 {warning !== '' && (
                   <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
                 )}
+
                 <Text style={{ marginTop: 15, fontWeight: "bold", color: "#000000" }}>والد کا نام:</Text>
                 <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
                   <TextInput placeholderColor="#c4c3cb" 
@@ -1019,6 +1029,7 @@ const handleInputChangeforaddress = (input, fieldName) => {
                 {warning !== '' && (
                   <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
                 )}
+
                 <Text style={{ marginTop: 15, fontWeight: "bold", color: "#000000" }}>ماہانہ آمدنی:</Text>
                 <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
                   <View style={styles.container}>
@@ -1103,23 +1114,22 @@ const handleInputChangeforaddress = (input, fieldName) => {
                       />
                     </View>
                     {warning !== '' && (
-                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
-                )}
-
+                      <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                    )}
                     <Text style={{ marginTop: 15, fontWeight: "bold", color: "#000000" }}>شادی رجسٹرار کا پتہ:</Text>
                     <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 5, height: 40 }}>
                       <TextInput placeholderColor="#c4c3cb" style={styles.Step1FormTextInput}
                         placeholderTextColor='grey'
                         onChangeText={input => {
-                          handleInputChange(input, 'regaddress');
+                          handleInputChangeforaddress(input, 'regaddress');
                         }}
                         value={regaddress}
                         placeholder="شادی رجسٹرار کا پتہ"
                       />
                     </View>
                     {warning !== '' && (
-                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
-                )}
+                      <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                    )}
 
                   </View>
 

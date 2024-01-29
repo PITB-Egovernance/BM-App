@@ -70,26 +70,6 @@ const Disable = ({ navigation }) => {
   const [urid, setURID] = useState('');
   const [uridis, setURIDis] = useState('');
 
-  const SkillData = [
-    { label: 'Yes', value: 'Yes' },
-    { label: 'No', value: 'No' },
-  ];
-
-  const NeedData = [
-    { label: 'Incase Of Emergency', value: 'Incase Of Emergency' },
-    { label: 'Widow', value: 'Widow' },
-    { label: 'Divorced', value: 'Divorced' },
-    { label: 'Seperated', value: 'eperated' },
-    { label: 'UnSupported', value: 'UnSupported' },
-    { label: 'Old', value: 'Old' },
-    { label: 'Disabled', value: 'Disabled' },
-    { label: 'Orphan', value: 'Orphan' },
-  ];
-
-  const PropertyData = [
-    { label: 'Yes', value: 'Yes' },
-    { label: 'No', value: 'No' },
-  ];
   const [warning, setWarning] = React.useState('');
   const handleInputChange = (input, fieldName) => {
     // Check if the input contains non-English characters
@@ -117,6 +97,27 @@ const Disable = ({ navigation }) => {
         break;
     }
   };
+
+  const SkillData = [
+    { label: 'Yes', value: 'Yes' },
+    { label: 'No', value: 'No' },
+  ];
+
+  const NeedData = [
+    { label: 'Incase Of Emergency', value: 'Incase Of Emergency' },
+    { label: 'Widow', value: 'Widow' },
+    { label: 'Divorced', value: 'Divorced' },
+    { label: 'Seperated', value: 'eperated' },
+    { label: 'UnSupported', value: 'UnSupported' },
+    { label: 'Old', value: 'Old' },
+    { label: 'Disabled', value: 'Disabled' },
+    { label: 'Orphan', value: 'Orphan' },
+  ];
+
+  const PropertyData = [
+    { label: 'Yes', value: 'Yes' },
+    { label: 'No', value: 'No' },
+  ];
 
 
   // step3
@@ -442,9 +443,10 @@ const Disable = ({ navigation }) => {
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb" 
                     placeholderTextColor='grey'
-                    onChangeText={input => {
-                      handleInputChange(input, 'expensedetail');
-                    }}
+                  // onChangeText={(expensedetail) => setExpensedetail(expensedetail)}
+                  onChangeText={input => {
+                    handleInputChange(input, 'expensedetail');
+                  }}
                   value={expensedetail}
                   placeholder="آپ کے اخراجات کی تفصیل"
                   style={[styles.Step1FormTextInput
@@ -455,7 +457,6 @@ const Disable = ({ navigation }) => {
                 {warning !== '' && (
                   <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
                 )}
-
 
                 {/* Experience */}
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>رہائش گاہ</Text>
@@ -477,7 +478,6 @@ const Disable = ({ navigation }) => {
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb"  style={styles.Step1FormTextInput}
                     placeholderTextColor='grey'
-                    keyboardType="numeric"
                   onChangeText={(houserent) => setHouserent(houserent)}
                   value={houserent}
                   placeholder="گھر کا کرایہ درج کریں"
@@ -544,6 +544,8 @@ const Disable = ({ navigation }) => {
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb"
                   placeholderTextColor='grey'
+                  // onChangeText={(purpose) => setPurpose(purpose)}
+
                   onChangeText={input => {
                     handleInputChange(input, 'purpose');
                   }}

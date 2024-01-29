@@ -84,45 +84,44 @@ const Medical = ({navigation}) => {
 //  const [FormIdArray, setFormIDArray] = useState([]);
  const [RelationArray, setRelationArray] = useState([]);
  const [warning, setWarning] = React.useState('');
-const handleInputChange = (input, fieldName) => {
-  // Check if the input contains non-English characters
-  const containsNonEnglish = /[^a-zA-Z ]/.test(input);
-
-  // Set the warning based on the presence of non-English characters
-  if (containsNonEnglish) {
-    setWarning('Please enter text in English only.');
-  } else {
-    setWarning('');
-  }
-
-  // Filter out non-English characters
-  const filteredInput = input.replace(/[^a-zA-Z ]/g, '');
-
-  switch (fieldName) {
-    case 'expensedetail':
-      setExpensedetail(filteredInput);
-      break;
-    case 'disease':
-      setDisease(filteredInput);
-      break;
-    case 'treatmentfrom':
-      setTreatmentfrom(filteredInput);  
-      break;
-    case 'treatmentexpense':
-      setTreatmentexpense(filteredInput); 
-      break;   
-    case 'name':
-      setName(filteredInput); 
-      break; 
-    case 'fname':
-      setFname(filteredInput);
-      break;     
-    default:
-      break;
-  }
-};
-//function to handle address input field for numeric and english only
-const handleInputChangeforaddress = (input, fieldName) => {
+ const handleInputChange = (input, fieldName) => {
+   // Check if the input contains non-English characters
+   const containsNonEnglish = /[^a-zA-Z ]/.test(input);
+ 
+   // Set the warning based on the presence of non-English characters
+   if (containsNonEnglish) {
+     setWarning('Please enter text in English only.');
+   } else {
+     setWarning('');
+   }
+ 
+   // Filter out non-English characters
+   const filteredInput = input.replace(/[^a-zA-Z ]/g, '');
+ 
+   switch (fieldName) {
+     case 'expensedetail':
+       setExpensedetail(filteredInput);
+       break;
+     case 'disease':
+       setDisease(filteredInput);
+       break;
+     case 'treatmentfrom':
+       setTreatmentfrom(filteredInput);  
+       break;
+     case 'treatmentexpense':
+       setTreatmentexpense(filteredInput); 
+       break;   
+     case 'name':
+       setName(filteredInput); 
+       break; 
+     case 'fname':
+       setFname(filteredInput);
+       break;     
+     default:
+       break;
+   }
+ };
+ const handleInputChangeforaddress = (input, fieldName) => {
   // Check if the input contains non-English characters
   const containsNonEnglish = /[^a-zA-Z0-9 ]/.test(input);
 
@@ -411,7 +410,6 @@ console.log(JSON.stringify(NameArray),AgeArray,EducationArray) /* Step 4 Fields 
     });
 
 }
-
 };
 
 return (
@@ -483,7 +481,6 @@ return (
                 {warning !== '' && (
                   <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
                 )}
-
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>رہائش گاہ:</Text>
                 <RadioButton.Group  onValueChange={residence => setResidence(residence)} value={residence} style={{marginTop:10}}>
                 <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 5 }}>
@@ -503,7 +500,6 @@ return (
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb" style={styles.Step1FormTextInput}
                   placeholderTextColor='grey'
-                  keyboardType="numeric"
                   onChangeText={(houserent) => setHouserent(houserent)}
                   value={houserent}
                   placeholder="گھر کا کرایہ درج کریں"
@@ -528,11 +524,10 @@ return (
                     , { borderColor: !disease && errorValidate ? 'red' : '#fff' }
                   ]}
                   />
-                </View> 
+                </View>     
                 {warning !== '' && (
                   <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
-                )}    
-
+                )}
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>کہاں سے علاج کروا رہے ہیں؟</Text>
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb" 
@@ -549,8 +544,7 @@ return (
                 </View> 
                 {warning !== '' && (
                   <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
-                )}
-
+                )} 
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>آپ کے علاج کے اخراجات</Text>
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb" 
@@ -564,10 +558,10 @@ return (
                     , { borderColor: !treatmentexpense && errorValidate ? 'red' : '#fff' }
                   ]}
                   />
-                </View> 
+                </View>
                 {warning !== '' && (
                   <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
-                )}
+                )} 
                 <View style={styles.center}>   
                 <Text style={{marginTop:10,fontWeight:"bold",color:"#002D62"}}>معلوماتی فارم (بذریعہ)</Text>
                 </View>
@@ -588,7 +582,7 @@ return (
                 </View>
                 {warning !== '' && (
                   <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
-                )}
+                )} 
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>والد کا نام:</Text>
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb" 
@@ -605,7 +599,7 @@ return (
                 </View>
                 {warning !== '' && (
                   <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
-                )}
+                )} 
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>شناختی کارڈ:</Text>
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb"
@@ -628,6 +622,7 @@ return (
                   onChangeText={input => {
                     handleInputChangeforaddress(input, 'address');
                   }}
+                  
                   value={address}
                   placeholder="پتہ درج کریں"
                   style={[styles.Step1FormTextInput
@@ -637,8 +632,7 @@ return (
                 </View>
                 {warning !== '' && (
                   <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
-                )}
-
+                )} 
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>مستقل پتہ:</Text>
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb"
@@ -655,8 +649,7 @@ return (
                 </View>
                 {warning !== '' && (
                   <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
-                )}
-
+                )} 
             <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>مریض کے ساتھ رشتہ:</Text>
              <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40}}>
                   <View style={styles.container}>

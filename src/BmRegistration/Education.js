@@ -132,35 +132,6 @@ const [capResult, setCapResult]  = useState('');
 //scholcerti
 const [scholcertiImage, setScholcertiImage]   = useState('');
 const [capSchoolCert, setCapSchoolCert]  = useState('');
-const [warning, setWarning] = React.useState('');
-const handleInputChange = (input, fieldName) => {
-  // Check if the input contains non-English characters
-  const containsNonEnglish = /[^a-zA-Z ]/.test(input);
-
-  // Set the warning based on the presence of non-English characters
-  if (containsNonEnglish) {
-    setWarning('Please enter text in English only.');
-  } else {
-    setWarning('');
-  }
-
-  // Filter out non-English characters
-  const filteredInput = input.replace(/[^a-zA-Z ]/g, '');
-
-  switch (fieldName) {
-    case 'studentname':
-      setStudentname(filteredInput);
-      break;
-    case 'schoolname':
-      setSchoolname(filteredInput);
-      break;
-    case 'groomname':
-      setGroomname(filteredInput);  
-      break;
-    default:
-      break;
-  }
-};
 
 
 
@@ -487,6 +458,37 @@ const [regId, setRegID] = useState([]);
 // const [FormIdArray, setFormIDArray] = useState([]);
 const [RelationArray, setRelationArray] = useState([]);
 
+const [warning, setWarning] = React.useState('');
+const handleInputChange = (input, fieldName) => {
+  // Check if the input contains non-English characters
+  const containsNonEnglish = /[^a-zA-Z ]/.test(input);
+
+  // Set the warning based on the presence of non-English characters
+  if (containsNonEnglish) {
+    setWarning('Please enter text in English only.');
+  } else {
+    setWarning('');
+  }
+
+  // Filter out non-English characters
+  const filteredInput = input.replace(/[^a-zA-Z ]/g, '');
+
+  switch (fieldName) {
+    case 'studentname':
+      setStudentname(filteredInput);
+      break;
+    case 'schoolname':
+      setSchoolname(filteredInput);
+      break;
+    
+    case 'rollnumber':
+      setRollnumber(filteredInput);  
+      break;
+    default:
+      break;
+  }
+};
+
 const familyData = syncStorage.get('BMfamily_details');
 // const nameData = [];
 // var count = Object.keys(familyData).length;
@@ -762,7 +764,6 @@ return (
                 {warning !== '' && (
                   <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
                 )}
-
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>طالبعلم کاشناختی کارڈ/بے فارم:</Text>
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb" 
@@ -821,7 +822,9 @@ return (
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb" 
                   placeholderTextColor='grey'
-                  onChangeText={(rollnumber) => setRollnumber(rollnumber)}
+                  onChangeText={input => {
+                    handleInputChange(input, 'rollnumber');
+                  }}
                   value={rollnumber}
                   placeholder="رول نمبر درج کریں"
                   style={[styles.Step1FormTextInput
@@ -829,7 +832,9 @@ return (
                   ]}
                   />
                 </View>       
-
+                {warning !== '' && (
+                  <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
+                )}
                 <Text style={{marginTop:10,fontWeight:"bold",color:"#000000"}}>موجودہ ادارے کا نام:</Text>
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40 }}>
                   <TextInput  placeholderColor="#c4c3cb" 
@@ -847,7 +852,6 @@ return (
                 {warning !== '' && (
                   <Text style={{color: 'red', fontsize: '12'}}>{warning}</Text>
                 )}
-
                 <Text style={{marginTop:10,fontWeight:"bold",color:"#002D62"}}>پچھلے سال کے امتحان کی تفصیلات:</Text>
                 <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>جماعت:</Text>
                 <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:5, height:40}}>
