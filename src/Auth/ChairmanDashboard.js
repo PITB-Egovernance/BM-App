@@ -87,8 +87,8 @@ const pwd = ({route, navigation}) => {
           // Use the data as needed
           setCounts({
             regformCount: data.regformCount,
-            countVerify: data.countVerify,
-            countCommittee: data.countCommittee,
+            countVerify: data.countverify,
+            countCommittee: data.countcommittee,
             countPayment: data.countPayment,
             districtName: data.districtName,
           });
