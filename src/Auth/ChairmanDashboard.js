@@ -113,7 +113,8 @@ const pwd = ({route, navigation}) => {
     }
   }
   const handleDetailsPress = (item) => {
-    navigation.navigate('UserDetails', item);
+    navigation.navigate('BMshow',{'UserDetails': item,
+    'key':'chairman'});
   };
   const handleLogout = async (navigation) => {
     try {

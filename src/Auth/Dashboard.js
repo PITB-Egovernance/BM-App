@@ -308,7 +308,9 @@ const pwd = ({ route, navigation}) => {
               showsHorizontalScrollIndicator={false}>
               {bmUserId!= '' || syncStorage.get('regform_id')!='' && syncStorage.get('regform_id') !=undefined ? 
                 <View style={{...styles.tiles, backgroundColor: 'green'}}>
-                  <TouchableOpacity onPress={() => navigation.navigate('BMshow')} style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+                  <TouchableOpacity onPress={() => navigation.navigate('BMshow',{
+                    'key':'empty'
+                  })} style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
                     <Text style={[styles.buttonText, {marginLeft:20, color: '#fff', fontSize: 16, fontFamily: 'sans-serif', }]}>
                       بیت المال کے لیے درخواست 
                     </Text>

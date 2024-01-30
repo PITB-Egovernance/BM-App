@@ -27,12 +27,13 @@ const screenWidth = Dimensions.get('window').width;
 import syncStorage from 'react-native-sync-storage';
 import { KeyboardAvoidingView,  TextInput  } from "react-native";
 import baseUrl from '../Components/Url';
+import UserDetails from '../Auth/UserDetails';
 
 // datatable start
 const optionsPerPage = [2, , 4];
 
 
-const BMshow = ({navigation}) => {
+const BMshow = ({navigation,route}) => {
 
   const [bmuserid, setBmUserId] = useState('') 
   const [otherservice, setGovernmentData] = useState('');
@@ -101,6 +102,7 @@ const [cnicbdis,setCnicbdis] = useState('');
   const [scnicedub, setscnicedub] = useState('');
   const [slipedu, setslipedu] = useState('');
   
+
   const [dname, setdname]      = useState('');
   const [dfile, setdfile]  = useState('');
   const [afile, setafile]  = useState('');
@@ -161,15 +163,27 @@ const [cnicbdis,setCnicbdis] = useState('');
 
   useEffect(() =>{
     console.log('bmUserId is showshow: ',syncStorage.get('bmuser_id'));
-    checkpwdDetail();
+    if(route.params.key=='chairman'){
+
+      const useDetails = route.params.UserDetails;
+      console.log('CECK', useDetails.id)
+      const UserBmId = useDetails.id;
+ 
+      checkpwdDetail(UserBmId)
+   }else{
+ 
+ 
+     const UserBmId = syncStorage.get('bmuser_id');
+     checkpwdDetail(UserBmId)
+   }
   
   }, []);
 
-  const UserBmId = syncStorage.get('bmuser_id');
+ 
 
 
 
-  const checkpwdDetail = () => {
+  const checkpwdDetail = (UserBmId) => {
    console.log('BM User ID==u=', `${baseUrl[0]}/apiformbmallshow/${UserBmId}`)
     fetch(`${baseUrl[0]}/apiformbmallshow/${UserBmId}`, {
       method: 'GET',
