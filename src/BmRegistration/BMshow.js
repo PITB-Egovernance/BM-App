@@ -87,6 +87,7 @@ const [cnicbdis,setCnicbdis] = useState('');
   const [schoolname, setSchoolname] = useState('');
   const [grade, setGrade] = useState('');
   const [tmarks, setTmarks] = useState('');
+  const [obmarksedu, setObmarks] = useState('');
   const [addCert, setAddmissionCertedu] = useState('');
   const [deathedu, setDeathEdu] = useState('');
   const [disedu, setDisEdu] = useState('');
@@ -1242,13 +1243,13 @@ const [cnicbdis,setCnicbdis] = useState('');
                         <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:40}}>
                         <TextInput
                           placeholderColor="#c4c3cb"
-                          // placeholder={afile}
+                          placeholder={obmarksedu}
                           editable={false}
                           style={[styles.BMshowFormTextInput
                             // ,{borderColor: !firstName && errorValidate ? 'red':'#fff'}
                           ]}
 
-                          value={obmarks}
+                          value={obmarksedu}
 
                         />
                         </View>
