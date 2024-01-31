@@ -107,7 +107,7 @@ const Disable = ({ navigation }) => {
     { label: 'Incase Of Emergency', value: 'Incase Of Emergency' },
     { label: 'Widow', value: 'Widow' },
     { label: 'Divorced', value: 'Divorced' },
-    { label: 'Seperated', value: 'eperated' },
+    { label: 'Seperated', value: 'Seperated' },
     { label: 'UnSupported', value: 'UnSupported' },
     { label: 'Old', value: 'Old' },
     { label: 'Disabled', value: 'Disabled' },
