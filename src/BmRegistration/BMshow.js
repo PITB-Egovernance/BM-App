@@ -1,6 +1,7 @@
 
 import React, { useEffect,useState }  from 'react';
 import pwdIMage from '../../assets/images/background.png'
+import ImageView from 'react-native-image-viewing';
 import {
   ScrollView,
   StyleSheet,
@@ -34,7 +35,6 @@ const optionsPerPage = [2, , 4];
 
 
 const BMshow = ({navigation,route}) => {
-
   const [bmuserid, setBmUserId] = useState('') 
   const [otherservice, setGovernmentData] = useState('');
   
@@ -179,7 +179,308 @@ const [cnicbdis,setCnicbdis] = useState('');
   
   }, []);
 
- 
+ //to view Applicant cnic front in image viewer
+ const [isApplicantImageViewVisible, setIsApplicantImageViewVisible] = useState(false);
+ const [imageIndex, setImageIndex] = useState(0); 
+ const applicantImages = [{ uri: `https://bm.punjab.gov.pk/uploads/cnic/${cnicdis}` }];
+
+ const openApplicantImageViewer = (index) => {
+   setImageIndex(index);
+   console.log('Opening Image Viewer');
+   setIsApplicantImageViewVisible(true);
+ };
+
+ const closeApplicantImageViewer = () => {
+   console.log('closing');
+   setIsApplicantImageViewVisible(false);
+ };
+//to view Applicant cnic back in image viewer
+ const [isApplicantCnicBackVisible, setIsApplicantCnicBackVisible] = useState(false);
+ const [applicantCnicBackIndex, setApplicantCnicBackIndex] = useState(0);
+ const applicantCnicBackImages = [{ uri: `https://bm.punjab.gov.pk/uploads/cnic/${cnicbdis}` }];
+
+ const openApplicantCnicBackViewer = (index) => {
+   setApplicantCnicBackIndex(index);
+   setIsApplicantCnicBackVisible(true);
+ };
+
+ const closeApplicantCnicBackViewer = () => {
+   setIsApplicantCnicBackVisible(false);
+ };
+// For Father/Guardian CNIC Front
+const [isFatehrcnicfVisible, setIsFatehrcnicfVisible] = useState(false);
+const [fatehrcnicfIndex, setFatehrcnicfIndex] = useState(0);
+const fatehrcnicfImages = [{ uri: `https://bm.punjab.gov.pk/uploads/fathercnic/${fatehrcnicf}` }];
+
+const openFatehrcnicfViewer = (index) => {
+ setFatehrcnicfIndex(index);
+ setIsFatehrcnicfVisible(true);
+};
+
+const closeFatehrcnicfViewer = () => {
+ setIsFatehrcnicfVisible(false);
+};
+// For Father/Guardian CNIC Back
+const [isFatehrcnicbVisible, setIsFatehrcnicbVisible] = useState(false);
+const [fatehrcnicbIndex, setFatehrcnicbIndex] = useState(0);
+const fatehrcnicbImages = [{ uri: `https://bm.punjab.gov.pk/uploads/fathercnic/${fatehrcnicb}` }];
+
+const openFatehrcnicbViewer = (index) => {
+  setFatehrcnicbIndex(index);
+  setIsFatehrcnicbVisible(true);
+};
+
+const closeFatehrcnicbViewer = () => {
+ // console.log('heellohj');
+  setIsFatehrcnicbVisible(false);
+};
+//for student cnic front
+const [isScnicedufVisible, setIsScnicedufVisible] = useState(false);
+ const [scnicedufIndex, setScnicedufIndex] = useState(0);
+ const scnicedufImages = [{ uri: `https://bm.punjab.gov.pk/uploads/studentcnic/${scniceduf}` }];
+
+ const openScnicedufViewer = (index) => {
+   setScnicedufIndex(index);
+   setIsScnicedufVisible(true);
+ };
+
+ const closeScnicedufViewer = () => {
+   setIsScnicedufVisible(false);
+ };
+//for student cnic back
+ const [isScnicedubVisible, setIsScnicedubVisible] = useState(false);
+ const [scnicedubIndex, setScnicedubIndex] = useState(0);
+ const scnicedubImages = [{ uri: `https://bm.punjab.gov.pk/uploads/studentcnic/${scnicedub}` }];
+
+ const openScnicedubViewer = (index) => {
+   setScnicedubIndex(index);
+   setIsScnicedubVisible(true);
+ };
+
+ const closeScnicedubViewer = () => {
+   setIsScnicedubVisible(false);
+ };
+  // viewer for Father/Guardian Salary Slip
+  const [isSlipeduVisible, setIsSlipeduVisible] = useState(false);
+  const [slipeduIndex, setSlipeduIndex] = useState(0);
+  const slipEduImages = [{ uri: `https://bm.punjab.gov.pk/uploads/salaryslip/${slipedu}` }];
+
+  const openSlipeduViewer = (index) => {
+    setSlipeduIndex(index);
+    setIsSlipeduVisible(true);
+  };
+
+  const closeSlipeduViewer = () => {
+    setIsSlipeduVisible(false);
+  };
+
+  // viewer for Death Certificate Of Father (If Orphan)
+  const [isDeatheduVisible, setIsDeatheduVisible] = useState(false);
+  const [deatheduIndex, setDeatheduIndex] = useState(0);
+  const deathEduImages = [{ uri: `https://bm.punjab.gov.pk/uploads/death/${deathedu}` }];
+
+  const openDeatheduViewer = (index) => {
+    setDeatheduIndex(index);
+    setIsDeatheduVisible(true);
+  };
+
+  const closeDeatheduViewer = () => {
+    setIsDeatheduVisible(false);
+  };
+
+  // viewer for Disability Certificate (If Disable)
+  const [isDiseduVisible, setIsDiseduVisible] = useState(false);
+  const [diseduIndex, setDiseduIndex] = useState(0);
+  const disEduImages = [{ uri: `https://bm.punjab.gov.pk/uploads/disability/${disedu}` }];
+
+  const openDiseduViewer = (index) => {
+    setDiseduIndex(index);
+    setIsDiseduVisible(true);
+  };
+
+  const closeDiseduViewer = () => {
+    setIsDiseduVisible(false);
+  };
+    // State and functions for Admission Certificate Of Institute
+ const [isAddCertVisible, setIsAddCertVisible] = useState(false);
+ const [addCertIndex, setAddCertIndex] = useState(0);
+ const addCertImages = [{ uri: `https://bm.punjab.gov.pk/uploads/admission/${addCert}` }];
+
+ const openAddCertViewer = (index) => {
+   setAddCertIndex(index);
+   setIsAddCertVisible(true);
+ };
+
+ const closeAddCertViewer = () => {
+   setIsAddCertVisible(false);
+ };
+
+ // State and functions for Result Card Of Previous Final Exam
+ const [isResulteduVisible, setIsResulteduVisible] = useState(false);
+ const [resulteduIndex, setResulteduIndex] = useState(0);
+ const resultEduImages = [{ uri: `https://bm.punjab.gov.pk/uploads/resultcard/${resultedu}` }];
+
+ const openResulteduViewer = (index) => {
+   setResulteduIndex(index);
+   setIsResulteduVisible(true);
+ };
+
+ const closeResulteduViewer = () => {
+   setIsResulteduVisible(false);
+ };
+
+ // State and functions for Scholarship Certificate
+ const [isSchooleduVisible, setIsSchooleduVisible] = useState(false);
+ const [schooleduIndex, setSchooleduIndex] = useState(0);
+ const schoolEduImages = [{ uri: `https://bm.punjab.gov.pk/uploads/scholarship/${schooledu}` }];
+
+ const openSchooleduViewer = (index) => {
+   setSchooleduIndex(index);
+   setIsSchooleduVisible(true);
+ };
+
+ const closeSchooleduViewer = () => {
+   setIsSchooleduVisible(false);
+ };
+ // State and functions for Hostel Residence Certificate
+ const [isHosteleduVisible, setIsHosteleduVisible] = useState(false);
+ const [hosteleduIndex, setHosteleduIndex] = useState(0);
+ const hosteleduImages = [{ uri: `https://bm.punjab.gov.pk/uploads/hostel/${hosteledu}` }];
+
+ const openHosteleduViewer = (index) => {
+   setHosteleduIndex(index);
+   setIsHosteleduVisible(true);
+ };
+
+ const closeHosteleduViewer = () => {
+   setIsHosteleduVisible(false);
+ };
+
+ //viewer for If Educational Institute Does Not Offer Hostel Residence Certificate
+ const [isNonHosteleduVisible, setIsNonHosteleduVisible] = useState(false);
+ const [nonHosteleduIndex, setNonHosteleduIndex] = useState(0);
+ const nonHosteleduImages = [{ uri: `https://bm.punjab.gov.pk/uploads/nohostel/${nonhosteledu}` }];
+
+ const openNonHosteleduViewer = (index) => {
+   setNonHosteleduIndex(index);
+   setIsNonHosteleduVisible(true);
+ };
+
+ const closeNonHosteleduViewer = () => {
+   setIsNonHosteleduVisible(false);
+ };
+  // viewer for "If Widow, Death Certificate Of Husband"
+  const [isDeathCertiVisible, setIsDeathCertiVisible] = useState(false);
+  const [deathCertiIndex, setDeathCertiIndex] = useState(0);
+  const deathCertiImages = [{ uri: `https://bm.punjab.gov.pk/uploads/death/${deathcerti}` }];
+
+  const openDeathCertiViewer = (index) => {
+    setDeathCertiIndex(index);
+    setIsDeathCertiVisible(true);
+  };
+
+  const closeDeathCertiViewer = () => {
+    setIsDeathCertiVisible(false);
+  };
+
+  //viewer for "If Disable upload Disability Certificate"
+  const [isDiscertVisible, setIsDiscertVisible] = useState(false);
+  const [discertIndex, setDiscertIndex] = useState(0);
+  const discertImages = [{ uri: `https://bm.punjab.gov.pk/uploads/death/${discert}` }];
+
+  const openDiscertViewer = (index) => {
+    setDiscertIndex(index);
+    setIsDiscertVisible(true);
+  };
+
+  const closeDiscertViewer = () => {
+    setIsDiscertVisible(false);
+  };
+  // State and functions for Own/Parent/Guardian CNIC Front
+  const [isCnicFrontVisible, setIsCnicFrontVisible] = useState(false);
+  const [cnicFrontIndex, setCnicFrontIndex] = useState(0);
+  const cnicFrontImages = [{ uri: `https://bm.punjab.gov.pk/uploads/fathercnic/${fcnic}` }];
+
+  const openCnicFrontViewer = (index) => {
+    setCnicFrontIndex(index);
+    setIsCnicFrontVisible(true);
+  };
+
+  const closeCnicFrontViewer = () => {
+    setIsCnicFrontVisible(false);
+  };
+
+  // State and functions for Own/Parent/Guardian CNIC Back
+  const [isCnicBackVisible, setIsCnicBackVisible] = useState(false);
+  const [cnicBackIndex, setCnicBackIndex] = useState(0);
+  const cnicBackImages = [{ uri: `https://bm.punjab.gov.pk/uploads/fathercnic/${fcnicback}` }];
+
+  const openCnicBackViewer = (index) => {
+    setCnicBackIndex(index);
+    setIsCnicBackVisible(true);
+  };
+
+  const closeCnicBackViewer = () => {
+    setIsCnicBackVisible(false);
+  };
+  // State and functions for Groom CNIC Front
+const [isGroomCnicFrontVisible, setIsGroomCnicFrontVisible] = useState(false);
+const [groomCnicFrontIndex, setGroomCnicFrontIndex] = useState(0);
+const groomCnicFrontImages = [{ uri: `https://bm.punjab.gov.pk/uploads/groomcnic/${gcnicfImage}` }];
+
+const openGroomCnicFrontViewer = (index) => {
+  setGroomCnicFrontIndex(index);
+  setIsGroomCnicFrontVisible(true);
+};
+
+const closeGroomCnicFrontViewer = () => {
+  setIsGroomCnicFrontVisible(false);
+};
+
+// State and functions for Groom CNIC Back
+const [isGroomCnicBackVisible, setIsGroomCnicBackVisible] = useState(false);
+const [groomCnicBackIndex, setGroomCnicBackIndex] = useState(0);
+const groomCnicBackImages = [{ uri: `https://bm.punjab.gov.pk/uploads/groomcnic/${gcnicbImage}` }];
+
+const openGroomCnicBackViewer = (index) => {
+  setGroomCnicBackIndex(index);
+  setIsGroomCnicBackVisible(true);
+};
+
+const closeGroomCnicBackViewer = () => {
+  setIsGroomCnicBackVisible(false);
+};
+
+// State and functions for Bride CNIC Front
+const [isBrideCnicFrontVisible, setIsBrideCnicFrontVisible] = useState(false);
+const [brideCnicFrontIndex, setBrideCnicFrontIndex] = useState(0);
+const brideCnicFrontImages = [{ uri: `https://bm.punjab.gov.pk/uploads/bridecnic/${bcnicfImage}` }];
+
+const openBrideCnicFrontViewer = (index) => {
+  setBrideCnicFrontIndex(index);
+  setIsBrideCnicFrontVisible(true);
+};
+
+const closeBrideCnicFrontViewer = () => {
+  setIsBrideCnicFrontVisible(false);
+};
+
+// State and functions for Bride CNIC Back
+const [isBrideCnicBackVisible, setIsBrideCnicBackVisible] = useState(false);
+const [brideCnicBackIndex, setBrideCnicBackIndex] = useState(0);
+const brideCnicBackImages = [{ uri: `https://bm.punjab.gov.pk/uploads/bridecnic/${bcnicbImage}` }];
+
+const openBrideCnicBackViewer = (index) => {
+  setBrideCnicBackIndex(index);
+  setIsBrideCnicBackVisible(true);
+};
+
+const closeBrideCnicBackViewer = () => {
+  setIsBrideCnicBackVisible(false);
+};
+
+ //----------------------------------//
+
 
 
 
@@ -760,20 +1061,53 @@ const [cnicbdis,setCnicbdis] = useState('');
                         />
                       </View>
 
-                      <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Own/Parent/Gaurdian Cnic Front:</Text>
-                      <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {fcnic!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/fathercnic/${fcnic}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
-                        </View>
+                      <View>
+      {/* ... (existing code) */}
 
-                      <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}> Own/Parent/Gaurdian Cnic Back:</Text>
-                     
-                      <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {fcnicback!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/fathercnic/${fcnicback}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
-                        </View>
+      {/* Own/Parent/Guardian CNIC Front */}
+      <TouchableOpacity onPress={() => openCnicFrontViewer(0)}>
+        <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>Own/Parent/Guardian CNIC Front:</Text>
+        <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+          {fcnic !== '' ? (
+            <Image source={{ uri: `https://bm.punjab.gov.pk/uploads/fathercnic/${fcnic}` }} style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }} />
+          ) : (
+            ''
+          )}
+        </View>
+      </TouchableOpacity>
+
+      {/* Image Viewer for Own/Parent/Guardian CNIC Front */}
+      <ImageView
+        images={cnicFrontImages}
+        imageIndex={cnicFrontIndex}
+        visible={isCnicFrontVisible}
+        onRequestClose={closeCnicFrontViewer}
+        presentationStyle="overFullScreen"
+        backgroundColor="black"
+      />
+
+      {/* Own/Parent/Guardian CNIC Back */}
+      <TouchableOpacity onPress={() => openCnicBackViewer(0)}>
+        <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>Own/Parent/Guardian CNIC Back:</Text>
+        <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+          {fcnicback !== '' ? (
+            <Image source={{ uri: `https://bm.punjab.gov.pk/uploads/fathercnic/${fcnicback}` }} style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }} />
+          ) : (
+            ''
+          )}
+        </View>
+      </TouchableOpacity>
+
+      {/* Image Viewer for Own/Parent/Guardian CNIC Back */}
+      <ImageView
+        images={cnicBackImages}
+        imageIndex={cnicBackIndex}
+        visible={isCnicBackVisible}
+        onRequestClose={closeCnicBackViewer}
+        presentationStyle="overFullScreen"
+        backgroundColor="black"
+      />
+    </View>
                     </View>
                     :<View>
                       <Text style={{padding:20,color:'#444',fontStyle:'normal', fontWeight:'700'}}>No Record Found of Medical Treatment</Text>
@@ -878,30 +1212,97 @@ const [cnicbdis,setCnicbdis] = useState('');
 
                           />
                         </View>
-                        <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>If Widow, Death Certificate Of Husband</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {deathcerti!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/death/${deathcerti}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
+ <View>
+      {/* If Widow, Death Certificate Of Husband */}
+      <TouchableOpacity onPress={() => openDeathCertiViewer(0)}>
+        <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>
+          If Widow, Death Certificate Of Husband
+        </Text>
+        <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+          {deathcerti !== '' ? (
+            <Image source={{ uri: `https://bm.punjab.gov.pk/uploads/death/${deathcerti}` }} style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }} />
+          ) : (
+            ''
+          )}
+        </View>
+      </TouchableOpacity>
+
+      {/* Image Viewer for If Widow, Death Certificate Of Husband */}
+      <ImageView
+        images={deathCertiImages}
+        imageIndex={deathCertiIndex}
+        visible={isDeathCertiVisible}
+        onRequestClose={closeDeathCertiViewer}
+        presentationStyle="overFullScreen"
+        backgroundColor="black"
+      />
+
+      {/* If Disable upload Disability Certificate */}
+      <TouchableOpacity onPress={() => openDiscertViewer(0)}>
+        <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>If Disable upload Disability Certificate</Text>
+        <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+          {discert !== '' ? (
+            <Image source={{ uri: `https://bm.punjab.gov.pk/uploads/death/${discert}` }} style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }} />
+          ) : (
+            ''
+          )}
+        </View>
+      </TouchableOpacity>
+
+      {/* Image Viewer for If Disable upload Disability Certificate */}
+      <ImageView
+        images={discertImages}
+        imageIndex={discertIndex}
+        visible={isDiscertVisible}
+        onRequestClose={closeDiscertViewer}
+        presentationStyle="overFullScreen"
+        backgroundColor="black"
+      />
+    </View>
+                        <View>
+                        {/* Applicant cnic front */}
+                        <TouchableOpacity onPress={() => openApplicantImageViewer(0)}>
+                          <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>Applicant cnic front</Text>
+                          <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+                            {cnicdis !== '' ? (
+                              <Image source={{ uri: `https://bm.punjab.gov.pk/uploads/cnic/${cnicdis}` }} style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }} />
+                            ) : (
+                              ''
+                            )}
+                          </View>
+                        </TouchableOpacity>
+
+                        <ImageView
+                          images={applicantImages}
+                          imageIndex={imageIndex}
+                          visible={isApplicantImageViewVisible}
+                          onRequestClose={closeApplicantImageViewer}
+                          presentationStyle="overFullScreen" // Center the image
+                          backgroundColor="black" // Set the background color
+                        />
                         </View>
-                        <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>If Disable upload Disability Certificate</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {discert!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/death/${discert}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
-                        </View>
-                        <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Applicant cnic front</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {cnicdis!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/cnic/${cnicdis}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
-                        </View>
-                        <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Applicant cnic back</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {cnicbdis!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/cnic/${cnicbdis}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
-                        </View>
+                        <View>
+                        {/* Applicant cnic back */}
+                        <TouchableOpacity onPress={() => openApplicantCnicBackViewer(0)}>
+                          <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>Applicant cnic back</Text>
+                          <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+                            {cnicbdis !== '' ? (
+                              <Image source={{ uri: `https://bm.punjab.gov.pk/uploads/cnic/${cnicbdis}` }} style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }} />
+                            ) : (
+                              ''
+                            )}
+                          </View>
+                        </TouchableOpacity>
+
+                        <ImageView
+                          images={applicantCnicBackImages}
+                          imageIndex={applicantCnicBackIndex}
+                          visible={isApplicantCnicBackVisible}
+                          onRequestClose={closeApplicantCnicBackViewer}
+                          presentationStyle="overFullScreen"
+                          backgroundColor="black"
+                        />
+                      </View>
                     </View>
                     :<View>
                     <Text style={{padding:20,color:'#444',fontStyle:'normal', fontWeight:'700'}}>No Record Found of Disability</Text>
@@ -1116,32 +1517,97 @@ const [cnicbdis,setCnicbdis] = useState('');
                         />
                         </View>
 
-                        <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Groom cnic front</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {gcnicfImage!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/groomcnic/${gcnicfImage}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
-                        </View>
-                        <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Groom cnic Back</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {gcnicbImage!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/groomcnic/${gcnicbImage}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
-                        </View>
+                        <View>
+    {/* ... (existing code) */}
 
-                        <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Bride cnic Front</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {bcnicfImage!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/bridecnic/${bcnicfImage}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
-                        </View>
+    {/* Groom CNIC Front */}
+    <TouchableOpacity onPress={() => openGroomCnicFrontViewer(0)}>
+      <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>Groom CNIC Front:</Text>
+      <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+        {gcnicfImage !== '' ? (
+          <Image source={{ uri: `https://bm.punjab.gov.pk/uploads/groomcnic/${gcnicfImage}` }} style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }} />
+        ) : (
+          ''
+        )}
+      </View>
+    </TouchableOpacity>
 
-                        <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Bride cnic Back</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {bcnicbImage!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/bridecnic/${bcnicbImage}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
-                        </View>
+    {/* Image Viewer for Groom CNIC Front */}
+    <ImageView
+      images={groomCnicFrontImages}
+      imageIndex={groomCnicFrontIndex}
+      visible={isGroomCnicFrontVisible}
+      onRequestClose={closeGroomCnicFrontViewer}
+      presentationStyle="overFullScreen"
+      backgroundColor="black"
+    />
+
+    {/* Groom CNIC Back */}
+    <TouchableOpacity onPress={() => openGroomCnicBackViewer(0)}>
+      <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>Groom CNIC Back:</Text>
+      <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+        {gcnicbImage !== '' ? (
+          <Image source={{ uri: `https://bm.punjab.gov.pk/uploads/groomcnic/${gcnicbImage}` }} style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }} />
+        ) : (
+          ''
+        )}
+      </View>
+    </TouchableOpacity>
+
+    {/* Image Viewer for Groom CNIC Back */}
+    <ImageView
+      images={groomCnicBackImages}
+      imageIndex={groomCnicBackIndex}
+      visible={isGroomCnicBackVisible}
+      onRequestClose={closeGroomCnicBackViewer}
+      presentationStyle="overFullScreen"
+      backgroundColor="black"
+    />
+
+    {/* Bride CNIC Front */}
+    <TouchableOpacity onPress={() => openBrideCnicFrontViewer(0)}>
+      <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>Bride CNIC Front:</Text>
+      <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+        {bcnicfImage !== '' ? (
+          <Image source={{ uri: `https://bm.punjab.gov.pk/uploads/bridecnic/${bcnicfImage}` }} style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }} />
+        ) : (
+          ''
+        )}
+      </View>
+    </TouchableOpacity>
+
+    {/* Image Viewer for Bride CNIC Front */}
+    <ImageView
+      images={brideCnicFrontImages}
+      imageIndex={brideCnicFrontIndex}
+      visible={isBrideCnicFrontVisible}
+      onRequestClose={closeBrideCnicFrontViewer}
+      presentationStyle="overFullScreen"
+      backgroundColor="black"
+    />
+
+    {/* Bride CNIC Back */}
+    <TouchableOpacity onPress={() => openBrideCnicBackViewer(0)}>
+      <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>Bride CNIC Back:</Text>
+      <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+        {bcnicbImage !== '' ? (
+          <Image source={{ uri: `https://bm.punjab.gov.pk/uploads/bridecnic/${bcnicbImage}` }} style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }} />
+        ) : (
+          ''
+        )}
+      </View>
+    </TouchableOpacity>
+
+    {/* Image Viewer for Bride CNIC Back */}
+    <ImageView
+      images={brideCnicBackImages}
+      imageIndex={brideCnicBackIndex}
+      visible={isBrideCnicBackVisible}
+      onRequestClose={closeBrideCnicBackViewer}
+      presentationStyle="overFullScreen"
+      backgroundColor="black"
+    />
+  </View>
                     </View>
                       :<View>
                       <Text style={{padding:20,color:'#444',fontStyle:'normal', fontWeight:'700'}}>No Record Found of Marriage Grant</Text>
@@ -1267,91 +1733,286 @@ const [cnicbdis,setCnicbdis] = useState('');
 
                         />
                         </View>
+                        <View>
+                              {/* Father/Guardian CNIC Front */}
+                              <TouchableOpacity onPress={() => openFatehrcnicfViewer(0)}>
+                                <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>Father/Guardian CNIC Front</Text>
+                                <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+                                  {fatehrcnicf !== '' ? (
+                                    <Image source={{ uri: `https://bm.punjab.gov.pk/uploads/fathercnic/${fatehrcnicf}` }} style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }} />
+                                  ) : (
+                                    ''
+                                  )}
+                                </View>
+                              </TouchableOpacity>
 
-                        <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Father/Guardian CNIC Front:</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {fatehrcnicf!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/fathercnic/${fatehrcnicf}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
+                              {/* Image Viewer for Father/Guardian CNIC Front */}
+                              <ImageView
+                                images={fatehrcnicfImages}
+                                imageIndex={fatehrcnicfIndex}
+                                visible={isFatehrcnicfVisible}
+                                onRequestClose={closeFatehrcnicfViewer}
+                                presentationStyle="overFullScreen"
+                                backgroundColor="black"
+                              />
                         </View>
-
-
-                        <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Father/Guardian CNIC Back:</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {fatehrcnicb!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/fathercnic/${fatehrcnicb}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
+                      {/* Father/Guardian CNIC Back */}
+                      <View>
+                      <TouchableOpacity onPress={() => openFatehrcnicbViewer(0)}>
+                        <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>Father/Guardian CNIC Back</Text>
+                        <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+                          {fatehrcnicb !== '' ? (
+                            <Image source={{ uri: `https://bm.punjab.gov.pk/uploads/fathercnic/${fatehrcnicb}` }} style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }} />
+                          ) : (
+                            ''
+                          )}
                         </View>
+                      </TouchableOpacity>
 
-                        <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Student CNIC Front</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {scniceduf!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/studentcnic/${scniceduf}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
-                        </View>
+                      {/* Image Viewer for Father/Guardian CNIC Back */}
+                      <ImageView
+                        images={fatehrcnicbImages}
+                        imageIndex={fatehrcnicbIndex}
+                        visible={isFatehrcnicbVisible}
+                        onRequestClose={closeFatehrcnicbViewer}
+                        presentationStyle="overFullScreen"
+                        backgroundColor="black"
+                      />
 
-                        <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Student CNIC Back</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {scnicedub!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/studentcnic/${scnicedub}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
-                        </View>
+                      {/* ... (existing code for other sections) */}
+                    </View>
 
-                        <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Father/Guardian Salary Slip</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {slipedu!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/salaryslip/${slipedu}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
-                        </View>
+                        <View>
+      {/* Student CNIC Front */}
+      <TouchableOpacity onPress={() => openScnicedufViewer(0)}>
+        <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>Student CNIC Front</Text>
+        <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+          {scniceduf !== '' ? (
+            <Image source={{ uri: `https://bm.punjab.gov.pk/uploads/studentcnic/${scniceduf}` }} style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }} />
+          ) : (
+            ''
+          )}
+        </View>
+      </TouchableOpacity>
 
-                        <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Death Certificate Of Father(If Orphan)</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {deathedu!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/death/${deathedu}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
-                        </View>
+      {/* Image Viewer for Student CNIC Front */}
+      <ImageView
+        images={scnicedufImages}
+        imageIndex={scnicedufIndex}
+        visible={isScnicedufVisible}
+        onRequestClose={closeScnicedufViewer}
+        presentationStyle="overFullScreen"
+        backgroundColor="black"
+      />
 
+      {/* Student CNIC Back */}
+      <TouchableOpacity onPress={() => openScnicedubViewer(0)}>
+        <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>Student CNIC Back</Text>
+        <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+          {scnicedub !== '' ? (
+            <Image source={{ uri: `https://bm.punjab.gov.pk/uploads/studentcnic/${scnicedub}` }} style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }} />
+          ) : (
+            ''
+          )}
+        </View>
+      </TouchableOpacity>
 
-                        <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Disability Certificate (If Disable)</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {disedu!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/disability/${disedu}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
-                        </View>
-                        <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Admission Certificate Of Institute</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {addCert!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/admission/${addCert}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
-                        </View>
+      {/* Image Viewer for Student CNIC Back */}
+      <ImageView
+        images={scnicedubImages}
+        imageIndex={scnicedubIndex}
+        visible={isScnicedubVisible}
+        onRequestClose={closeScnicedubViewer}
+        presentationStyle="overFullScreen"
+        backgroundColor="black"
+      />
+    </View>
 
-                        <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Result Card Of Previous Final Exam</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {resultedu!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/resultcard/${resultedu}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
-                        </View>
+                        <View>
+      {/* Father/Guardian Salary Slip */}
+      <TouchableOpacity onPress={() => openSlipeduViewer(0)}>
+        <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>Father/Guardian Salary Slip</Text>
+        <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+          {slipedu !== '' ? (
+            <Image source={{ uri: `https://bm.punjab.gov.pk/uploads/salaryslip/${slipedu}` }} style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }} />
+          ) : (
+            ''
+          )}
+        </View>
+      </TouchableOpacity>
 
-                        <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Scholarship Certificate</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {schooledu!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/scholarship/${schooledu}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
-                        </View>
+      {/* Image Viewer for Father/Guardian Salary Slip */}
+      <ImageView
+        images={slipEduImages}
+        imageIndex={slipeduIndex}
+        visible={isSlipeduVisible}
+        onRequestClose={closeSlipeduViewer}
+        presentationStyle="overFullScreen"
+        backgroundColor="black"
+      />
 
-                        <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>Hostel Residence Certificate</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {hosteledu!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/hostel/${hosteledu}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
-                        </View>
+      {/* Death Certificate Of Father (If Orphan) */}
+      <TouchableOpacity onPress={() => openDeatheduViewer(0)}>
+        <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>Death Certificate Of Father (If Orphan)</Text>
+        <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+          {deathedu !== '' ? (
+            <Image source={{ uri: `https://bm.punjab.gov.pk/uploads/death/${deathedu}` }} style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }} />
+          ) : (
+            ''
+          )}
+        </View>
+      </TouchableOpacity>
 
-                        <Text style={{marginTop:15,fontWeight:"bold",color:"#000000"}}>If Educational Institute Do Not Offer Hostel Residence, Attach Certificate</Text>
-                        <View style={{marginTop:10,backgroundColor:'#D3D3D3',borderRadius:3, height:70}}>
-                          {nonhosteledu!='' ? 
-                          <Image source={{uri:`https://bm.punjab.gov.pk/uploads/nohostel/${nonhosteledu}`}} style={{width: '100%', height: 60,resizeMode : 'contain',top:3 }} />
-                          :''}
-                        </View>
+      {/* Image Viewer for Death Certificate Of Father (If Orphan) */}
+      <ImageView
+        images={deathEduImages}
+        imageIndex={deatheduIndex}
+        visible={isDeatheduVisible}
+        onRequestClose={closeDeatheduViewer}
+        presentationStyle="overFullScreen"
+        backgroundColor="black"
+      />
+
+      {/* Disability Certificate (If Disable) */}
+      <TouchableOpacity onPress={() => openDiseduViewer(0)}>
+        <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>Disability Certificate (If Disable)</Text>
+        <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+          {disedu !== '' ? (
+            <Image source={{ uri: `https://bm.punjab.gov.pk/uploads/disability/${disedu}` }} style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }} />
+          ) : (
+            ''
+          )}
+        </View>
+      </TouchableOpacity>
+
+      {/* Image Viewer for Disability Certificate (If Disable) */}
+      <ImageView
+        images={disEduImages}
+        imageIndex={diseduIndex}
+        visible={isDiseduVisible}
+        onRequestClose={closeDiseduViewer}
+        presentationStyle="overFullScreen"
+        backgroundColor="black"
+      />
+    </View>
+                       <View>
+      {/* Admission Certificate Of Institute */}
+      <TouchableOpacity onPress={() => openAddCertViewer(0)}>
+        <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>Admission Certificate Of Institute</Text>
+        <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+          {addCert !== '' ? (
+            <Image source={{ uri: `https://bm.punjab.gov.pk/uploads/admission/${addCert}` }} style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }} />
+          ) : (
+            ''
+          )}
+        </View>
+      </TouchableOpacity>
+
+      {/* Image Viewer for Admission Certificate Of Institute */}
+      <ImageView
+        images={addCertImages}
+        imageIndex={addCertIndex}
+        visible={isAddCertVisible}
+        onRequestClose={closeAddCertViewer}
+        presentationStyle="overFullScreen"
+        backgroundColor="black"
+      />
+
+      {/* Result Card Of Previous Final Exam */}
+      <TouchableOpacity onPress={() => openResulteduViewer(0)}>
+        <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>Result Card Of Previous Final Exam</Text>
+        <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+          {resultedu !== '' ? (
+            <Image source={{ uri: `https://bm.punjab.gov.pk/uploads/resultcard/${resultedu}` }} style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }} />
+          ) : (
+            ''
+          )}
+        </View>
+      </TouchableOpacity>
+
+      {/* Image Viewer for Result Card Of Previous Final Exam */}
+      <ImageView
+        images={resultEduImages}
+        imageIndex={resulteduIndex}
+        visible={isResulteduVisible}
+        onRequestClose={closeResulteduViewer}
+        presentationStyle="overFullScreen"
+        backgroundColor="black"
+      />
+
+      {/* Scholarship Certificate */}
+      <TouchableOpacity onPress={() => openSchooleduViewer(0)}>
+        <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>Scholarship Certificate</Text>
+        <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+          {schooledu !== '' ? (
+            <Image source={{ uri: `https://bm.punjab.gov.pk/uploads/scholarship/${schooledu}` }} style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }} />
+          ) : (
+            ''
+          )}
+        </View>
+      </TouchableOpacity>
+
+      {/* Image Viewer for Scholarship Certificate */}
+      <ImageView
+        images={schoolEduImages}
+        imageIndex={schooleduIndex}
+        visible={isSchooleduVisible}
+        onRequestClose={closeSchooleduViewer}
+        presentationStyle="overFullScreen"
+        backgroundColor="black"
+      />
+    </View>
+
+      <View>
+      {/* Hostel Residence Certificate */}
+      <TouchableOpacity onPress={() => openHosteleduViewer(0)}>
+        <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>Hostel Residence Certificate</Text>
+        <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+          {hosteledu !== '' ? (
+            <Image source={{ uri: `https://bm.punjab.gov.pk/uploads/hostel/${hosteledu}` }} style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }} />
+          ) : (
+            ''
+          )}
+        </View>
+      </TouchableOpacity>
+
+      {/* Image Viewer for Hostel Residence Certificate */}
+      <ImageView
+        images={hosteleduImages}
+        imageIndex={hosteleduIndex}
+        visible={isHosteleduVisible}
+        onRequestClose={closeHosteleduViewer}
+        presentationStyle="overFullScreen"
+        backgroundColor="black"
+      />
+
+      {/* If Educational Institute Does Not Offer Hostel Residence Certificate */}
+      <TouchableOpacity onPress={() => openNonHosteleduViewer(0)}>
+        <Text style={{ marginTop: 15, fontWeight: 'bold', color: '#000000' }}>
+          If Educational Institute Does Not Offer Hostel Residence, Attach Certificate
+        </Text>
+        <View style={{ marginTop: 10, backgroundColor: '#D3D3D3', borderRadius: 3, height: 70 }}>
+          {nonhosteledu !== '' ? (
+            <Image
+              source={{ uri: `https://bm.punjab.gov.pk/uploads/nohostel/${nonhosteledu}` }}
+              style={{ width: '100%', height: 60, resizeMode: 'contain', top: 3 }}
+            />
+          ) : (
+            ''
+          )}
+        </View>
+      </TouchableOpacity>
+
+      {/* Image Viewer for If Educational Institute Does Not Offer Hostel Residence Certificate */}
+      <ImageView
+        images={nonHosteleduImages}
+        imageIndex={nonHosteleduIndex}
+        visible={isNonHosteleduVisible}
+        onRequestClose={closeNonHosteleduViewer}
+        presentationStyle="overFullScreen"
+        backgroundColor="black"
+      />
+    </View>
                     </View>
                         :<View>
                         <Text style={{padding:20,color:'#444',fontStyle:'normal', fontWeight:'700'}}>No Record Found of Education Stipend</Text>
