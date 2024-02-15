@@ -47,6 +47,9 @@ const pwd = ({route, navigation}) => {
     countVerifydeo: 0,
     countCommitteedeo: 0,
     countPayment: 0,
+    ddrejecteddeo:0,
+    deorejecteddeo: 0,
+    comrejecteddeo:0
     // districtName: '',
   });
   const [page, setPage] = useState(0);
@@ -87,6 +90,9 @@ const pwd = ({route, navigation}) => {
             countVerifydeo: data.countVerifydeo,
             countCommitteedeo: data.countCommitteedeo,
             countPayment: data.countPayment,
+            ddrejecteddeo: data.ddrejecteddeo,
+            deorejecteddeo: data.deorejecteddeo,
+            comrejecteddeo: data.comrejecteddeo,
             districtName: data.districtName,
           });
 
@@ -110,7 +116,7 @@ const pwd = ({route, navigation}) => {
     }
   };
   const handleDetailsPress = item => {
-    navigation.navigate('UserDetails', item);
+    navigation.navigate('BMshow', {UserDetails: item, key: 'member'});
   };
   const handleLogout = async navigation => {
     try {
@@ -134,69 +140,7 @@ const pwd = ({route, navigation}) => {
     );
     setSortField(field);
   };
-  // const fetchData = async () => {
-  //   try {
-  //     const id = syncStorage.get('bmuser_id');
-  //     const response = await fetch(`https://bm.punjab.gov.pk/api/cmentryshow/${id}`);
-  //     const result = await response.json();
 
-  //     if (response.ok) {
-  //       setData(result.data);
-  //     } else {
-  //       console.error('Failed to fetch data:', result.message);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //   }
-  // };
-
-  // const fetchData1 = async () => {
-  //   try {
-  //     const id = syncStorage.get('bmuser_id');
-  //     const response = await fetch(`https://bm.punjab.gov.pk/api/cmverifiedshow/${id}`);
-  //     const result = await response.json();
-
-  //     if (response.ok) {
-  //       setData1(result.data);
-  //     } else {
-  //       console.error('Failed to fetch data:', result.message);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //   }
-  // };
-
-  // const fetchData2 = async () => {
-  //   try {
-  //     const id = syncStorage.get('bmuser_id');
-  //     const response = await fetch(`https://bm.punjab.gov.pk/api/cmcommitteeshow/${id}`);
-  //     const result = await response.json();
-
-  //     if (response.ok) {
-  //       setData2(result.data);
-  //     } else {
-  //       console.error('Failed to fetch data:', result.message);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //   }
-  // };
-
-  // const fetchData3 = async () => {
-  //   try {
-  //     const id = syncStorage.get('bmuser_id');
-  //     const response = await fetch(`https://bm.punjab.gov.pk/api/cmpaymentshow/${id}`);
-  //     const result = await response.json();
-
-  //     if (response.ok) {
-  //       setData3(result.data);
-  //     } else {
-  //       console.error('Failed to fetch data:', result.message);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //   }
-  // };
 
   const handleCirclePress = async apiIndex => {
     setShowTable(true);
@@ -337,7 +281,10 @@ const pwd = ({route, navigation}) => {
                     textAlign: 'center',
                   },
                 ]}>
-                Member
+                Member -{' '}
+                <Text style={{fontSize: 22, color: '#fff', fontWeight: 'bold'}}>
+                  {counts.districtName}
+                </Text>
               </Text>
               <TouchableOpacity
                 onPress={() => handleLogout(navigation)}
@@ -367,7 +314,23 @@ const pwd = ({route, navigation}) => {
                   </View>
                 </TouchableOpacity>
 
-                <View style={styles.line} />
+                {/* Rejected application circle  */}
+                <View style={styles.downwardLineContainer}>
+                  <View style={styles.line} />
+                  <View style={[styles.downwardLine]}></View>
+                  <TouchableOpacity>
+                    <View style={styles.circleContainer}>
+                      <View style={styles.circle2}>
+                        <Text style={styles.circleText} numberOfLines={2}>
+                          {counts.ddrejecteddeo}
+                        </Text>
+                        <Text style={styles.labelTextBottom} numberOfLines={2}>
+                          ڈپٹی ڈائریکٹر سے مسترد
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
 
                 <TouchableOpacity onPress={() => handleSecondCirclePress()}>
                   <View style={styles.circleContainer}>
@@ -381,7 +344,22 @@ const pwd = ({route, navigation}) => {
                     </Text>
                   </View>
                 </TouchableOpacity>
-                <View style={styles.line} />
+                <View style={styles.downwardLineContainer}>
+                  <View style={styles.line} />
+                  <View style={[styles.downwardLine]}></View>
+                  <TouchableOpacity>
+                    <View style={styles.circleContainer}>
+                      <View style={styles.circle2}>
+                        <Text style={styles.circleText} numberOfLines={2}>
+                          {counts.deorejecteddeo}
+                        </Text>
+                        <Text style={styles.labelTextBottom} numberOfLines={2}>
+                          ممبر سے{'\n'} مسترد
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
 
                 <TouchableOpacity onPress={() => handleThirdCirclePress()}>
                   <View style={styles.circleContainer}>
@@ -396,7 +374,22 @@ const pwd = ({route, navigation}) => {
                   </View>
                 </TouchableOpacity>
 
-                <View style={styles.line} />
+                <View style={styles.downwardLineContainer}>
+                  <View style={styles.line} />
+                  <View style={[styles.downwardLine]}></View>
+                  <TouchableOpacity>
+                    <View style={styles.circleContainer}>
+                      <View style={styles.circle2}>
+                        <Text style={styles.circleText} numberOfLines={2}>
+                          {counts.comrejecteddeo}
+                        </Text>
+                        <Text style={styles.labelTextBottom} numberOfLines={2}>
+                          کمیٹی سے مسترد
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
 
                 <TouchableOpacity>
                   <View style={styles.circleContainer}>
@@ -415,7 +408,10 @@ const pwd = ({route, navigation}) => {
               {showTable && (
                 <View style={styles.tableContainer}>
                   <DataTable
-                    style={[styles.dataTable, {backgroundColor: '#afbe94'}]}>
+                    style={[
+                      styles.dataTable,
+                      {backgroundColor: '#afbe94', marginTop: '20%'},
+                    ]}>
                     {/* Table Headers */}
                     <DataTable.Header>
                       <DataTable.Title
@@ -548,7 +544,10 @@ const pwd = ({route, navigation}) => {
               {showSecondTable && (
                 <View style={styles.tableContainer}>
                   <DataTable
-                    style={[styles.dataTable, {backgroundColor: '#afbe94'}]}>
+                    style={[
+                      styles.dataTable,
+                      {backgroundColor: '#afbe94', marginTop: '20%'},
+                    ]}>
                     <DataTable.Header>
                       <DataTable.Title
                         style={[styles.dataTableTitle, styles.tableHeader]}
@@ -682,7 +681,10 @@ const pwd = ({route, navigation}) => {
               {showthirdTable && (
                 <View style={styles.tableContainer}>
                   <DataTable
-                    style={[styles.dataTable, {backgroundColor: '#afbe94'}]}>
+                    style={[
+                      styles.dataTable,
+                      {backgroundColor: '#afbe94', marginTop: '20%'},
+                    ]}>
                     <DataTable.Header>
                       <DataTable.Title
                         style={[styles.dataTableTitle, styles.tableHeader]}
@@ -767,6 +769,39 @@ const pwd = ({route, navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  labelTextBottom: {
+    position: 'absolute',
+    bottom: 10,
+    color: 'white',
+    textAlign: 'center',
+    width: '90%',
+  },
+  downwardLineContainer: {
+    // position: 'relative',
+    alignItems: 'center',
+  },
+  downwardLine: {
+    width: 2,
+    height: 88,
+    backgroundColor: '#fff',
+    position: 'absolute',
+    top: -20,
+    left: 35,
+  },
+  circle2: {
+    position: 'absolute',
+    top: 85,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: '#fff',
+    // backgroundColor: '#FF4433', //#DC143C
+    backgroundColor: 'rgba(255, 68, 51, 0.5)', // Red color with 50% transparency
+    // justifyContent: 'center', // Center content horizontally
+    alignItems: 'center',
+  },
+
   dataTableTitle: {
     color: 'blue',
     fontWeight: 'bold',
@@ -776,7 +811,7 @@ const styles = StyleSheet.create({
   dataTableCell: {
     flex: 1,
     textAlign: 'center',
-    color: 'white', // set text color to white
+    color: 'white',
   },
   dataTable: {
     marginTop: 20,
@@ -814,7 +849,7 @@ const styles = StyleSheet.create({
     padding: 20,
     flex: 1,
     justifyContent: 'flex-start',
-    paddingTop: '10%',
+    paddingTop: '2%',
     paddingBottom: '20%',
   },
   circleRow: {
@@ -855,7 +890,7 @@ const styles = StyleSheet.create({
     height: 2,
     width: 70,
     backgroundColor: '#fff',
-    marginTop: -25, // Adjust the marginTop to control the vertical positioning of the line
+    marginTop: -20, // Adjust the marginTop to control the vertical positioning of the line
   },
   tableContainer: {
     marginTop: 20,

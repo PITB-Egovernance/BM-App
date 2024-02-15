@@ -170,9 +170,13 @@ const [cnicbdis,setCnicbdis] = useState('');
       const UserBmId = useDetails.id;
  
       checkpwdDetail(UserBmId)
+   }else if(route.params.key=='member'){
+    const useDetails = route.params.UserDetails;
+      console.log('CECK', useDetails.id)
+      const UserBmId = useDetails.id;
+ 
+      checkpwdDetail(UserBmId)
    }else{
- 
- 
      const UserBmId = syncStorage.get('bmuser_id');
      checkpwdDetail(UserBmId)
    }
